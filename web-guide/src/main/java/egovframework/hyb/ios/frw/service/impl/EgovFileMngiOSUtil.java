@@ -102,7 +102,9 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 				byte[] bytes = file.getBytes();
 				input = new ByteArrayInputStream(bytes);
 				
-				File videoFile = new File(propertiesService.getString("fileStorePath") + newName);
+				//File videoFile = new File(propertiesService.getString("fileStorePath") + newName);
+				// 260320 KISA 보안취약점 패치
+				File videoFile = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath") + newName));
 				out = new FileOutputStream(videoFile);
 				int nextChar;
 				while((nextChar = input.read()) != -1){
@@ -152,7 +154,9 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 	 * @exception Exception
 	 */
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response, String originalFileName, String streFileNm) throws Exception{
-		File file = new File(propertiesService.getString("fileStorePath") + streFileNm);
+		//File file = new File(propertiesService.getString("fileStorePath") + streFileNm);
+		// 260320 KISA 보안취약점 패치
+		File file = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath") + streFileNm));
 		
 		if(!file.exists()){
 			throw new FileNotFoundException(streFileNm);			
@@ -216,7 +220,9 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 	 */
 	public void deleteFile(FileReaderWriteriOSAPIVO fileVO) throws Exception{
 		
-		File videoFile = new File(propertiesService.getString("fileStorePath") + fileVO.getStreFileNm());
+		//File videoFile = new File(propertiesService.getString("fileStorePath") + fileVO.getStreFileNm());
+		// 260320 KISA 보안취약점 패치
+		File videoFile = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath") + fileVO.getStreFileNm()));
 		
 		if(!videoFile.exists()){
 			LOGGER.info("There is no file to remove.");			

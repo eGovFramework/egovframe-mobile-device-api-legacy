@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import egovframework.hyb.add.cmr.service.CameraAndroidAPIFileVO;
 import egovframework.hyb.add.cmr.service.EgovCameraAndroidAPIService;
+import egovframework.hyb.ios.cmr.service.impl.EgovWebUtil;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.cmmn.exception.EgovBizException;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
@@ -84,7 +85,8 @@ public class EgovCameraAndroidFileMngUtil extends EgovAbstractServiceImpl {
                 byte[] bytes = file.getBytes();
                 input = new ByteArrayInputStream(bytes);
                 
-                File videoFile = new File(filePath + newName);
+                // 260320 KISA 보안취약점 패치
+                File videoFile = new File(EgovWebUtil.filePathBlackList(filePath + newName));
                 out = new FileOutputStream(videoFile);
                 int nextChar;
                 while((nextChar = input.read()) != -1){

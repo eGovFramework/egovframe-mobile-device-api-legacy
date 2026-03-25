@@ -86,7 +86,8 @@ public class EgovMediaiOSFileMngUtil extends EgovAbstractServiceImpl {
 				byte[] bytes = file.getBytes();
 				input = new ByteArrayInputStream(bytes);
 				
-				File videoFile = new File(filePath + newName);
+				// 260320 KISA 보안취약점 패치
+				File videoFile = new File(EgovWebUtil.filePathBlackList(filePath + newName));
 				out = new FileOutputStream(videoFile);
 				int nextChar;
 				while((nextChar = input.read()) != -1){
