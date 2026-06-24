@@ -45,6 +45,7 @@ import io.swagger.annotations.ApiOperation;
  * @ ----------   ---------   -------------------------------
  *   2012.07.31   이한철        최초 작성
  *   2020.08.24   신용호        Swagger 적용
+ *   2026.06.25   이백행              [2026년 컨트리뷰션] iOS API Controller 파일명과 클래스명 일치화
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 06. 18
@@ -55,7 +56,7 @@ import io.swagger.annotations.ApiOperation;
  */
 
 @Controller
-public class EgovGPSIosAPIController {
+public class EgovGPSiOSAPIController {
 
     /** EgovGPSAPIService */
     @Resource(name = "EgovGPSAPIService")

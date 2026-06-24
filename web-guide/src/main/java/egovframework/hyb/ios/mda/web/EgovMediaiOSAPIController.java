@@ -48,6 +48,7 @@ import io.swagger.annotations.ApiOperation;
  *   2012.07.30	  이율경              최초생성
  *   2012.08.14	  이해성              커스터마이징
  *   2020.09.07   신용호              Swagger 적용
+ *   2026.06.25   이백행              [2026년 컨트리뷰션] iOS API Controller 파일명과 클래스명 일치화
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 7. 30.
@@ -56,7 +57,7 @@ import io.swagger.annotations.ApiOperation;
  * 
  */
 @Controller
-public class EgovMediaIosAPIController {
+public class EgovMediaiOSAPIController {
 
 	/** EgovMediaiOSAPIService */
     @Resource(name = "EgovMediaiOSAPIService")
