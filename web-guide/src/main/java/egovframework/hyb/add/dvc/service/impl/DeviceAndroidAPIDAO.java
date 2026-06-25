@@ -32,6 +32,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일                 수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2012.06.18    서형주                  최초생성
+ * @ 2026.06.26    이백행                  [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 23
@@ -47,9 +48,8 @@ public class DeviceAndroidAPIDAO extends EgovComAbstractDAO {
      * 디바이스 정보를 등록한다.
      * @param vo - 등록할 정보가 담긴 DeviceAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertDeviceInfo(DeviceAndroidAPIVO vo) throws Exception {
+    public int insertDeviceInfo(DeviceAndroidAPIVO vo) {
         return (Integer)insert("deviceAndroidAPIDAO.insertDeviceInfo", vo);
     }
 
@@ -57,9 +57,8 @@ public class DeviceAndroidAPIDAO extends EgovComAbstractDAO {
      * 디바이스 정보를 수정한다.
      * @param vo - 수정할 정보가 담긴 DeviceAPIVO
      * @return void형
-     * @exception Exception
      */
-    public void updateDeviceInfo(DeviceAndroidAPIVO vo) throws Exception {
+    public void updateDeviceInfo(DeviceAndroidAPIVO vo) {
         update("deviceAndroidAPIDAO.updateDeviceInfo", vo);
     }
 
@@ -67,9 +66,8 @@ public class DeviceAndroidAPIDAO extends EgovComAbstractDAO {
      * 디바이스 정보를 삭제한다.
      * @param vo - 삭제할 정보가 담긴 DeviceAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int deleteDeviceInfo(DeviceAndroidAPIVO vo) throws Exception {
+    public int deleteDeviceInfo(DeviceAndroidAPIVO vo) {
         return (Integer)delete("deviceAndroidAPIDAO.deleteDeviceInfo", vo);
     }
 
@@ -77,9 +75,8 @@ public class DeviceAndroidAPIDAO extends EgovComAbstractDAO {
      * 디바이스 정보를 조회한다.
      * @param vo - 조회할 정보가 담긴 DeviceAPIVO
      * @return 조회한 디바이스 정보
-     * @exception Exception
      */
-    public DeviceAndroidAPIVO selectDeviceInfo(DeviceAndroidAPIVO vo) throws Exception {
+    public DeviceAndroidAPIVO selectDeviceInfo(DeviceAndroidAPIVO vo) {
         return (DeviceAndroidAPIVO) selectOne("deviceAndroidAPIDAO.selectDeviceInfo", vo);
     }
 
@@ -87,9 +84,8 @@ public class DeviceAndroidAPIDAO extends EgovComAbstractDAO {
      * 디바이스 정보 목록을 조회한다.
      * @param vo - 조회할 정보가 담긴 DeviceAPIDefaultVO
      * @return 디바이스 정보 목록
-     * @exception Exception
      */
-    public List<?> selectDeviceInfoList(DeviceAndroidAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectDeviceInfoList(DeviceAndroidAPIDefaultVO searchVO) {
         return selectList("deviceAndroidAPIDAO.selectDeviceInfoList", searchVO);
     }
 
@@ -97,7 +93,6 @@ public class DeviceAndroidAPIDAO extends EgovComAbstractDAO {
      * 디바이스 정보 총 갯수를 조회한다.
      * @param  vo - 조회할 정보가 담긴 DeviceAPIDefaultVO
      * @return 디바이스 정보 총 갯수
-     * @exception
      */
     public int selectDeviceInfoListTotCnt(DeviceAndroidAPIDefaultVO searchVO) {
         return (Integer) selectOne("deviceAndroidAPIDAO.selectDeviceInfoListTotCnt", searchVO);

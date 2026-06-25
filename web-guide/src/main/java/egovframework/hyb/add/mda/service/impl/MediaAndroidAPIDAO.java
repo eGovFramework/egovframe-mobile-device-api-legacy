@@ -31,6 +31,7 @@ import egovframework.hyb.add.mda.service.MediaAndroidAPIVO;
  * @  수정일            수정자        수정내용
  * @ ---------        ---------    -------------------------------
  * @ 2012. 7. 30.        이율경        최초생성
+ * @ 2026. 6. 26.        이백행        [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 7. 30.
@@ -45,9 +46,8 @@ public class MediaAndroidAPIDAO extends EgovComAbstractDAO {
      * 녹음 Media를 등록한다.
      * @param vo - 등록할 정보가 담긴 CameraAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertMediaInfo(MediaAndroidAPIFileVO vo) throws Exception {
+    public int insertMediaInfo(MediaAndroidAPIFileVO vo) {
         return (Integer)insert("mediaAndroidAPIDAO.insertMediaInfo", vo);
     }
     
@@ -55,9 +55,8 @@ public class MediaAndroidAPIDAO extends EgovComAbstractDAO {
      * 녹음 파일을 등록한다.
      * @param vo - 등록할 파일 정보가 담긴 CameraAndroidAPIFileVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertMediaRecordFile(MediaAndroidAPIFileVO vo) throws Exception {
+    public int insertMediaRecordFile(MediaAndroidAPIFileVO vo) {
         return (Integer)insert("mediaAndroidAPIDAO.insertMediaRecordFile", vo);
     }
     
@@ -65,9 +64,8 @@ public class MediaAndroidAPIDAO extends EgovComAbstractDAO {
      * 녹음 재생횟수를 수정한다.
      * @param vo - 등록할 정보가 담긴 MediaAndroidAPIFileVO
      * @return 수정 결과
-     * @exception Exception
      */
-    public int updateMediaInfoRevivCo(MediaAndroidAPIVO vo) throws Exception {
+    public int updateMediaInfoRevivCo(MediaAndroidAPIVO vo) {
         return (Integer)update("mediaAndroidAPIDAO.updateMediaInfoRevivCo", vo);
     }
     
@@ -75,9 +73,8 @@ public class MediaAndroidAPIDAO extends EgovComAbstractDAO {
      * 미디어 정보를 조회한다.
      * @param VO - 조회할 정보가 담긴 MediaAndroidAPIVO
      * @return 조회 목록
-     * @exception Exception
      */
-    public MediaAndroidAPIFileVO selectMediaInfoDetail(MediaAndroidAPIVO vo) throws Exception {
+    public MediaAndroidAPIFileVO selectMediaInfoDetail(MediaAndroidAPIVO vo) {
         return (MediaAndroidAPIFileVO) selectOne("mediaAndroidAPIDAO.selectMediaInfoDetail", vo);
     }
     
@@ -85,9 +82,8 @@ public class MediaAndroidAPIDAO extends EgovComAbstractDAO {
      * 미디어 목록을 조회한다.
      * @param VO - 조회할 정보가 담긴 MediaAndroidAPIDefaultVO
      * @return 조회 목록
-     * @exception Exception
      */
-    public List<?> selectMediaInfoList(MediaAndroidAPIVO searchVO) throws Exception {
+    public List<?> selectMediaInfoList(MediaAndroidAPIVO searchVO) {
         return selectList("mediaAndroidAPIDAO.selectMediaInfoList", searchVO);
     }
     
@@ -95,9 +91,8 @@ public class MediaAndroidAPIDAO extends EgovComAbstractDAO {
      * 미디어 파일 정보를 조회한다.
      * @param vo - 조회할 정보가 담긴 MediaAndroidAPIFileVO
      * @return 이미지 파일 정보
-     * @exception Exception
      */
-    public MediaAndroidAPIFileVO selectMediaFileInfo(MediaAndroidAPIFileVO vo) throws Exception {
+    public MediaAndroidAPIFileVO selectMediaFileInfo(MediaAndroidAPIFileVO vo) {
         return (MediaAndroidAPIFileVO) selectOne("mediaAndroidAPIDAO.selectMediaFileInfo", vo);
     }
 }

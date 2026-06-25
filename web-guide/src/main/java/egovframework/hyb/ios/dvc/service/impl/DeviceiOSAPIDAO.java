@@ -31,6 +31,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일      수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2012.07.30   서준식                 최초생성
+ *   2026.06.26   이백행                 [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 07.30
@@ -47,9 +48,8 @@ public class DeviceiOSAPIDAO extends EgovComAbstractDAO {
 	 * 디바이스 정보를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 DeviceiOSAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public void insertDeviceInfo(DeviceiOSAPIVO vo) throws Exception {
+    public void insertDeviceInfo(DeviceiOSAPIVO vo) {
         insert("deviceiOSAPIDAO.insertDeviceInfo", vo);
     }
 
@@ -59,9 +59,8 @@ public class DeviceiOSAPIDAO extends EgovComAbstractDAO {
 	 * 디바이스 정보를 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 DeviceiOSAPIVO
 	 * @return void형 
-	 * @exception Exception
 	 */
-    public void deleteDeviceInfo(DeviceiOSAPIVO vo) throws Exception {
+    public void deleteDeviceInfo(DeviceiOSAPIVO vo) {
         delete("deviceiOSAPIDAO.deleteDeviceInfo", vo);
     }
 
@@ -69,9 +68,8 @@ public class DeviceiOSAPIDAO extends EgovComAbstractDAO {
 	 * 디바이스 정보를 조회한다.
 	 * @param vo - 조회할 정보가 담긴 DeviceiOSAPIVO
 	 * @return 조회한 디바이스 정보
-	 * @exception Exception
 	 */
-    public DeviceiOSAPIVO selectDeviceInfo(DeviceiOSAPIVO vo) throws Exception {
+    public DeviceiOSAPIVO selectDeviceInfo(DeviceiOSAPIVO vo) {
         return (DeviceiOSAPIVO) selectOne("deviceiOSAPIDAO.selectDeviceInfo", vo);
     }
 
@@ -79,9 +77,8 @@ public class DeviceiOSAPIDAO extends EgovComAbstractDAO {
 	 * 디바이스 정보 목록을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 DeviceiOSAPIVO
 	 * @return 디바이스 정보 목록
-	 * @exception Exception
 	 */
-    public List<?> selectDeviceInfoList(DeviceiOSAPIVO vo) throws Exception {
+    public List<?> selectDeviceInfoList(DeviceiOSAPIVO vo) {
         return selectList("deviceiOSAPIDAO.selectDeviceInfoList", vo);
     }
 
@@ -89,7 +86,6 @@ public class DeviceiOSAPIDAO extends EgovComAbstractDAO {
 	 * 디바이스 정보 총 갯수를 조회한다.
 	 * @param  vo - 조회할 정보가 담긴 DeviceiOSAPIVO
 	 * @return 디바이스 정보 총 갯수
-	 * @exception
 	 */
     public int selectDeviceInfoListTotCnt(DeviceiOSAPIVO vo) {
         return (Integer) selectOne("deviceiOSAPIDAO.selectDeviceInfoListTotCnt", vo);

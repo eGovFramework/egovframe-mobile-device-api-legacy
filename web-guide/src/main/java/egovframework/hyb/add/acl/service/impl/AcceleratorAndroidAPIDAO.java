@@ -32,6 +32,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일                 수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2012.06.18    서형주                  최초생성
+ * @ 2026.06.26    이백행                  [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 23
@@ -47,9 +48,8 @@ public class AcceleratorAndroidAPIDAO extends EgovComAbstractDAO {
      * 가속도 정보를 등록한다.
      * @param vo - 등록할 정보가 담긴 AcceleratorAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertAcceleratorInfo(AcceleratorAndroidAPIVO vo) throws Exception {
+    public int insertAcceleratorInfo(AcceleratorAndroidAPIVO vo) {
         return (Integer)insert("acceleratorAndroidAPIDAO.insertAcceleratorInfo", vo);
     }
 
@@ -57,9 +57,8 @@ public class AcceleratorAndroidAPIDAO extends EgovComAbstractDAO {
      * 가속도 정보를 수정한다.
      * @param vo - 수정할 정보가 담긴 AcceleratorAPIVO
      * @return void형
-     * @exception Exception
      */
-    public void updateAcceleratorInfo(AcceleratorAndroidAPIVO vo) throws Exception {
+    public void updateAcceleratorInfo(AcceleratorAndroidAPIVO vo) {
         update("acceleratorAndroidAPIDAO.updateAcceleratorInfo", vo);
     }
 
@@ -67,9 +66,8 @@ public class AcceleratorAndroidAPIDAO extends EgovComAbstractDAO {
      * 가속도 정보를 삭제한다.
      * @param vo - 삭제할 정보가 담긴 AcceleratorAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int deleteAcceleratorInfo(AcceleratorAndroidAPIVO vo) throws Exception {
+    public int deleteAcceleratorInfo(AcceleratorAndroidAPIVO vo) {
         return (Integer)delete("acceleratorAndroidAPIDAO.deleteAcceleratorInfo", vo);
     }
 
@@ -77,9 +75,8 @@ public class AcceleratorAndroidAPIDAO extends EgovComAbstractDAO {
      * 가속도 정보를 조회한다.
      * @param vo - 조회할 정보가 담긴 AcceleratorAPIVO
      * @return 조회한 가속도 정보
-     * @exception Exception
      */
-    public AcceleratorAndroidAPIVO selectAcceleratorInfo(AcceleratorAndroidAPIVO vo) throws Exception {
+    public AcceleratorAndroidAPIVO selectAcceleratorInfo(AcceleratorAndroidAPIVO vo) {
         return (AcceleratorAndroidAPIVO) selectOne("acceleratorAndroidAPIDAO.selectAcceleratorInfo", vo);
     }
 
@@ -87,9 +84,8 @@ public class AcceleratorAndroidAPIDAO extends EgovComAbstractDAO {
      * 가속도 정보 목록을 조회한다.
      * @param vo - 조회할 정보가 담긴 AcceleratorAPIDefaultVO
      * @return 가속도 정보 목록
-     * @exception Exception
      */
-    public List<?> selectAcceleratorInfoList(AcceleratorAndroidAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectAcceleratorInfoList(AcceleratorAndroidAPIDefaultVO searchVO) {
         return selectList("acceleratorAndroidAPIDAO.selectAcceleratorInfoList", searchVO);
     }
 
@@ -97,7 +93,6 @@ public class AcceleratorAndroidAPIDAO extends EgovComAbstractDAO {
      * 가속도 정보 총 갯수를 조회한다.
      * @param  vo - 조회할 정보가 담긴 AcceleratorAPIDefaultVO
      * @return 가속도 정보 총 갯수
-     * @exception
      */
     public int selectAcceleratorInfoListTotCnt(AcceleratorAndroidAPIDefaultVO searchVO) {
         return (Integer) selectOne("acceleratorAndroidAPIDAO.selectAcceleratorInfoListTotCnt", searchVO);

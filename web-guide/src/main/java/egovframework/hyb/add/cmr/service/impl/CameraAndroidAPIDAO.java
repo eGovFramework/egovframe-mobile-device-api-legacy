@@ -32,6 +32,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일            수정자        수정내용
  * @ ---------        ---------    -------------------------------
  * @ 2012. 7. 23.        이율경        최초생성
+ * @ 2026. 6. 26.        이백행        [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 개발환경 팀
  * @since 2012. 7. 23.
@@ -46,9 +47,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지를 등록한다.
      * @param vo - 등록할 정보가 담긴 CameraAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertCameraPhotoAlbum(CameraAndroidAPIFileVO vo) throws Exception {
+    public int insertCameraPhotoAlbum(CameraAndroidAPIFileVO vo) {
         return (Integer)insert("cameraAndroidAPIDAO.insertCameraPhotoAlbum", vo);
     }
     
@@ -56,9 +56,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지 파일을 등록한다.
      * @param vo - 등록할 파일 정보가 담긴 CameraAndroidAPIFileVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertCameraPhotoAlbumFile(CameraAndroidAPIFileVO vo) throws Exception {
+    public int insertCameraPhotoAlbumFile(CameraAndroidAPIFileVO vo) {
         return (Integer)insert("cameraAndroidAPIDAO.insertCameraPhotoAlbumFile", vo);
     }
     
@@ -66,9 +65,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지 파일을 수정한다.
      * @param vo - 등록할 정보가 담긴 CameraAndroidAPIFileVO
      * @return 수정 결과
-     * @exception Exception
      */
-    public int updateCameraPhotoAlbumInfoFile(CameraAndroidAPIFileVO vo) throws Exception {
+    public int updateCameraPhotoAlbumInfoFile(CameraAndroidAPIFileVO vo) {
         return (Integer)update("cameraAndroidAPIDAO.updateCameraPhotoAlbumFile", vo);
     }
 
@@ -76,9 +74,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지를 삭제한다.
      * @param vo - 삭제할 파일 정보가 담긴 CameraAPIVO
      * @return 삭제 결과
-     * @exception Exception
      */
-    public int deleteCameraPhotoAlbumInfo(CameraAndroidAPIVO vo) throws Exception {
+    public int deleteCameraPhotoAlbumInfo(CameraAndroidAPIVO vo) {
         return (Integer)delete("cameraAndroidAPIDAO.deleteCameraPhotoAlbumInfo", vo);
     }
     
@@ -86,9 +83,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지 파일을  삭제한다.
      * @param vo - 삭제할 파일 정보가 담긴 CameraAndroidAPIFileVO
      * @return 삭제 결과 
-     * @exception Exception
      */
-    public int deleteCameraPhotoAlbumInfoFile(CameraAndroidAPIVO vo) throws Exception {
+    public int deleteCameraPhotoAlbumInfoFile(CameraAndroidAPIVO vo) {
         return (Integer)delete("cameraAndroidAPIDAO.deleteCameraPhotoAlbumInfoFile", vo);
     }
 
@@ -96,9 +92,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지 정보를 조회한다.
      * @param vo - 조회할 정보가 담긴 CameraAPIVO
      * @return 조회한 네트워크 정보
-     * @exception Exception
      */
-    public CameraAndroidAPIVO selectCameraPhotoAlbumInfo(CameraAndroidAPIVO vo) throws Exception {
+    public CameraAndroidAPIVO selectCameraPhotoAlbumInfo(CameraAndroidAPIVO vo) {
         return (CameraAndroidAPIVO) selectOne("cameraAndroidAPIDAO.selectCameraPhotoAlbumInfo", vo);
     }
 
@@ -106,9 +101,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지 정보 목록을 조회한다.
      * @param vo - 조회할 정보가 담긴 CameraAPIDefaultVO
      * @return 이미지 정보 목록
-     * @exception Exception
      */
-    public List<?> selectCameraPhotoAlbumInfoList(CameraAndroidAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectCameraPhotoAlbumInfoList(CameraAndroidAPIDefaultVO searchVO) {
         return selectList("cameraAndroidAPIDAO.selectCameraPhotoAlbumInfoList", searchVO);
     }
     
@@ -116,9 +110,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지 파일 정보를 조회한다.
      * @param vo - 조회할 정보가 담긴 CameraAndroidAPIFileVO
      * @return 이미지 파일 정보
-     * @exception Exception
      */
-    public CameraAndroidAPIFileVO selectImageFileInfo(CameraAndroidAPIFileVO vo) throws Exception {
+    public CameraAndroidAPIFileVO selectImageFileInfo(CameraAndroidAPIFileVO vo) {
         return (CameraAndroidAPIFileVO) selectOne("cameraAndroidAPIDAO.selectImageFileInfo", vo);
     }
     
@@ -126,9 +119,8 @@ public class CameraAndroidAPIDAO extends EgovComAbstractDAO {
      * 이미지 제목 중복을 조회한다.
      * @param vo - 조회할 정보가 담긴 CameraAndroidAPIFileVO
      * @return 파일연번 정보
-     * @exception Exception
      */
-    public CameraAndroidAPIFileVO selectPhotoAlbumPhotoSj(CameraAndroidAPIFileVO vo) throws Exception {
+    public CameraAndroidAPIFileVO selectPhotoAlbumPhotoSj(CameraAndroidAPIFileVO vo) {
         return (CameraAndroidAPIFileVO) selectOne("cameraAndroidAPIDAO.selectCameraPhotoAlbumPhotoSj", vo);
     }
 }

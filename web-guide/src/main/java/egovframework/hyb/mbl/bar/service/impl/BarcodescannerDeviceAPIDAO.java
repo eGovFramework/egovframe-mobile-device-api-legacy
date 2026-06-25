@@ -29,6 +29,7 @@ import egovframework.hyb.mbl.bar.service.BarcodescannerAPIVO;
  * @Modification Information
  * @ @ 수정일 수정자 수정내용 @ --------- --------- ------------------------------- @
  *   2016.07.26 신성학 최초생성
+ *   2026.06.26 이백행 [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 07. 26
@@ -47,9 +48,8 @@ public class BarcodescannerDeviceAPIDAO extends EgovComAbstractDAO {
 	 * @param vo
 	 *            - 등록할 정보가 담긴 BarcodescannerAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-	public int insertBarcodescannerDevcie(BarcodescannerAPIVO vo) throws Exception {
+	public int insertBarcodescannerDevcie(BarcodescannerAPIVO vo) {
 
 		return (Integer) insert("barcodescannerDeviceAPIDAO.insertBarcodescannerDevcie", vo);
 
@@ -61,9 +61,8 @@ public class BarcodescannerDeviceAPIDAO extends EgovComAbstractDAO {
 	 * @param vo
 	 *            - 등록할 정보가 담긴 BarcodescannerAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-	public List<?> selectBarcodescannerDevcieList(BarcodescannerAPIDefaultVO searchVO) throws Exception {
+	public List<?> selectBarcodescannerDevcieList(BarcodescannerAPIDefaultVO searchVO) {
 
 		return selectList("barcodescannerDeviceAPIDAO.selectBarcodescannerDevcieList", searchVO);
 	}

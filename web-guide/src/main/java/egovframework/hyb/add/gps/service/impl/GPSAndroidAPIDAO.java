@@ -33,6 +33,7 @@ import egovframework.hyb.add.gps.service.GPSAndroidAPIVO;
  * @ ----------   ---------   -------------------------------
  *   2012.08.27   나신일        최초생성
  *   2020.08.24   신용호        Swagger 적용
+ *   2026.06.26   이백행        [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 08.27
@@ -51,9 +52,8 @@ public class GPSAndroidAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 등록할 정보가 담긴 GPSAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertGPSInfo(GPSAndroidAPIVO vo) throws Exception {
+    public int insertGPSInfo(GPSAndroidAPIVO vo) {
         return (Integer) insert("gpsAndroidAPIDAO.insertGPSInfo", vo);
     }
 
@@ -63,9 +63,8 @@ public class GPSAndroidAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 삭제할 정보가 담긴 GPSAPIVO
      * @return void형
-     * @exception Exception
      */
-    public int deleteGPSInfo(GPSAndroidAPIVO vo) throws Exception {
+    public int deleteGPSInfo(GPSAndroidAPIVO vo) {
         return delete("gpsAndroidAPIDAO.deleteGPSInfo", vo);
     }
 
@@ -75,9 +74,8 @@ public class GPSAndroidAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 조회할 정보가 담긴 GPSAPIDefaultVO
      * @return gps 정보 목록
-     * @exception Exception
      */
-    public List<?> selectGPSInfoList(GPSAndroidAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectGPSInfoList(GPSAndroidAPIDefaultVO searchVO) {
         return selectList("gpsAndroidAPIDAO.selectGPSInfoList", searchVO);
     }
 
@@ -87,7 +85,6 @@ public class GPSAndroidAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 조회할 정보가 담긴 GPSAPIDefaultVO
      * @return 네트워크 정보 총 갯수
-     * @exception
      */
     public int selectGPSInfoListTotCnt(GPSAndroidAPIDefaultVO searchVO) {
         return (Integer) selectOne(
