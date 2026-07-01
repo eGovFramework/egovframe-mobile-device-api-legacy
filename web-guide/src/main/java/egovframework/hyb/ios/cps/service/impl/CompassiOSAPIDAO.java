@@ -33,6 +33,7 @@ import org.springframework.stereotype.Repository;
  * @ ---------   ---------   -------------------------------
  * @ 2012.06.18    서형주                  최초생성
  *   2012.08.27    서준식             iOS용 패키지로 변경 
+ *   2026.06.26    이백행                  [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * @author Device API 실행환경팀
  * @since 2012. 07. 30
  * @version 1.0
@@ -47,9 +48,8 @@ public class CompassiOSAPIDAO extends EgovComAbstractDAO {
 	 * 방향 정보를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 CompassiOSAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertCompassInfo(CompassiOSAPIVO vo) throws Exception {
+    public int insertCompassInfo(CompassiOSAPIVO vo) {
     	return (Integer)insert("compassiOSAPIDAO.insertCompassInfo", vo);
     }
 
@@ -57,9 +57,8 @@ public class CompassiOSAPIDAO extends EgovComAbstractDAO {
 	 * 방향 정보를 수정한다.
 	 * @param vo - 수정할 정보가 담긴 CompassiOSAPIVO
 	 * @return void형
-	 * @exception Exception
 	 */
-    public void updateCompassInfo(CompassiOSAPIVO vo) throws Exception {
+    public void updateCompassInfo(CompassiOSAPIVO vo) {
         update("compassiOSAPIDAO.updateCompassInfo", vo);
     }
 
@@ -67,9 +66,8 @@ public class CompassiOSAPIDAO extends EgovComAbstractDAO {
 	 * 방향 정보를 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 CompassiOSAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int deleteCompassInfo(CompassiOSAPIVO vo) throws Exception {
+    public int deleteCompassInfo(CompassiOSAPIVO vo) {
     	return (Integer)delete("compassiOSAPIDAO.deleteCompassInfo", vo);
     }
 
@@ -77,9 +75,8 @@ public class CompassiOSAPIDAO extends EgovComAbstractDAO {
 	 * 방향 정보를 조회한다.
 	 * @param vo - 조회할 정보가 담긴 CompassiOSAPIVO
 	 * @return 조회한 방향 정보
-	 * @exception Exception
 	 */
-    public CompassiOSAPIVO selectCompassInfo(CompassiOSAPIVO vo) throws Exception {
+    public CompassiOSAPIVO selectCompassInfo(CompassiOSAPIVO vo) {
         return (CompassiOSAPIVO) selectOne("compassiOSAPIDAO.selectCompassInfo", vo);
     }
 
@@ -87,9 +84,8 @@ public class CompassiOSAPIDAO extends EgovComAbstractDAO {
 	 * 방향 정보 목록을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 CompassiOSAPIDefaultVO
 	 * @return 방향 정보 목록
-	 * @exception Exception
 	 */
-    public List<?> selectCompassInfoList(CompassiOSAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectCompassInfoList(CompassiOSAPIDefaultVO searchVO) {
         return selectList("compassiOSAPIDAO.selectCompassInfoList", searchVO);
     }
 
@@ -97,7 +93,6 @@ public class CompassiOSAPIDAO extends EgovComAbstractDAO {
 	 * 방향 정보 총 갯수를 조회한다.
 	 * @param  vo - 조회할 정보가 담긴 CompassiOSAPIDefaultVO
 	 * @return 방향 정보 총 갯수
-	 * @exception
 	 */
     public int selectCompassInfoListTotCnt(CompassiOSAPIDefaultVO searchVO) {
         return (Integer) selectOne("compassiOSAPIDAO.selectCompassInfoListTotCnt", searchVO);

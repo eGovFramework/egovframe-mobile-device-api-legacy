@@ -33,6 +33,7 @@ import org.springframework.stereotype.Repository;
  * @ ---------   ---------   -------------------------------
  * @ 2012.05.14   서준식                 최초생성
  * @ 2012.08.01    이해성        DeviceAPIGuide Network Info
+ *   2026.06.26   이백행                 [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 05. 14
@@ -49,9 +50,8 @@ public class NetworkiOSAPIDAO extends EgovComAbstractDAO {
 	 * 네트워크 정보를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 NetworkAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertNetworkInfo(NetworkiOSAPIVO vo) throws Exception {
+    public int insertNetworkInfo(NetworkiOSAPIVO vo) {
         return (Integer)insert("networkiOSAPIDAO.insertNetworkInfo", vo);
     }
 
@@ -59,9 +59,8 @@ public class NetworkiOSAPIDAO extends EgovComAbstractDAO {
 	 * 네트워크 정보를 수정한다.
 	 * @param vo - 수정할 정보가 담긴 NetworkAPIVO
 	 * @return void형
-	 * @exception Exception
 	 */
-    public int updateNetworkInfo(NetworkiOSAPIVO vo) throws Exception {
+    public int updateNetworkInfo(NetworkiOSAPIVO vo) {
     	return (Integer)update("networkiOSAPIDAO.updateNetworkInfo", vo);
     }
 
@@ -69,9 +68,8 @@ public class NetworkiOSAPIDAO extends EgovComAbstractDAO {
 	 * 네트워크 정보를 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 NetworkAPIVO
 	 * @return void형 
-	 * @exception Exception
 	 */
-    public int deleteNetworkInfo(NetworkiOSAPIVO vo) throws Exception {
+    public int deleteNetworkInfo(NetworkiOSAPIVO vo) {
     	return (Integer)delete("networkiOSAPIDAO.deleteNetworkInfo", vo);
     }
 
@@ -79,9 +77,8 @@ public class NetworkiOSAPIDAO extends EgovComAbstractDAO {
 	 * 네트워크 정보를 조회한다.
 	 * @param vo - 조회할 정보가 담긴 NetworkAPIVO
 	 * @return 조회한 네트워크 정보
-	 * @exception Exception
 	 */
-    public NetworkiOSAPIVO selectNetworkInfo(NetworkiOSAPIVO vo) throws Exception {
+    public NetworkiOSAPIVO selectNetworkInfo(NetworkiOSAPIVO vo) {
         return (NetworkiOSAPIVO) selectOne("networkiOSAPIDAO.selectNetworkInfo", vo);
     }
 
@@ -89,9 +86,8 @@ public class NetworkiOSAPIDAO extends EgovComAbstractDAO {
 	 * 네트워크 정보 목록을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 NetworkAPIDefaultVO
 	 * @return 네트워크 정보 목록
-	 * @exception Exception
 	 */
-    public List<?> selectNetworkInfoList(NetworkiOSAPIVO vo) throws Exception {
+    public List<?> selectNetworkInfoList(NetworkiOSAPIVO vo) {
         return selectList("networkiOSAPIDAO.selectNetworkInfoList", vo);
     	//return null;
     }
@@ -100,7 +96,6 @@ public class NetworkiOSAPIDAO extends EgovComAbstractDAO {
 	 * 네트워크 정보 총 갯수를 조회한다.
 	 * @param  vo - 조회할 정보가 담긴 NetworkAPIDefaultVO
 	 * @return 네트워크 정보 총 갯수
-	 * @exception
 	 */
     public int selectNetworkInfoListTotCnt(NetworkiOSAPIVO vo) {
         return (Integer) selectOne("networkAPIDAO.selectNetworkInfoListTotCnt", vo);

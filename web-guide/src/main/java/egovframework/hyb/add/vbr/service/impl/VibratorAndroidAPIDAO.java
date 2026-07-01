@@ -31,6 +31,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일            수정자        수정내용
  * @ ---------        ---------    -------------------------------
  * @ 2012. 8. 16.        이율경        최초생성
+ * @ 2026. 6. 26.        이백행        [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 8. 16.
@@ -45,9 +46,8 @@ public class VibratorAndroidAPIDAO extends EgovComAbstractDAO {
      * 알람 정보를 등록한다.
      * @param vo - 등록할 정보가 담긴 VibratorAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertVibrator(VibratorAndroidAPIVO vo) throws Exception {
+    public int insertVibrator(VibratorAndroidAPIVO vo) {
         return (Integer)insert("vibratorAndroidAPIDAO.insertVibrator", vo);
     }
 
@@ -55,9 +55,8 @@ public class VibratorAndroidAPIDAO extends EgovComAbstractDAO {
      * 알람 정보 목록을 조회한다.
      * @param vo - 조회할 정보가 담긴 VibratorAPIDefaultVO
      * @return 네트워크 정보 목록
-     * @exception Exception
      */
-    public List<?> selectVibratorList(VibratorAndroidAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectVibratorList(VibratorAndroidAPIDefaultVO searchVO) {
         return selectList("vibratorAndroidAPIDAO.selectVibratorList", searchVO);
     }
 }

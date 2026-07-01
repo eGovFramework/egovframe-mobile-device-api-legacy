@@ -33,6 +33,7 @@ import org.springframework.stereotype.Repository;
  * @ ---------   ---------   -------------------------------
  * @ 2012.07.23    서형주                  최초생성
  *   2012.08.16    서준식                 json 버전으로 변경 
+ *   2026.06.26    이백행                  [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 23
@@ -48,9 +49,8 @@ public class AcceleratoriOSAPIDAO extends EgovComAbstractDAO {
 	 * 가속도 정보를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 AcceleratoriOSAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertAcceleratorInfo(AcceleratoriOSAPIVO vo) throws Exception {
+    public int insertAcceleratorInfo(AcceleratoriOSAPIVO vo) {
     	return (Integer)insert("acceleratoriOSAPIDAO.insertAcceleratorInfo", vo);
     }
 
@@ -58,9 +58,8 @@ public class AcceleratoriOSAPIDAO extends EgovComAbstractDAO {
 	 * 가속도 정보를 수정한다.
 	 * @param vo - 수정할 정보가 담긴 AcceleratoriOSAPIVO
 	 * @return void형
-	 * @exception Exception
 	 */
-    public void updateAcceleratorInfo(AcceleratoriOSAPIVO vo) throws Exception {
+    public void updateAcceleratorInfo(AcceleratoriOSAPIVO vo) {
         update("acceleratoriOSAPIDAO.updateAcceleratorInfo", vo);
     }
 
@@ -68,9 +67,8 @@ public class AcceleratoriOSAPIDAO extends EgovComAbstractDAO {
 	 * 가속도 정보를 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 AcceleratoriOSAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int deleteAcceleratorInfo(AcceleratoriOSAPIVO vo) throws Exception {
+    public int deleteAcceleratorInfo(AcceleratoriOSAPIVO vo) {
     	return (Integer)delete("acceleratoriOSAPIDAO.deleteAcceleratorInfo", vo);
     }
 
@@ -78,9 +76,8 @@ public class AcceleratoriOSAPIDAO extends EgovComAbstractDAO {
 	 * 가속도 정보를 조회한다.
 	 * @param vo - 조회할 정보가 담긴 AcceleratoriOSAPIVO
 	 * @return 조회한 가속도 정보
-	 * @exception Exception
 	 */
-    public AcceleratoriOSAPIVO selectAcceleratorInfo(AcceleratoriOSAPIVO vo) throws Exception {
+    public AcceleratoriOSAPIVO selectAcceleratorInfo(AcceleratoriOSAPIVO vo) {
         return (AcceleratoriOSAPIVO) selectOne("acceleratoriOSAPIDAO.selectAcceleratorInfo", vo);
     }
 
@@ -88,9 +85,8 @@ public class AcceleratoriOSAPIDAO extends EgovComAbstractDAO {
 	 * 가속도 정보 목록을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 AcceleratoriOSAPIDefaultVO
 	 * @return 가속도 정보 목록
-	 * @exception Exception
 	 */
-    public List<?> selectAcceleratorInfoList(AcceleratoriOSAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectAcceleratorInfoList(AcceleratoriOSAPIDefaultVO searchVO) {
         return selectList("acceleratoriOSAPIDAO.selectAcceleratorInfoList", searchVO);
     }
 
@@ -98,7 +94,6 @@ public class AcceleratoriOSAPIDAO extends EgovComAbstractDAO {
 	 * 가속도 정보 총 갯수를 조회한다.
 	 * @param  vo - 조회할 정보가 담긴 AcceleratoriOSAPIDefaultVO
 	 * @return 가속도 정보 총 갯수
-	 * @exception
 	 */
     public int selectAcceleratorInfoListTotCnt(AcceleratoriOSAPIDefaultVO searchVO) {
         return (Integer) selectOne("acceleratoriOSAPIDAO.selectAcceleratorInfoListTotCnt", searchVO);

@@ -16,6 +16,7 @@ import egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIVO;
  * @  수정일       수정자                  수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2016.07.26    신성학                최초 작성
+ *   2026.06.26    이백행                [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 07. 26
@@ -32,9 +33,8 @@ public class JailbreakDetectionDeviceAPIDAO extends EgovComAbstractDAO{
 	 * JailbreakDetectionDevice 정보를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 JailbreakDetectionAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertJailbreakDetectionDevcie(JailbreakDetectionDeviceAPIVO vo) throws Exception {
+    public int insertJailbreakDetectionDevcie(JailbreakDetectionDeviceAPIVO vo) {
     	
         return (Integer)insert("jailbreakDetectionDeviceAPIDAO.insertJailbreakDetectionDevcie", vo);
         
@@ -46,9 +46,8 @@ public class JailbreakDetectionDeviceAPIDAO extends EgovComAbstractDAO{
 	 * JailbreakDetectionDevice 정보를 조회한다.
 	 * @param vo - 등록할 정보가 담긴 JailbreakDetectionAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-	public List<?> selectJailbreakDetectionDevcieList(JailbreakDetectionDeviceAPIDefaultVO searchVO) throws Exception{
+	public List<?> selectJailbreakDetectionDevcieList(JailbreakDetectionDeviceAPIDefaultVO searchVO) {
 
 		return selectList("jailbreakDetectionDeviceAPIDAO.selectJailbreakDetectionDevcieList", searchVO);
 	}

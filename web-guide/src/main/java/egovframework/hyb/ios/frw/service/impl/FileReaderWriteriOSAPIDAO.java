@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일                 수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2012. 7. 10.  서준식                  최초생성
+ * @ 2026. 6. 26.  이백행                  [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 7. 10.
@@ -32,9 +33,8 @@ public class FileReaderWriteriOSAPIDAO extends EgovComAbstractDAO{
 	/**
 	 * 파일  정보를 입력한다.
 	 * @param fileVO - 파일 정보가 담긴 FileReaderWriteriOSAPIVO 
-	 * @exception Exception
 	 */
-    public void insertFileInfo(FileReaderWriteriOSAPIVO vo) throws Exception {
+    public void insertFileInfo(FileReaderWriteriOSAPIVO vo) {
         insert("fileReaderWriteriOSAPIDAO.insertFileInfo", vo);
     }
     
@@ -42,36 +42,32 @@ public class FileReaderWriteriOSAPIDAO extends EgovComAbstractDAO{
     /**
 	 * 업로드 된 파일의 상세 정보를 저장한다.
 	 * @param fileVO - 파일 정보가 담긴 FileReaderWriteriOSAPIVO 
-	 * @exception Exception
 	 */
-    public void insertFileDetailInfo(FileReaderWriteriOSAPIVO vo) throws Exception {
+    public void insertFileDetailInfo(FileReaderWriteriOSAPIVO vo) {
         insert("fileReaderWriteriOSAPIDAO.insertFileDetailInfo", vo);
     }
     
     /**
 	 * 파일 정보리스트를 조회한다.
 	 * @param fileVO - 파일 정보가 담긴 FileReaderWriteriOSAPIVO 
-	 * @exception Exception
 	 */
-    public List<?> selectFileInfoList(FileReaderWriteriOSAPIVO vo) throws Exception{
+    public List<?> selectFileInfoList(FileReaderWriteriOSAPIVO vo) {
     	return selectList("fileReaderWriteriOSAPIDAO.selectFileInfoList", vo);
     }
     
     /**
 	 * 파일 정보를 조회한다.
 	 * @param fileVO - 파일 정보가 담긴 FileReaderWriteriOSAPIVO 
-	 * @exception Exception
 	 */
-    public FileReaderWriteriOSAPIVO selectFileInfo(FileReaderWriteriOSAPIVO vo) throws Exception{
+    public FileReaderWriteriOSAPIVO selectFileInfo(FileReaderWriteriOSAPIVO vo) {
     	return (FileReaderWriteriOSAPIVO) selectOne("fileReaderWriteriOSAPIDAO.selectFileInfo", vo);
     }
     
     /**
 	 * 파일 정보를 삭제한다.
 	 * @param fileVO - 파일 정보가 담긴 FileReaderWriteriOSAPIVO 
-	 * @exception Exception
 	 */
-    public void deleteFileInfo(FileReaderWriteriOSAPIVO vo) throws Exception {
+    public void deleteFileInfo(FileReaderWriteriOSAPIVO vo) {
     	delete("fileReaderWriteriOSAPIDAO.deleteFileInfo", vo);
     }
     
@@ -79,9 +75,8 @@ public class FileReaderWriteriOSAPIDAO extends EgovComAbstractDAO{
     /**
 	 * 파일 디테일 정보를 삭제한다.
 	 * @param fileVO - 파일 정보가 담긴 FileReaderWriteriOSAPIVO 
-	 * @exception Exception
 	 */
-    public void deleteFileDetailInfo(FileReaderWriteriOSAPIVO vo) throws Exception {
+    public void deleteFileDetailInfo(FileReaderWriteriOSAPIVO vo) {
     	delete("fileReaderWriteriOSAPIDAO.deleteFileDetailInfo", vo);
     }
 }

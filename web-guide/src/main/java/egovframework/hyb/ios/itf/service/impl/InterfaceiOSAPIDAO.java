@@ -29,6 +29,7 @@ import egovframework.hyb.ios.itf.service.InterfaceiOSAPIVO;
  * @  수정일                 수정자                 수정내용
  * @ 
  * @ 2012.07.11    이한철                  최초생성
+ *   2026.06.26    이백행                  [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 모바일 디바이스 API 팀
  * @since 2012. 07. 11
@@ -47,7 +48,6 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 조회할 정보가 담긴 InterfaceiOSAPIVO
      * @return 인터페이스 정보 갯수
-     * @exception
      */
     public int selectInterfaceInfoListTotCnt(InterfaceiOSAPIVO vo) {
         return (Integer) selectOne(
@@ -60,9 +60,8 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 등록할 정보가 담긴 InterfaceiOSAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertInterfaceInfo(InterfaceiOSAPIVO vo) throws Exception {
+    public int insertInterfaceInfo(InterfaceiOSAPIVO vo) {
         return (Integer) insert("interfaceiOSAPIDAO.insertInterfaceInfo", vo);
     }
 
@@ -72,10 +71,8 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 로그인할 정보가 담긴 InterfaceiOSAPIVO
      * @return 로그인 결과
-     * @exception Exception
      */
-    public InterfaceiOSAPIVO selectInterfaceInfo(InterfaceiOSAPIVO vo)
-            throws Exception {
+    public InterfaceiOSAPIVO selectInterfaceInfo(InterfaceiOSAPIVO vo) {
         return (InterfaceiOSAPIVO) selectOne(
                 "interfaceiOSAPIDAO.selectInterfaceInfo", vo);
     }
@@ -86,9 +83,8 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 탈퇴할 정보가 담긴 InterfaceiOSAPIVO
      * @return 회원탈퇴 결과
-     * @exception Exception
      */
-    public int deleteInterfaceInfo(InterfaceiOSAPIVO vo) throws Exception {
+    public int deleteInterfaceInfo(InterfaceiOSAPIVO vo) {
         return delete("interfaceiOSAPIDAO.deleteInterfaceInfo", vo);
     }
 

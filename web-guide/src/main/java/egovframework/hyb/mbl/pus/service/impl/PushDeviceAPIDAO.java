@@ -32,6 +32,7 @@ import egovframework.hyb.mbl.pus.service.PushDeviceAPIVO;
  * @  수정일      수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2016.06.20   신성학               최초생성
+ *   2026.06.26   이백행               [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 06. 20
@@ -48,9 +49,8 @@ public class PushDeviceAPIDAO extends EgovComAbstractDAO {
 	 * Push Device 정보 목록을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 PushDeviceAPIDefaultVO
 	 * @return Push Device 정보 목록
-	 * @exception Exception
 	 */
-    public List<?> selectPushDeviceList(PushDeviceAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectPushDeviceList(PushDeviceAPIDefaultVO searchVO) {
         return selectList("pushDeviceAPIDAO.selectPushDeviceList", searchVO);
     }
 
@@ -58,9 +58,8 @@ public class PushDeviceAPIDAO extends EgovComAbstractDAO {
 	 * Push Device 정보를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 PushDeviceAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertPushDevice(PushDeviceAPIVO vo) throws Exception {
+    public int insertPushDevice(PushDeviceAPIVO vo) {
         return (Integer)insert("pushDeviceAPIDAO.insertPushDevice", vo);
     }
 
@@ -68,18 +67,16 @@ public class PushDeviceAPIDAO extends EgovComAbstractDAO {
 	 * Push Notification 정보를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 PushDeviceAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertPushInfo(PushDeviceAPIVO vo) throws Exception {
+    public int insertPushInfo(PushDeviceAPIVO vo) {
         return (Integer)insert("pushDeviceAPIDAO.insertVibratorInfo", vo);
     }
 	/**
 	 * Push Notification 기기 상세 조회를 한다.
 	 * @param vo - 등록할 정보가 담긴 PushDeviceAPIVO
 	 * @return 조회 결과
-	 * @exception Exception
 	 */
-    public PushDeviceAPIVO selectPushDevice(PushDeviceAPIVO vo) throws Exception {
+    public PushDeviceAPIVO selectPushDevice(PushDeviceAPIVO vo) {
         return (PushDeviceAPIVO) selectOne("pushDeviceAPIDAO.selectPushDevice", vo);
     }
 
@@ -87,9 +84,8 @@ public class PushDeviceAPIDAO extends EgovComAbstractDAO {
 	 * Push Notification 송신 메세지 조회를 한다.
 	 * @param vo - 등록할 정보가 담긴 PushDeviceAPIVO
 	 * @return 조회 결과
-	 * @exception Exception
 	 */
-    public List<?> selectPushMessageList(PushDeviceAPIVO vo) throws Exception {
+    public List<?> selectPushMessageList(PushDeviceAPIVO vo) {
         return selectList("pushDeviceAPIDAO.selectPushMessageList", vo);
     }
 
@@ -97,9 +93,8 @@ public class PushDeviceAPIDAO extends EgovComAbstractDAO {
      * Push Notification 등록된 기기가 있는지 조회를 한다.
      * @param vo
      * @return
-     * @throws Exception
      */
-    public int selectPushDeviceCount(PushDeviceAPIVO vo) throws Exception {
+    public int selectPushDeviceCount(PushDeviceAPIVO vo) {
     	return (Integer)selectOne("pushDeviceAPIDAO.selectPushDeviceCount", vo);
     }
 
