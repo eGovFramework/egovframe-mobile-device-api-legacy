@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import egovframework.hyb.add.frw.service.EgovFileReaderWriterAndroidAPIService;
 import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVO;
 import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVOList;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.add.frw.service.impl.EgovFileMngAndroidUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -89,12 +90,18 @@ public class EgovFileReaderWriterAndroidAPIController {
     })
 	@RequestMapping("/frw/xml/deleteFile.do")
 	public @ResponseBody
-	FileReaderWriterAndroidAPIVO deleteFile(FileReaderWriterAndroidAPIVO fileVO) throws Exception {
+	FileReaderWriterAndroidAPIVO deleteFile(FileReaderWriterAndroidAPIVO fileVO, HttpServletRequest request) throws Exception {
 
 		FileReaderWriterAndroidAPIVO fileReaderWriterAndroidAPIVO = new FileReaderWriterAndroidAPIVO();
 
-		// fileSN 과 uuid 를 이용하여 삭제할 파일 검색
+		fileVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, fileVO.getUuid()));
 		FileReaderWriterAndroidAPIVO selectInfoVO = egovFileReaderWriterAndroidAPIService.selectFileInfo(fileVO);
+
+		if (selectInfoVO == null) {
+			fileReaderWriterAndroidAPIVO.setResultState("FAIL");
+			fileReaderWriterAndroidAPIVO.setResultMessage("삭제 권한이 없거나 파일을 찾을 수 없습니다.");
+			return fileReaderWriterAndroidAPIVO;
+		}
 
 		if (egovFileMngAndroidUtil.deleteFile(selectInfoVO)) {
 
@@ -170,9 +177,13 @@ public class EgovFileReaderWriterAndroidAPIController {
 	@RequestMapping("/frw/xml/fileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response, FileReaderWriterAndroidAPIVO fileVO) throws Exception {
 
+		fileVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, fileVO.getUuid()));
 		FileReaderWriterAndroidAPIVO selectInfoVO = egovFileReaderWriterAndroidAPIService.selectFileInfo(fileVO);
+		if (selectInfoVO == null) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN, "File access denied.");
+			return;
+		}
 		egovFileMngAndroidUtil.fileDownload(request, response, selectInfoVO);
-
 	}
 
 }

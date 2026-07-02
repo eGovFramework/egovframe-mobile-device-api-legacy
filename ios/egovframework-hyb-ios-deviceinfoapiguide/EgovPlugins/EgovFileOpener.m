@@ -11,15 +11,18 @@
 //
 
 #import "EgovFileOpener.h"
+#import "EgovFileOpenerRequestValidator.h"
 
 
 @implementation EgovFileOpener {
     BOOL resultError;
+    NSString *validatedTargetFilePath;
 }
 
 - (void)fileDownload:(CDVInvokedUrlCommand *)command {
     
     resultError = NO;
+    validatedTargetFilePath = nil;
     
     NSString *url = [command.arguments objectAtIndex:0];
     NSMutableDictionary *params = [command.arguments objectAtIndex:1];
@@ -28,40 +31,49 @@
     NSLog(@"url : %@", url);
     NSLog(@"options : %@", params);
     
-    self.streFileNm = [params objectForKey:@"streFileNm"];
-    self.orignlFileNm = [params objectForKey:@"orignlFileNm"];
+    NSError *validationError = nil;
+
+    self.streFileNm = [EgovFileOpenerRequestValidator normalizeStoredFileName:[params objectForKey:@"streFileNm"]
+                                                                         error:&validationError];
+    if (validationError != nil) {
+        [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:1
+                                             addMessage:[NSString stringWithFormat:@" (%@)", validationError.localizedDescription]];
+        return;
+    }
+
+    self.orignlFileNm = [EgovFileOpenerRequestValidator normalizeFileName:[params objectForKey:@"orignlFileNm"]
+                                                                    error:&validationError];
+    if (self.orignlFileNm == nil) {
+        [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:1
+                                             addMessage:[NSString stringWithFormat:@" (%@)", validationError.localizedDescription]];
+        return;
+    }
+
     self.targetPath = [params objectForKey:@"targetPath"];
+    validatedTargetFilePath = [EgovFileOpenerRequestValidator resolveSecureTargetFilePathForDirectory:self.targetPath
+                                                                                             fileName:self.orignlFileNm
+                                                                                                error:&validationError];
+    if (validatedTargetFilePath == nil) {
+        [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:1
+                                             addMessage:[NSString stringWithFormat:@" (%@)", validationError.localizedDescription]];
+        return;
+    }
+    self.targetPath = [validatedTargetFilePath stringByDeletingLastPathComponent];
     
     NSLog(@"streFileNm : %@", self.streFileNm);
     NSLog(@"orignlFileNm : %@", self.orignlFileNm);
     NSLog(@"targetPath : %@", self.targetPath);
     
-    if (self.targetPath==nil || [self.targetPath isKindOfClass:[NSNull class]]) {
-        NSLog(@"targetPath is null");
-        NSArray *pa = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *documentFilePath = [pa objectAtIndex:0];
-        NSLog(@">>> documentFilePath %@",documentFilePath);
-        self.targetPath = [documentFilePath stringByAppendingPathComponent:@"/www"];
-    } else {
-        NSLog(@"targetPath : <%@>",self.targetPath);
+    NSString *downloadAssetFileUrl = [EgovFileOpenerRequestValidator buildDownloadUrlWithServerUrl:kSERVER_URL
+                                                                                               uri:url
+                                                                                             error:&validationError];
+    if (downloadAssetFileUrl == nil) {
+        [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:1
+                                             addMessage:[NSString stringWithFormat:@" (%@)", validationError.localizedDescription]];
+        return;
     }
+    NSLog(@"downloadAssetFileUrl : %@", downloadAssetFileUrl);
     
-    NSString *downloadAssetFileUrl;
-    if (url==nil || [url isKindOfClass:[NSNull class]]) {
-
-        NSLog(@"ERROR : url param is null");
-        NSLog(@"Connection Fail!!!");
-        resultError = YES;
-
-        // Cordova 콜백 처리
-        [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:1 addMessage:@" (URL)"];
-        // 에러처리
-    } else {
-        downloadAssetFileUrl = [NSString stringWithFormat:@"%@%@", kSERVER_URL, url];
-        NSLog(@"downloadAssetFileUrl : %@", downloadAssetFileUrl);
-    }
-    
-    //프로그레스바 생성 및 화면에 보여줌
     [self initDialogView:@"리소스 파일을 다운로드 중입니다."];
     [self dialogView:@"show" progress:0];
     
@@ -78,22 +90,14 @@
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:updateFileUrl]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:60.0];
-    // create the connection with the request
-    // and start loading the data
     NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     
     if (theConnection) {
-        
-        // Create the NSMutableData to hold the received data.
-        // receivedData is an instance variable declared elsewhere.
         _receivedData = [NSMutableData data];
         
     } else {
-        // Inform the user that the connection failed.
         NSLog(@"Connection Fail!!!");
         resultError = YES;
-
-        // Cordova 콜백 처리
         [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:2 addMessage:@" (URL)"];
         
         return NO;
@@ -104,13 +108,6 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    // This method is called when the server has determined that it
-    // has enough information to create the NSURLResponse.
-    
-    // It can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-    
-    // receivedData is an instance variable declared elsewhere.
     NSLog(@">>> suggestedFilename = %@",response.suggestedFilename);
     NSLog(@">>> expectedContentLength = %lld",response.expectedContentLength);
     
@@ -120,7 +117,6 @@
     {
         case 404:
             resultError = YES;
-            // Cordova 콜백 처리
             [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:3 addMessage:@" URL이 존재하지 않습니다."];
             NSLog(@"=> Server Error  : 404");
             [connection cancel];
@@ -128,7 +124,6 @@
             break;
         case 500:
             resultError = YES;
-            // Cordova 콜백 처리
             [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:3 addMessage:@" 서버 내부오류가 발생했습니다."];
             NSLog(@"=> Server Error  : 500");
             [connection cancel];
@@ -149,8 +144,6 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    // Append the new data to receivedData.
-    // receivedData is an instance variable declared elsewhere.
     [_receivedData appendData:data];
     self.downloadContentLength += [data length];
     float progress = (self.downloadContentLength*1.0f)/self.expectedContentLength;
@@ -160,47 +153,41 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    // release the connection, and the data object
-    //[connection release];
-    // receivedData is declared as a method instance elsewhere
-    //[receivedData release];
-    
-    // inform the user
     NSLog(@"Connection failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
 
     resultError = YES;
-    // Cordova 콜백 처리
     [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:3 addMessage:[error localizedDescription]];
     [self dialogView:@"hide" progress:0];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    // do something with the data
-    // receivedData is declared as a method instance elsewhere
-    
-    //NSString *fileInfo= [NSString stringWithFormat:@"Succeeded! Received %lu bytes of data",(unsigned long)[_receivedData length]];
-    //[self performSelectorOnMainThread:@selector(log:) withObject:fileInfo waitUntilDone:YES];
-    
     NSLog(@"=> download Finish");
-    NSString *targetFileLocation = [self.targetPath stringByAppendingString:self.orignlFileNm];
+    NSString *targetFileLocation = validatedTargetFilePath;
+    if (targetFileLocation == nil) {
+        NSError *validationError = nil;
+        targetFileLocation = [EgovFileOpenerRequestValidator resolveSecureTargetFilePathForDirectory:self.targetPath
+                                                                                            fileName:self.orignlFileNm
+                                                                                               error:&validationError];
+    }
+    if (targetFileLocation == nil) {
+        [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:1 addMessage:@" (Target path)"];
+        [self dialogView:@"hide" progress:0];
+        return;
+    }
     
-    BOOL ret = [_receivedData writeToFile:[targetFileLocation stringByReplacingOccurrencesOfString:@"file://" withString:@""] atomically:YES];
+    BOOL ret = [_receivedData writeToFile:targetFileLocation atomically:YES];
   
     NSLog(@"targetFileLocation : %@", targetFileLocation);
     NSLog(@">>> File Store Result: %@", (ret ? @"YES": @"NO"));
     
 
-    if (ret==YES) { // 성공
-        
-        // Cordova 콜백 처리
+    if (ret==YES) {
         [self requestOKCommandDelegateWithCallBackId:self.callbackID addMessage:@""];
         
-    } else { // 오류
-        
-        // Cordova 콜백 처리
+    } else {
         [self requestFailCommandDelegateWithCallBackId:self.callbackID errorCode:9 addMessage:@""];
         
     }
@@ -279,7 +266,6 @@
     
     self.dialogView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.dialogView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.85f];
-    //dialogView.alpha = 0.5f;
     [self.dialogView addSubview:infoView];
     
     [self.viewController.view addSubview:self.dialogView];

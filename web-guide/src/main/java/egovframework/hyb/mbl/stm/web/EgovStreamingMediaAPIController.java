@@ -21,6 +21,7 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.AbstractView;
 
 import egovframework.hyb.ios.dvc.service.DeviceiOSAPIVO;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.mbl.stm.service.EgovStreamingMediaAPIService;
 import egovframework.hyb.mbl.stm.service.StreamingMediaAPIDefaultVO;
 import egovframework.hyb.mbl.stm.service.StreamingMediaAPIFileVO;
@@ -87,13 +88,12 @@ public class EgovStreamingMediaAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
 	@RequestMapping("/stm/updateMediaInfoRevivCo.do")
-	public ModelAndView updateMediaInfoRevivCo(@RequestParam("sn") String sn) throws Exception {
+	public ModelAndView updateMediaInfoRevivCo(@RequestParam("sn") String sn, HttpServletRequest request) throws Exception {
 
-		if (sn != null && "".equals(sn) == false) {
-
+		if (sn != null && !"".equals(sn)) {
 			StreamingMediaAPIVO vo = new StreamingMediaAPIVO();
 			vo.setSn(sn);
-
+			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, request.getParameter("uuid")));
 			egovStreamingMediaAPIService.updateMediaInfoRevivCo(vo);
 		}
 		
@@ -109,21 +109,27 @@ public class EgovStreamingMediaAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
 	@RequestMapping("/stm/getMediaStreaming.do")
-	public ModelAndView getMediaStreaming(@RequestParam("sn") final String sn, HttpServletResponse response) throws Exception {
+	public ModelAndView getMediaStreaming(@RequestParam("sn") final String sn,
+			final HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		View streamView = new AbstractView() {
 	        @Override
-	        protected void renderMergedOutputModel(Map model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	        protected void renderMergedOutputModel(Map model, HttpServletRequest req, HttpServletResponse resp) throws Exception {
 	            
 	        	StreamingMediaAPIFileVO resultVO = null;
-	    		if (sn != null && "".equals(sn) == false) {
-
+	    		if (sn != null && !"".equals(sn)) {
 	    			StreamingMediaAPIFileVO vo = new StreamingMediaAPIFileVO();
-	    			vo.setSn(Integer.parseInt(sn));	    			
-	    			resultVO = egovStreamingMediaAPIService.selectMediaFileURL(vo);	    			
+	    			vo.setSn(Integer.parseInt(sn));
+	    			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, req.getParameter("uuid")));
+	    			resultVO = egovStreamingMediaAPIService.selectMediaFileURL(vo);
 	    		}
-	    		
-	    		RandomAccessFile rf = new RandomAccessFile(new File(resultVO.getFileStreCours().toString() + resultVO.getStreFileNm().toString()), "r");
+	    		if (resultVO == null) {
+	    			resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Media access denied.");
+	    			return;
+	    		}
+
+	    		RandomAccessFile rf = new RandomAccessFile(new File(
+	    				resultVO.getFileStreCours().toString() + resultVO.getStreFileNm().toString()), "r");
 	    		
 	    		long rangeStart = 0;
 	    		long rangeEnd = 0;
@@ -131,7 +137,7 @@ public class EgovStreamingMediaAPIController {
 	    		
 	    		try{
 	    			long movieSize = rf.length();
-	    			String range = request.getHeader("range");
+	    				String range = req.getHeader("range");
 	    		
 	    			if(range != null){
 	    				if(range.endsWith("-")){
@@ -151,16 +157,16 @@ public class EgovStreamingMediaAPIController {
 	    			
 	    			long partSize = rangeEnd - rangeStart +1;
 	    			
-	    			response.reset();	    			
-	    			response.setStatus(isPart ? 206 : 200);	
-	    			response.setContentType("video/"+ resultVO.getFileExtsn());
-	    			response.setHeader("Content-Disposition:", "attachment; filename=" + new String(resultVO.getOrignlFileNm().getBytes(), "UTF-8"));
-	    			response.setHeader("Content-Transfer-Encoding", "binary");
-	    			response.setHeader("Content-Range", "bytes"+rangeStart+"-"+rangeEnd+"/"+movieSize);
-	    			response.setHeader("Accept-Range", "bytes");
-	    			response.setHeader("Content-Length", ""+partSize);
+	    			resp.reset();	    			
+	    			resp.setStatus(isPart ? 206 : 200);	
+	    			resp.setContentType("video/"+ resultVO.getFileExtsn());
+	    			resp.setHeader("Content-Disposition:", "attachment; filename=" + new String(resultVO.getOrignlFileNm().getBytes(), "UTF-8"));
+	    			resp.setHeader("Content-Transfer-Encoding", "binary");
+	    			resp.setHeader("Content-Range", "bytes"+rangeStart+"-"+rangeEnd+"/"+movieSize);
+	    			resp.setHeader("Accept-Range", "bytes");
+	    			resp.setHeader("Content-Length", ""+partSize);
 	    			
-	    			OutputStream out = response.getOutputStream();
+	    			OutputStream out = resp.getOutputStream();
 	    			rf.seek(rangeStart);
 	    			
 	    			int bufferSize = 8*1024;

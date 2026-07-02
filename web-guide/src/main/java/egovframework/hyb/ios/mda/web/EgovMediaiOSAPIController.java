@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.ios.mda.service.EgovMediaiOSAPIService;
 import egovframework.hyb.ios.mda.service.MediaiOSAPIFileVO;
 import egovframework.hyb.ios.mda.service.MediaiOSAPIVO;
@@ -171,11 +172,13 @@ public class EgovMediaiOSAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping("/mda/getMediaiOS.do")
-    public void getSoundFile(@RequestParam("sn") String sn, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	if(sn != null && "".equals(sn) == false) {
+    public void getSoundFile(@RequestParam("sn") String sn,
+            @RequestParam(value = "uuid", required = false) String uuid,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	if(sn != null && !"".equals(sn)) {
     		MediaiOSAPIFileVO vo = new MediaiOSAPIFileVO();
 			vo.setSn(Integer.parseInt(sn));
-		
+			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, uuid));
 			egovMediaiOSAPIService.selectMediaFileInf(response, vo);
     	}
     }

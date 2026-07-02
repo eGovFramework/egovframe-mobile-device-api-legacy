@@ -18,11 +18,13 @@ package egovframework.hyb.ios.dvc.web;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.ios.dvc.service.DeviceiOSAPIVO;
 import egovframework.hyb.ios.dvc.service.EgovDeviceiOSAPIService;
 import egovframework.rte.fdl.property.EgovPropertyService;
@@ -98,11 +100,14 @@ public class EgovDeviceiOSAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping(value="/dvc/deviceInfo.do")
-    public ModelAndView selectDeviceInfo(DeviceiOSAPIVO vo)
+    public ModelAndView selectDeviceInfo(DeviceiOSAPIVO vo, HttpServletRequest request)
             throws Exception {
- 
+
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		DeviceiOSAPIVO deviceiOSAPIVO = egovDeviceiOSAPIService.selectDeviceInfo(vo);
+		if (deviceiOSAPIVO != null) {
+			DeviceAPIAuthSupport.assertOwnedUuid(request, deviceiOSAPIVO.getUuid());
+		}
 		
 		jsonView.addObject("deviceInfo", deviceiOSAPIVO);
 		jsonView.addObject("resultState","OK");
@@ -145,11 +150,17 @@ public class EgovDeviceiOSAPIController {
     	@ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping("/dvc/deleteDeviceInfo.do")
-    public ModelAndView deleteDeviceInfo(
-    		DeviceiOSAPIVO vo)
+    public ModelAndView deleteDeviceInfo(DeviceiOSAPIVO vo, HttpServletRequest request)
             throws Exception {
-    	
-    	egovDeviceiOSAPIService.deleteDeviceInfo(vo);
+
+    	DeviceiOSAPIVO deviceInfo = egovDeviceiOSAPIService.selectDeviceInfo(vo);
+    	if (deviceInfo == null) {
+    		ModelAndView deniedView = new ModelAndView("jsonView");
+    		deniedView.addObject("resultState", "FAIL");
+    		return deniedView;
+    	}
+    	DeviceAPIAuthSupport.assertOwnedUuid(request, deviceInfo.getUuid());
+    	egovDeviceiOSAPIService.deleteDeviceInfo(deviceInfo);
         
         ModelAndView jsonView = new ModelAndView("jsonView");
         jsonView.addObject("resultState","OK");

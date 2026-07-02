@@ -83,7 +83,8 @@
 	    	SELECT
 				A.SN, A.MD_SJ, A.REVIV_CO, B.STRE_FILE_NM
 			FROM MEDIA A JOIN FILE_DETAIL_INFO B ON A.FILE_SN = B.FILE_SN
-			WHERE SN = #{sn}
+			WHERE A.SN = #{sn}
+			AND A.UUID = #{uuid}
 			
 	</select>
 	
@@ -94,6 +95,7 @@
 			FROM MEDIA
 			WHERE USEYN = 'Y'
 			  AND MD_CODE IN ('MLT02', 'MLT03')
+			  AND UUID = #{uuid}
 			ORDER BY SN DESC
 			
 	</select>
@@ -104,6 +106,7 @@
 				A.MD_CODE, B.FILE_SN, B.FILE_STRE_COURS, B.STRE_FILE_NM, B.FILE_EXTSN
 			FROM MEDIA A JOIN FILE_DETAIL_INFO B ON A.FILE_SN = B.FILE_SN
 			WHERE A.SN = #{sn}
+			AND A.UUID = #{uuid}
 			
 	</select>
 	

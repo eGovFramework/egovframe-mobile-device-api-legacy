@@ -42,5 +42,4 @@ public interface EgovResourceUpdateDeviceAPIService {
 	 */
 	ResourceUpdateDeviceAPIVO selectResourceUpdateVersionInfo(ResourceUpdateDeviceAPIVO searchVO) throws Exception;
 
-
 }

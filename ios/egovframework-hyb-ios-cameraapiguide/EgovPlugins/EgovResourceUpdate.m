@@ -7,6 +7,9 @@
 //
 
 #import "EgovResourceUpdate.h"
+#import <CommonCrypto/CommonDigest.h>
+
+static const unsigned long long kMaxUncompressedZipSize = 100ULL * 1024ULL * 1024ULL;
 
 @implementation EgovResourceUpdate
 
@@ -24,7 +27,6 @@
 - (void)getAppVersion:(CDVInvokedUrlCommand *)command {
     
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    //NSString *appDisplayName = [infoDictionary objectForKey:@"CFBundleDisplayName"];
     NSString *appVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
     NSString *buildVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
     
@@ -49,8 +51,6 @@
     NSString *resInstallDt = [EgovResourceUpdate loadFromUserDefaults:@"resInstallDt"];
     
     NSDictionary *jsonInfo;
-    //jsonInfo = @{@"resVersion": resVersion};
-    
     jsonInfo = @{@"resVersion": [NSString stringWithFormat:@"%@",resVersion]
                  ,@"resDistDt": [NSString stringWithFormat:@"%@",resDistDt]
                  ,@"resInstallDt": [NSString stringWithFormat:@"%@",resInstallDt]
@@ -77,12 +77,20 @@
     self.resLastestVersion = [params objectForKey:@"resLastestVersion"];
     self.resVersionUpdDt = [params objectForKey:@"resVersionUpdDt"];
     self.resVersion = [params objectForKey:@"resVersion"];
+    self.expectedSha256 = [params objectForKey:@"resFileSha256"];
     
     NSLog(@"streFileNm : %@", streFileNm);
     NSLog(@"orignlFileNm : %@", orignlFileNm);
     NSLog(@"targetPath : %@", targetPath);
     NSLog(@"resLastestVersion : %@", self.resLastestVersion);
     NSLog(@"resVersionUpdDt : %@", self.resVersionUpdDt);
+    
+    if (self.expectedSha256 == nil || [self.expectedSha256 isKindOfClass:[NSNull class]]
+        || [self.expectedSha256 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0) {
+        [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:10 addMessage:@""];
+        return;
+    }
+    self.expectedSha256 = [[self.expectedSha256 lowercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     NSString *downloadAssetFileUrl;
     
@@ -91,47 +99,32 @@
     
     NSLog(@">>> documentFilePath %@",documentFilePath);
     
-    //NSString *downloadLocalPath = [documentFilePath stringByAppendingPathComponent:@"test.zip"];
-    NSString *downloadLocalPath = [NSTemporaryDirectory() stringByAppendingPathComponent:orignlFileNm];
+    NSString *safeFileName = [EgovResourceUpdate sanitizeFileName:orignlFileNm];
+    NSString *downloadLocalPath = [NSTemporaryDirectory() stringByAppendingPathComponent:safeFileName];
     
-    if (targetPath==nil || [targetPath isKindOfClass:[NSNull class]]) {
-        NSLog(@"targetPath is null");
-        targetPath = [documentFilePath stringByAppendingPathComponent:@"/www"];
-    } else {
-        NSLog(@"targetPath OK <%@>",targetPath);
+    NSError *targetPathError = nil;
+    targetPath = [EgovResourceUpdate resolveSecureTargetPath:targetPath documentRoot:documentFilePath error:&targetPathError];
+    if (targetPath == nil) {
+        [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:12 addMessage:@""];
+        return;
     }
     
     if (url==nil || [url isKindOfClass:[NSNull class]]) {
-        //downloadAssetFileUrl = @"http://192.168.100.120:8080/Template-DeviceAPI-Total_Web/upd/ResourceUpdatefileDownload.do?streFileNm=AAA&orignlFileNm=BBB";
         NSLog(@"ERROR : url param is null");
-        NSLog(@"Connection Fail!!!");
-        
-        // Cordova 콜백 처리
         [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:1 addMessage:@" (URL)"];
-        
-        // 에러처리
-    } else {
-        downloadAssetFileUrl = [NSString stringWithFormat:@"%@%@", kSERVER_URL, url];
-        NSLog(@"downloadAssetFileUrl : %@", downloadAssetFileUrl);
+        return;
     }
     
+    downloadAssetFileUrl = [NSString stringWithFormat:@"%@%@", kSERVER_URL, url];
+    NSLog(@"downloadAssetFileUrl : %@", downloadAssetFileUrl);
     
-    //프로그레스바 생성 및 화면에 보여줌
+    if (![EgovResourceUpdate isSecureDownloadUrl:downloadAssetFileUrl]) {
+        [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:4 addMessage:@""];
+        return;
+    }
+    
     [self initDialogView:@"리소스 파일을 다운로드 중입니다."];
     [self dialogView:@"show" progress:0];
-    /*
-     self.progressAlert = [[UIAlertView alloc] initWithTitle:@"Please wait..."
-     message:@"리소스 파일을 다운로드 중입니다."
-     delegate:self cancelButtonTitle:nil
-     otherButtonTitles:nil];
-     self.progressAlert.tag = 12;
-     self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(30.0f, 80.0f, 225.0f, 90.0f)];
-     [self.progressAlert addSubview:self.progressView];
-     [self.progressView setProgressViewStyle:UIProgressViewStyleBar];
-     [self.progressAlert show];
-     //self.progressView.progress = .5f;
-     */
-    
     
     [self UpdateZipAssetFileAtUrl:downloadAssetFileUrl downloadLocalPath:downloadLocalPath toUnzipPath:targetPath];
     
@@ -144,28 +137,16 @@
     self.fileUnzipPath = unzipPath;
     
     NSLog(@">>> download UPDATEFILE from URL = %@",updateFileUrl);
-    /*NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.100.120:8080/Template-DeviceAPI-Total_Web/upd/ResourceUpdatefileDownload.do?orignlFileNm=UPDATE_IMAGE_20160626.zip&streFileNm=FILE_201606301111.zip"]
-     cachePolicy:NSURLRequestUseProtocolCachePolicy
-     timeoutInterval:60.0];
-     */
     NSURLRequest *theRequest=[NSURLRequest requestWithURL:[NSURL URLWithString:updateFileUrl]
                                               cachePolicy:NSURLRequestUseProtocolCachePolicy
                                           timeoutInterval:60.0];
-    // create the connection with the request
-    // and start loading the data
     NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:theRequest delegate:self];
     
     if (theConnection) {
-        // Create the NSMutableData to hold the received data.
-        // receivedData is an instance variable declared elsewhere.
         _receivedData = [NSMutableData data];
     } else {
-        // Inform the user that the connection failed.
         NSLog(@"Connection Fail!!!");
-        
-        // Cordova 콜백 처리
         [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:2 addMessage:@" (URL)"];
-        
         return NO;
     }
     return YES;
@@ -174,13 +155,6 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    // This method is called when the server has determined that it
-    // has enough information to create the NSURLResponse.
-    
-    // It can be called multiple times, for example in the case of a
-    // redirect, so each time we reset the data.
-    
-    // receivedData is an instance variable declared elsewhere.
     NSLog(@">>> suggestedFilename = %@",response.suggestedFilename);
     NSLog(@">>> expectedContentLength = %lld",response.expectedContentLength);
     if (response.expectedContentLength==0)
@@ -194,10 +168,13 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    // Append the new data to receivedData.
-    // receivedData is an instance variable declared elsewhere.
     [_receivedData appendData:data];
     self.downloadContentLength += [data length];
+    if (self.downloadContentLength > kMaxUncompressedZipSize) {
+        [connection cancel];
+        [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:11 addMessage:@""];
+        return;
+    }
     float progress = (self.downloadContentLength*1.0f)/self.expectedContentLength;
     NSLog(@"progress = %f",progress);
     [self dialogView:@"progress" progress:progress];
@@ -205,70 +182,47 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    // release the connection, and the data object
-    //[connection release];
-    // receivedData is declared as a method instance elsewhere
-    //[receivedData release];
-    
-    // inform the user
     NSLog(@"Connection failed! Error - %@ %@",
           [error localizedDescription],
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     
-    // Cordova 콜백 처리
     [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:3 addMessage:[error localizedDescription]];
     
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    // do something with the data
-    // receivedData is declared as a method instance elsewhere
-    
-    //NSString *fileInfo= [NSString stringWithFormat:@"Succeeded! Received %lu bytes of data",(unsigned long)[_receivedData length]];
-    //[self performSelectorOnMainThread:@selector(log:) withObject:fileInfo waitUntilDone:YES];
-    
-    
     NSLog(@"download Finish");
     [_receivedData writeToFile:self.fileDownloadLocalPath atomically:YES];
+    
+    NSString *actualSha256 = [EgovResourceUpdate computeSha256HexForFileAtPath:self.fileDownloadLocalPath];
+    if (actualSha256 == nil || ![self.expectedSha256 isEqualToString:actualSha256]) {
+        [[NSFileManager defaultManager] removeItemAtPath:self.fileDownloadLocalPath error:nil];
+        [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:11 addMessage:@""];
+        [self dialogView:@"hide" progress:0];
+        return;
+    }
     
     BOOL ret = [EgovZip doUnZipFileAtPath:self.fileDownloadLocalPath toDestination:self.fileUnzipPath];
     NSLog(@">>> unzip ret %hhd",ret);
     
-    if (ret==YES) { // 성공
-        
-        
-        
-        //[EgovResourceUpdate saveToUserDefaults:self.resVersion forKey:@"resVersion"];
+    [[NSFileManager defaultManager] removeItemAtPath:self.fileDownloadLocalPath error:nil];
+    
+    if (ret==YES) {
         [EgovResourceUpdate saveToUserDefaults:self.resLastestVersion forKey:@"resVersion"];
-        NSLog(@"save resLastestVersion >>> %@",self.resLastestVersion);
-        
         [EgovResourceUpdate saveToUserDefaults:self.resVersionUpdDt forKey:@"resDistDt"];
-        NSLog(@"save resVersionUpdDt >>> %@",self.resVersionUpdDt);
         
         NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSLog(@">>> resInstallDt : %@",[dateFormatter stringFromDate:[NSDate date]]);
-        
         [EgovResourceUpdate saveToUserDefaults:[dateFormatter stringFromDate:[NSDate date]] forKey:@"resInstallDt"];
         
-        // Cordova 콜백 처리
         [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:0 addMessage:@""];
         
-    } else { // 압축풀기 오류
-        
-        // Cordova 콜백 처리
+    } else {
         [self requestCommandDelegateWithCallBackId:self.callbackID errorCode:9 addMessage:@""];
-        
     }
     
-    //self.progressAlert.message = @"OK";
-    //[self.progressAlert dismissWithClickedButtonIndex:0 animated:YES];
     [self dialogView:@"hide" progress:0];
-    
-    // release the connection, and the data object
-    //[connection release];
-    //[_receivedData release];
 }
 
 - (void) requestCommandDelegateWithCallBackId:(NSString*)callbackID errorCode:(int)errCode addMessage:(NSString*)addMessage {
@@ -286,8 +240,20 @@
         case 3:
             errMessage = @"통신오류 : ";
             break;
+        case 4:
+            errMessage = @"보안 다운로드 URL(HTTPS)만 허용됩니다.";
+            break;
         case 9:
             errMessage = @"압축풀기 작업중 오류가 발생했습니다.";
+            break;
+        case 10:
+            errMessage = @"리소스 무결성 검증값(SHA-256)이 필요합니다.";
+            break;
+        case 11:
+            errMessage = @"다운로드한 리소스의 무결성 검증에 실패했습니다.";
+            break;
+        case 12:
+            errMessage = @"허용되지 않은 압축 해제 경로입니다.";
             break;
         default:
             errMessage = @"기타 예외오류가 발생했습니다.";
@@ -309,6 +275,96 @@
 
 + (NSString*)getBundleID {
     return [[NSBundle mainBundle] bundleIdentifier];
+}
+
++ (BOOL)isSecureDownloadUrl:(NSString *)downloadUrl {
+    if (downloadUrl == nil) {
+        return NO;
+    }
+    NSURL *url = [NSURL URLWithString:downloadUrl];
+    if (url == nil || url.scheme == nil) {
+        return NO;
+    }
+    NSString *scheme = [url.scheme lowercaseString];
+    if (![scheme isEqualToString:@"http"] && ![scheme isEqualToString:@"https"]) {
+        return NO;
+    }
+#if kREQUIRE_HTTPS
+    return [scheme isEqualToString:@"https"];
+#else
+    return YES;
+#endif
+}
+
++ (NSString *)sanitizeFileName:(NSString *)fileName {
+    if (fileName == nil || [fileName isKindOfClass:[NSNull class]]) {
+        return @"resource_update.zip";
+    }
+    NSString *sanitized = [fileName lastPathComponent];
+    if (sanitized.length == 0) {
+        return @"resource_update.zip";
+    }
+    return sanitized;
+}
+
++ (NSString *)resolveSecureTargetPath:(NSString *)targetPath documentRoot:(NSString *)documentRoot error:(NSError **)error {
+    NSString *defaultPath = [documentRoot stringByAppendingPathComponent:@"www"];
+    if (targetPath == nil || [targetPath isKindOfClass:[NSNull class]]
+        || [targetPath stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0) {
+        return defaultPath;
+    }
+    
+    NSString *canonicalTarget = [targetPath stringByStandardizingPath];
+    NSString *canonicalRoot = [documentRoot stringByStandardizingPath];
+    if (![EgovResourceUpdate isPath:canonicalTarget withinDirectory:canonicalRoot]) {
+        if (error != NULL) {
+            *error = [NSError errorWithDomain:@"EgovResourceUpdate"
+                                         code:12
+                                     userInfo:@{NSLocalizedDescriptionKey: @"Target path outside app documents directory"}];
+        }
+        return nil;
+    }
+    return canonicalTarget;
+}
+
++ (BOOL)isPath:(NSString *)path withinDirectory:(NSString *)directory {
+    if (path == nil || directory == nil) {
+        return NO;
+    }
+    if ([path isEqualToString:directory]) {
+        return YES;
+    }
+    return [path hasPrefix:[directory stringByAppendingString:@"/"]];
+}
+
++ (NSString *)computeSha256HexForFileAtPath:(NSString *)filePath {
+    NSFileHandle *handle = [NSFileHandle fileHandleForReadingAtPath:filePath];
+    if (handle == nil) {
+        return nil;
+    }
+    
+    CC_SHA256_CTX context;
+    CC_SHA256_Init(&context);
+    
+    while (YES) {
+        @autoreleasepool {
+            NSData *data = [handle readDataOfLength:8192];
+            if (data.length == 0) {
+                break;
+            }
+            CC_SHA256_Update(&context, data.bytes, (CC_LONG)data.length);
+        }
+    }
+    [handle closeFile];
+    
+    unsigned char digest[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256_Final(digest, &context);
+    
+    NSMutableString *hash = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_SHA256_DIGEST_LENGTH; i++) {
+        [hash appendFormat:@"%02x", digest[i]];
+    }
+    return hash;
 }
 
 +(id) loadFromUserDefaults:(id)key {
@@ -355,7 +411,6 @@
     
     self.dialogView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.dialogView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.85f];
-    //dialogView.alpha = 0.5f;
     [self.dialogView addSubview:infoView];
     
     [self.viewController.view addSubview:self.dialogView];

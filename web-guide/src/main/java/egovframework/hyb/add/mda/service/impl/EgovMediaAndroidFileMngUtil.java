@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import egovframework.hyb.add.mda.service.EgovMediaAndroidAPIService;
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.add.mda.service.MediaAndroidAPIFileVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -59,6 +60,8 @@ public class EgovMediaAndroidFileMngUtil extends EgovAbstractServiceImpl {
     
     public MediaAndroidAPIFileVO writeUploadedFile(MultipartFile file) throws Exception{
         
+        DeviceAPIFileUploadValidator.validateMdaUpload(file);
+
         String originFileName = file.getOriginalFilename();
         int index = originFileName.lastIndexOf(".");
         String fileExt = originFileName.substring(index + 1);

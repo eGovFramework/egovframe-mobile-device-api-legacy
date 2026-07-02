@@ -160,10 +160,10 @@ function fn_egov_login_member() {
             userId: userid,
             userPw: userpw};
 
-    alert('전송방식:RESTful\n전송타입:GET('+ acceptType + ')\nparam:' + JSON.stringify(params).replace(userpw,'****'));
+        alert('전송방식:RESTful\n전송타입:POST('+ acceptType + ')\nparam:' + JSON.stringify(params).replace(userpw,'****'));
 
     // get the data from server
-    window.plugins.EgovInterface.get(url,acceptType, params, function(xmldata) {		
+    window.plugins.EgovInterface.post(url, acceptType, params, function(xmldata) {		
     /*
     var data = JSON.parse(jsondata);		
     if(data.resultState == "OK"){
@@ -172,7 +172,7 @@ function fn_egov_login_member() {
         jAlert(data.resultMessage, '오류', 'c');
     }*/
         console.log('DeviceAPIGuide fn_egov_login_member request Complete');
-        alert('응답방식:RESTful\n응답타입:GET('+ acceptType + ')\nparam:' + xmldata.replace(userpw,'****'));		
+        alert('응답방식:RESTful\n응답타입:POST('+ acceptType + ')\nparam:' + xmldata.replace(userpw,'****'));		
         $.mobile.loading("hide");
         if($(xmldata).find("resultState").text() == "OK"){
                 window.history.back();

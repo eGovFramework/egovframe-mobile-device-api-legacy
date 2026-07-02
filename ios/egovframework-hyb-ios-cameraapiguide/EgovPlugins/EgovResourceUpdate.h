@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSString *fileUnzipPath;
 @property (nonatomic, retain) NSString *resLastestVersion;
 @property (nonatomic, retain) NSString *resVersionUpdDt;
+@property (nonatomic, retain) NSString *expectedSha256;
 
 @property (nonatomic, retain) UIProgressView *progressView;
 @property (nonatomic, retain) UIAlertView *progressAlert;

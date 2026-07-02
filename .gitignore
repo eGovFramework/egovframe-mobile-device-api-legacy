@@ -1,30 +1,124 @@
-# Compiled class file
-*.class
+# =============================================================================
+# egovframe-mobile-device-api-legacy (4.3.x 이하 Legacy 통합)
+# web-guide (Maven) + android-studio/eclipse (Cordova) + ios (Xcode/Cordova)
+# =============================================================================
 
-# Log file
+# --- OS ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# --- Logs & JVM crash dumps ---
 *.log
+logs/
+hs_err_pid*
+replay_pid*
 
-# BlueJ files
+# --- Java compile output ---
+*.class
 *.ctxt
-
-# Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+# --- Maven (web-guide) ---
+web-guide/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
+# --- Gradle / Android Studio ---
 .gradle/
-.idea/
-build/
+**/.gradle/
+local.properties
+**/local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.ap_
+*.aab
+*.dex
+*.hprof
 
-# OS
-.DS_Store
+# Gradle build outputs (keep app/libs/*.jar and gradle-wrapper.jar tracked)
+**/build/
+!**/src/**/build/
+
+# IntelliJ / Android Studio (per-project IDE state)
+.idea/
+**/.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# --- Android Eclipse / Ant (Cordova legacy) ---
+**/bin/
+**/gen/
+ant-build/
+ant-gen/
+
+# --- Node.js / Cordova ---
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Cordova generated platforms (restore with cordova prepare)
+**/platforms/
+**/plugins/
+!**/src/**/plugins/
+
+# --- iOS / Xcode ---
+**/DerivedData/
+**/xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.hmap
+*.ipa
+*.dSYM
+*.dSYM.zip
+**/Pods/
+**/build/
+*.swp
+*~
+
+# --- Archives & packages (build artifacts only; not app/libs) ---
+**/target/**/*.war
+**/target/**/*.jar
+**/target/**/*.zip
+**/build/**/*.apk
+**/build/**/*.aab
+
+# --- Local secrets / overrides (template uses committed globals.properties) ---
+**/egovProps/globals-local.properties
+.env
+.env.*
+!.env.example
+
+# --- Editor / merge ---
+*.orig
+*.rej
+.projectile

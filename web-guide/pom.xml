@@ -23,8 +23,8 @@
 
     <repositories>
         <repository>
-            <id>mvn2</id>
-            <url>http://repo1.maven.org/maven2/</url>
+            <id>mvn2s</id>
+            <url>https://repo1.maven.org/maven2/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -33,28 +33,8 @@
             </snapshots>
         </repository>
         <repository>
-			<id>egovframe</id>
-			<url>http://maven.egovframe.go.kr/maven/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-        <repository>
-			<id>egovframe_old1</id>
-			<url>http://maven.egovframe.kr:8080/maven/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-        <repository>
-            <id>egovframe_old2</id>
-            <url>http://www.egovframe.go.kr/maven/</url>
+            <id>egovframe</id>
+            <url>https://maven.egovframe.go.kr/maven/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -96,6 +76,12 @@
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+            <version>4.2.20.RELEASE</version>
         </dependency>
 
         <!-- xercesImpl -->

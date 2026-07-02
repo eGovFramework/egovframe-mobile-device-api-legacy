@@ -18,6 +18,7 @@ package egovframework.hyb.mbl.pus.web;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.mbl.pus.service.EgovPushDeviceAPIService;
 import egovframework.hyb.mbl.pus.service.PushDeviceAPIDefaultVO;
 import egovframework.hyb.mbl.pus.service.PushDeviceAPIVO;
@@ -72,22 +74,24 @@ public class EgovPushDeviceAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-    @ApiOperation(value="Push Notification 정보 목록조회", notes="Push Notification 정보 목록을 조회한다.", response=PushDeviceAPIVO.class, responseContainer="List")
+    @ApiOperation(value = "Push Notification 정보 목록조회", notes = "Push Notification 정보 목록을 조회한다.", response = PushDeviceAPIVO.class, responseContainer = "List")
     @ApiImplicitParams({
-    	@ApiImplicitParam(name = "uuid", value = "기기식별코드", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "uuid", value = "기기식별코드", required = true, dataType = "string", paramType = "query"),
     })
-    @RequestMapping(value="/pus/pushDeviceInfoList.do")
-    public ModelAndView selectVibratorInfoList(@ModelAttribute("searchVO") PushDeviceAPIDefaultVO searchVO, 
-    		ModelMap model)
-            throws Exception {
- 
-		ModelAndView jsonView = new ModelAndView("jsonView");
-		List<?> PushDeviceInfoList = egovPushDeviceAPIService.selectPushDeviceList(searchVO);
-		
-		jsonView.addObject("pushDeviceInfoList", PushDeviceInfoList);
-		jsonView.addObject("resultState","OK");
-		
-		return jsonView;
+    @RequestMapping(value = "/pus/pushDeviceInfoList.do")
+    public ModelAndView selectVibratorInfoList(@ModelAttribute("searchVO") PushDeviceAPIDefaultVO searchVO,
+            HttpServletRequest request, ModelMap model) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        searchVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, searchVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+        List<?> pushDeviceInfoList = egovPushDeviceAPIService.selectPushDeviceList(searchVO);
+
+        jsonView.addObject("pushDeviceInfoList", pushDeviceInfoList);
+        jsonView.addObject("resultState", "OK");
+
+        return jsonView;
     }
 
     /**
@@ -97,26 +101,27 @@ public class EgovPushDeviceAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-    @ApiOperation(value="Push Notification 세부정보 등록", notes="Push Notification 세부정보를 등록한다.\nresponseOK = {\"resultState\",\"OK\"}")
+    @ApiOperation(value = "Push Notification 세부정보 등록", notes = "Push Notification 세부정보를 등록한다.\nresponseOK = {\"resultState\",\"OK\"}")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "uuid", value = "기기식별코드", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "uuid", value = "기기식별코드", required = true, dataType = "string", paramType = "query"),
     })
     @RequestMapping("/pus/addPushDeviceInfo.do")
-    public ModelAndView insertDeviceInfo(
-    		PushDeviceAPIVO sampleVO,
-            BindingResult bindingResult, Model model, SessionStatus status) 
-    throws Exception {
-    	
-    	ModelAndView jsonView = new ModelAndView("jsonView");
-    	
-    	int success = egovPushDeviceAPIService.insertPushDevice(sampleVO);
-    	if(success > 0) {
-			jsonView.addObject("resultState","OK");
-			jsonView.addObject("resultMessage","insert success");
-		} else {
-			jsonView.addObject("resultState","FAIL");
-			jsonView.addObject("resultMessage","insert fail");
-		}
+    public ModelAndView insertDeviceInfo(PushDeviceAPIVO sampleVO, BindingResult bindingResult,
+            HttpServletRequest request, Model model, SessionStatus status) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        sampleVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, sampleVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+
+        int success = egovPushDeviceAPIService.insertPushDevice(sampleVO);
+        if (success > 0) {
+            jsonView.addObject("resultState", "OK");
+            jsonView.addObject("resultMessage", "insert success");
+        } else {
+            jsonView.addObject("resultState", "FAIL");
+            jsonView.addObject("resultMessage", "insert fail");
+        }
 
         return jsonView;
     }
@@ -129,27 +134,28 @@ public class EgovPushDeviceAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-    @ApiOperation(value="Push Notification 발송메시지정보 등록", notes="Push Notification 발송메시지정보를 등록한다.\nresponseOK = {\"resultState\",\"OK\"}")
+    @ApiOperation(value = "Push Notification 발송메시지정보 등록", notes = "Push Notification 발송메시지정보를 등록한다.\nresponseOK = {\"resultState\",\"OK\"}")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "uuid", value = "기기식별코드", required = true, dataType = "string", paramType = "query"),
-        @ApiImplicitParam(name = "osType", value = "OS 구분", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "uuid", value = "기기식별코드", required = true, dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "osType", value = "OS 구분", required = true, dataType = "string", paramType = "query"),
     })
     @RequestMapping("/pus/requestPushInfo.do")
-    public ModelAndView insertVibratorInfo(
-    		PushDeviceAPIVO sampleVO,
-            BindingResult bindingResult, Model model, SessionStatus status) 
-    throws Exception {
-    	
-    	ModelAndView jsonView = new ModelAndView("jsonView");
-    	
-    	int success = egovPushDeviceAPIService.insertPushInfo(sampleVO);
-    	if(success > 0) {
-			jsonView.addObject("resultState","OK");
-			jsonView.addObject("resultMessage","insert success");
-		} else {
-			jsonView.addObject("resultState","FAIL");
-			jsonView.addObject("resultMessage","insert fail");
-		}
+    public ModelAndView insertVibratorInfo(PushDeviceAPIVO sampleVO, BindingResult bindingResult,
+            HttpServletRequest request, Model model, SessionStatus status) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        sampleVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, sampleVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+
+        int success = egovPushDeviceAPIService.insertPushInfo(sampleVO);
+        if (success > 0) {
+            jsonView.addObject("resultState", "OK");
+            jsonView.addObject("resultMessage", "insert success");
+        } else {
+            jsonView.addObject("resultState", "FAIL");
+            jsonView.addObject("resultMessage", "insert fail");
+        }
 
         return jsonView;
     }
@@ -161,23 +167,29 @@ public class EgovPushDeviceAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-    @ApiOperation(value="Push Notification 세부정보 조회", notes="Push Notification 세부정보를 조회한다.", response=PushDeviceAPIVO.class)
+    @ApiOperation(value = "Push Notification 세부정보 조회", notes = "Push Notification 세부정보를 조회한다.", response = PushDeviceAPIVO.class)
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "uuid", value = "기기식별코드", required = true, dataType = "string", paramType = "query"),
     })
-    @RequestMapping(value="/pus/pushDeviceInfo.do")
-    public ModelAndView selectVibratorInfo(@ModelAttribute("searchVO") PushDeviceAPIVO searchVO, 
-    		ModelMap model)
-            throws Exception {
- 
-		ModelAndView jsonView = new ModelAndView("jsonView");
-		PushDeviceAPIVO pushDeviceAPIVO = egovPushDeviceAPIService.selectPushDevice(searchVO);
-		
-		jsonView.addObject("pushDeviceInfo", pushDeviceAPIVO);
-		jsonView.addObject("resultState","OK");
-		
-		return jsonView;
-    } 
+    @RequestMapping(value = "/pus/pushDeviceInfo.do")
+    public ModelAndView selectVibratorInfo(@ModelAttribute("searchVO") PushDeviceAPIVO searchVO,
+            HttpServletRequest request, ModelMap model) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        searchVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, searchVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+        PushDeviceAPIVO pushDeviceAPIVO = egovPushDeviceAPIService.selectPushDevice(searchVO);
+        if (pushDeviceAPIVO != null) {
+            DeviceAPIAuthSupport.assertOwnedUuid(request, pushDeviceAPIVO.getUuid());
+        }
+
+        jsonView.addObject("pushDeviceInfo", pushDeviceAPIVO);
+        jsonView.addObject("resultState", "OK");
+
+        return jsonView;
+    }
     
     /**
 	 * Push 송신 메세지 목록을 조회한다.
@@ -186,24 +198,23 @@ public class EgovPushDeviceAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-    @ApiOperation(value="Push Notification 송신메시지 세부정보 조회", notes="Push Notification 송신메시지 세부정보를 조회한다.", response=PushDeviceAPIVO.class)
+    @ApiOperation(value = "Push Notification 송신메시지 세부정보 조회", notes = "Push Notification 송신메시지 세부정보를 조회한다.", response = PushDeviceAPIVO.class)
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "uuid", value = "기기식별코드", required = true, dataType = "string", paramType = "query"),
     })
-    @RequestMapping(value="/pus/PushMessageList.do")
-    public ModelAndView selectPushMessageList(@ModelAttribute("searchVO") PushDeviceAPIVO searchVO, 
-    		ModelMap model)
-            throws Exception {
- 
-		ModelAndView jsonView = new ModelAndView("jsonView");
-		List<?> PushMessageList = egovPushDeviceAPIService.selectPushMessageList(searchVO);
-		
-		jsonView.addObject("PushMessageList", PushMessageList);
-		jsonView.addObject("resultState","OK");
-		
-		return jsonView;
-    } 
-    
-    
-}
+    @RequestMapping(value = "/pus/PushMessageList.do")
+    public ModelAndView selectPushMessageList(@ModelAttribute("searchVO") PushDeviceAPIVO searchVO,
+            HttpServletRequest request, ModelMap model) throws Exception {
 
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        searchVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, searchVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+        List<?> pushMessageList = egovPushDeviceAPIService.selectPushMessageList(searchVO);
+
+        jsonView.addObject("PushMessageList", pushMessageList);
+        jsonView.addObject("resultState", "OK");
+
+        return jsonView;
+    }
+}

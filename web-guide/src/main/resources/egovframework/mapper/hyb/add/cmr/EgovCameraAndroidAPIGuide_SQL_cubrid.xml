@@ -82,6 +82,7 @@
 		
 			DELETE FROM CAMERA
 			WHERE SN = #{sn}
+			AND UUID = #{uuid}
 		
 	</delete>
 	
@@ -98,6 +99,7 @@
 				SN, FILE_SN, PHOTO_SJ
 			FROM CAMERA
 			WHERE SN = #{sn}
+			AND UUID = #{uuid}
 		
 	</select>
 	
@@ -107,6 +109,7 @@
 			FROM	(SELECT
 						A.SN, A.PHOTO_SJ, A.FILE_SN, B.FILE_STRE_COURS, B.STRE_FILE_NM
 						FROM CAMERA A JOIN FILE_DETAIL_INFO B ON A.FILE_SN = B.FILE_SN
+						WHERE A.UUID = #{uuid}
 						ORDER BY A.FILE_SN DESC
 						) TBL
 			WHERE ROWNUM BETWEEN #{firstIndex} AND #{firstIndex} + #{recordCountPerPage}
@@ -116,9 +119,10 @@
 	<select id="selectImageFileInfo" resultMap="cameraAndroidPhotoAlbumImageFile">
 			
 	    	SELECT
-				FILE_SN, FILE_STRE_COURS, STRE_FILE_NM, FILE_EXTSN
-			FROM FILE_DETAIL_INFO
-			WHERE FILE_SN = #{fileSn}
+				B.FILE_SN, B.FILE_STRE_COURS, B.STRE_FILE_NM, B.FILE_EXTSN
+			FROM CAMERA A JOIN FILE_DETAIL_INFO B ON A.FILE_SN = B.FILE_SN
+			WHERE B.FILE_SN = #{fileSn}
+			AND A.UUID = #{uuid}
 			
 	</select>
 	

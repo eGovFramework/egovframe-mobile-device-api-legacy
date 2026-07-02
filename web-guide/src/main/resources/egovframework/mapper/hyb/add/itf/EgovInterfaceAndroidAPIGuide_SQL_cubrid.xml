@@ -45,6 +45,19 @@
 			AND USER_PW = #{userPw}
 		
 	</delete>
+
+	<delete id="deleteInterfaceInfoByUserId">
+			DELETE FROM INTERFACE_EGOV
+			WHERE USER_ID = #{userId}
+	</delete>
+	
+	<select id="selectInterfaceInfoByUserId" resultMap="interfaceAndroidInfo">
+			SELECT
+				SN, UUID, EMAILS, 
+				USER_ID, USER_PW
+			FROM INTERFACE_EGOV 
+			WHERE USER_ID = #{userId}
+	</select>
 	
 	<select id="selectInterfaceInfo" resultMap="interfaceAndroidInfo">
 		

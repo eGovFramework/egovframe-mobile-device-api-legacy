@@ -39,6 +39,7 @@ var orignlFileNm;
 var streFileNm;
 var resVersionUpdDt;
 var resUpdateContent;
+var resFileSha256;
 
 var jsonresult;
 
@@ -103,7 +104,8 @@ function fn_egov_update_action() {
         streFileNm : streFileNm,
         resLastestVersion : resLastestVersion,
         targetPath : null,
-        resVersionUpdDt : resVersionUpdDt};
+        resVersionUpdDt : resVersionUpdDt,
+        resFileSha256 : resFileSha256};
     
     window.plugins.EgovResourceUpdate.update(url, params, function(jsondata) {
 
@@ -149,11 +151,16 @@ function fn_egov_update_lastestVersion() {
                 jAlert('서버에 현재 앱의 버전정보가 없습니다.', '전송 오류', 'c');
                 return;
             }
-            resLastestVersion = jsondata.result.resVersion;
-            orignlFileNm = jsondata.result.orignlFileNm;
-            streFileNm = jsondata.result.streFileNm;
-            resVersionUpdDt = jsondata.result.updDt;
-            resUpdateContent = jsondata.result.updateContent;
+         resLastestVersion = jsondata.result.resVersion;
+         orignlFileNm = jsondata.result.orignlFileNm;
+         streFileNm = jsondata.result.streFileNm;
+         resVersionUpdDt = jsondata.result.updDt;
+         resUpdateContent = jsondata.result.updateContent;
+         resFileSha256 = jsondata.result.fileSha256;
+         if (!resFileSha256) {
+             jAlert('서버에서 리소스 무결성 검증값을 받지 못했습니다.', '전송 오류', 'c');
+             return;
+         }
 
             console.log("server resLastestVersion : "+jsondata.result.resVersion);
             console.log("server orignlFileNm : "+jsondata.result.orignlFileNm);

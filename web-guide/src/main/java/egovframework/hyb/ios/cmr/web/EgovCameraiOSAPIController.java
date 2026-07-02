@@ -36,6 +36,7 @@ import egovframework.hyb.ios.cmr.service.CameraiOSAPIFileVO;
 import egovframework.hyb.ios.cmr.service.CameraiOSAPIVO;
 import egovframework.hyb.ios.cmr.service.CameraiOSAPIXmlVO;
 import egovframework.hyb.ios.cmr.service.EgovCameraiOSAPIService;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.ios.cmr.service.impl.EgovCameraiOSMngUtil;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -173,10 +174,11 @@ public class EgovCameraiOSAPIController {
     	@ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping(value="/cmr/cameraPhotoAlbumDetailiOS.do")
-    public @ResponseBody CameraiOSAPIXmlVO selectPhotoAlbum( CameraiOSAPIVO vo,
-    		SessionStatus status)
+    public @ResponseBody CameraiOSAPIXmlVO selectPhotoAlbum(CameraiOSAPIVO vo,
+    		HttpServletRequest request, SessionStatus status)
             throws Exception {
-    	
+
+    	vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, vo.getUuid()));
     	CameraiOSAPIVO cameraVO = egovCameraiOSAPIService.selectCameraPhotoAlbum(vo);
     	
     	CameraiOSAPIXmlVO cameraiOSAPIXmlVO = new CameraiOSAPIXmlVO();
@@ -198,14 +200,14 @@ public class EgovCameraiOSAPIController {
     	@ApiImplicitParam(name = "fileSn", value = "파일연번", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping("/cmr/getImageiOS.do")
-    public void getImageInf(@RequestParam("fileSn") String fileSn, ModelMap model,
-    		HttpServletResponse response) throws Exception {
+    public void getImageInf(@RequestParam("fileSn") String fileSn,
+            @RequestParam(value = "uuid", required = false) String uuid,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-    	if(fileSn != null && "".equals(fileSn) == false) {
-    		
+    	if(fileSn != null && !"".equals(fileSn)) {
 			CameraiOSAPIFileVO vo = new CameraiOSAPIFileVO();
 			vo.setFileSn(Integer.parseInt(fileSn));
-		
+			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, uuid));
 			egovCameraiOSAPIService.selectImageFileInf(response, vo);
     	}
     }
@@ -221,12 +223,13 @@ public class EgovCameraiOSAPIController {
     	@ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping(value="/cmr/deleteCameraPhotoAlbumiOS.do")
-    public @ResponseBody CameraiOSAPIXmlVO deleteCameraPhotoAlbum( CameraiOSAPIVO vo,
-    		SessionStatus status)
+    public @ResponseBody CameraiOSAPIXmlVO deleteCameraPhotoAlbum(CameraiOSAPIVO vo,
+    		HttpServletRequest request, SessionStatus status)
             throws Exception {
- 
+
     	CameraiOSAPIXmlVO cameraiOSAPIXmlVO = new CameraiOSAPIXmlVO();
-    		
+    	vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, vo.getUuid()));
+
     	CameraiOSAPIVO cameraVO = egovCameraiOSAPIService.selectCameraPhotoAlbum(vo);
     	if(cameraVO == null) {
     		cameraiOSAPIXmlVO.setDeleteCheck("false");

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012년 einslib@naver.com. All rights reserved.
 //
 
-#define kSERVER_URL     @"http://192.168.100.86:8080/APIGuide_Web"
+#define kSERVER_URL     @"https://192.168.100.86:8080/APIGuide_Web"
 #define kSERVER_OK      200
 
 #import <UIKit/UIKit.h>

@@ -186,10 +186,18 @@ function fn_egov_displayList()
     {
         for ( var i = 0; i < ImageArray.length; i++) 
         {
+            var photoSj = (ImageArray[i]["photoSj"] || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&#34;")
+                .replace(/'/g, "&#39;")
+                .replace(/\./g, "&#46;")
+                .replace(/\//g, "&#47;");
             html += '<li>';
             html += ' 	<a href="#" onclick="fn_detailPhotoAlbum(\'' + ImageArray[i]["sn"] + '\');">';
-            html += ' 		<img src="' + context + '/cmr/getImageiOS.do?fileSn=' + ImageArray[i]["fileSn"] + '" style="max-width: 100;" />';
-            html += '		<h3>' + ImageArray[i]["photoSj"] + '</h3>';
+            html += ' 		<img src="' + context + '/cmr/getImageiOS.do?fileSn=' + ImageArray[i]["fileSn"] + '&uuid=' + encodeURIComponent(device.uuid) + '" style="max-width: 100;" />';
+            html += '		<h3>' + photoSj + '</h3>';
             html += '	</a>';
             html += '</li>';
         }
@@ -457,7 +465,7 @@ function fn_egov_sendto_server(serviceName, params)
                                                  var cameraiOSAPIVO = result["cameraiOSAPIVO"];
                                                  currentImageSn = cameraiOSAPIVO["fileSn"];
                                                  var photoSj = cameraiOSAPIVO["photoSj"];
-                                                 var imageSrc = context + '/cmr/getImageiOS.do?fileSn=' + currentImageSn;
+                                                 var imageSrc = context + '/cmr/getImageiOS.do?fileSn=' + currentImageSn + '&uuid=' + encodeURIComponent(device.uuid);
                                                  $("#imageDetailSj").text("제목 : " + photoSj);
                                                  $("#imageDetailView").attr('src', imageSrc);
                                              }

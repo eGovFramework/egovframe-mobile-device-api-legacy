@@ -18,6 +18,7 @@ package egovframework.hyb.add.dvc.web;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import egovframework.hyb.add.dvc.service.DeviceAndroidAPIDefaultVO;
 import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVO;
 import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVOList;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.add.dvc.service.EgovDeviceAndroidAPIService;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -77,12 +79,14 @@ public class EgovDeviceAndroidAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping(value="/dvc/xml/deviceInfo.do")
-    public @ResponseBody DeviceAndroidAPIVO selectDeviceInfoXML(@ModelAttribute("searchVO") DeviceAndroidAPIVO searchVO, 
-            ModelMap model)
+    public @ResponseBody DeviceAndroidAPIVO selectDeviceInfoXML(@ModelAttribute("searchVO") DeviceAndroidAPIVO searchVO,
+            HttpServletRequest request, ModelMap model)
             throws Exception {
- 
+
         DeviceAndroidAPIVO deviceInfo = egovDeviceAndroidAPIService.selectDeviceInfo(searchVO);
-        
+        if (deviceInfo != null) {
+            DeviceAPIAuthSupport.assertOwnedUuid(request, deviceInfo.getUuid());
+        }
         return deviceInfo;
     }
     
@@ -158,10 +162,18 @@ public class EgovDeviceAndroidAPIController {
     @RequestMapping("/dvc/xml/withdrawal.do")
     public @ResponseBody DeviceAndroidAPIVO withdrawalXml(
                 DeviceAndroidAPIVO deviceVO,
+            HttpServletRequest request,
             BindingResult bindingResult, Model model, SessionStatus status) 
     throws Exception {
-              
-        int cnt = egovDeviceAndroidAPIService.deleteDeviceInfo(deviceVO);
+
+        DeviceAndroidAPIVO deviceInfo = egovDeviceAndroidAPIService.selectDeviceInfo(deviceVO);
+        if (deviceInfo == null) {
+            DeviceAndroidAPIVO deviceAPIVO = new DeviceAndroidAPIVO();
+            deviceAPIVO.setUseYn("FAIL");
+            return deviceAPIVO;
+        }
+        DeviceAPIAuthSupport.assertOwnedUuid(request, deviceInfo.getUuid());
+        int cnt = egovDeviceAndroidAPIService.deleteDeviceInfo(deviceInfo);
                 
         DeviceAndroidAPIVO deviceAPIVO = new DeviceAndroidAPIVO();
         

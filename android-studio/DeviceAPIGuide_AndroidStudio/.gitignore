@@ -1,14 +1,38 @@
-# Non-project-specific build files:
-build.xml
+# Android Studio + Cordova (eGov Device API Legacy)
+# Keep gradlew, gradle/wrapper/, and app/libs/ tracked.
+
+# Gradle
+.gradle/
+build/
 local.properties
-/gradlew
-/gradlew.bat
-/gradle
-# Ant builds
-ant-build
-ant-gen
-# Eclipse builds
-gen
-out
-# Gradle builds
-/build
+
+# Android build outputs
+*.apk
+*.ap_
+*.aab
+*.dex
+captures/
+.externalNativeBuild/
+.cxx/
+*.hprof
+
+# Java
+*.class
+bin/
+gen/
+out/
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Cordova / Node
+node_modules/
+platforms/
+plugins/
+
+# OS
+.DS_Store
+Thumbs.db

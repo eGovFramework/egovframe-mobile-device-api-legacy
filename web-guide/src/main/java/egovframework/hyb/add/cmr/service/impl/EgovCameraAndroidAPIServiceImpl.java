@@ -157,6 +157,10 @@ public class EgovCameraAndroidAPIServiceImpl extends EgovAbstractServiceImpl imp
         ByteArrayOutputStream bStream = null;
         
         CameraAndroidAPIFileVO fileVO = cameraAPIDAO.selectImageFileInfo(vo);
+        if (fileVO == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "File access denied.");
+            return false;
+        }
 
         boolean errorFlag = true;
         

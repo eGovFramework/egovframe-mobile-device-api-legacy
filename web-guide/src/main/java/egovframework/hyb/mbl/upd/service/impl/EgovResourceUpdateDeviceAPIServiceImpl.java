@@ -21,10 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import egovframework.hyb.ios.frw.service.impl.EgovFileMngiOSUtil;
 import egovframework.hyb.mbl.upd.service.EgovResourceUpdateDeviceAPIService;
 import egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 
 /**  
  * @Class Name : EgovPushDeviceAPIServiceImpl.java
@@ -52,6 +52,9 @@ public class EgovResourceUpdateDeviceAPIServiceImpl extends EgovAbstractServiceI
     @Resource(name="ResourceUpdateDeviceAPIDAO")
     private ResourceUpdateDeviceAPIDAO resourceUpdateDeviceAPIDAO;
 
+    @Resource(name = "egovFileMngiOSUtil")
+    private EgovFileMngiOSUtil egovFileMngUtil;
+
     /**
 	 * 알림 설정 정보 목록을 조회한다.
 	 * @param VO - 조회할 정보가 담긴 ResourceUpdateDeviceAPIVO
@@ -59,7 +62,16 @@ public class EgovResourceUpdateDeviceAPIServiceImpl extends EgovAbstractServiceI
 	 * @exception Exception
 	 */
     public ResourceUpdateDeviceAPIVO selectResourceUpdateVersionInfo(ResourceUpdateDeviceAPIVO searchVO) throws Exception {
-        return resourceUpdateDeviceAPIDAO.selectResourceUpdateVersionInfo(searchVO);
+        ResourceUpdateDeviceAPIVO resultVO = resourceUpdateDeviceAPIDAO.selectResourceUpdateVersionInfo(searchVO);
+        if (resultVO != null && resultVO.getStreFileNm() != null && !resultVO.getStreFileNm().isEmpty()) {
+        	try {
+        		resultVO.setFileSha256(egovFileMngUtil.computeFileSha256(resultVO.getStreFileNm()));
+        	} catch (Exception e) {
+        		LOGGER.warn("Failed to compute resource update file SHA-256: {}", e.getMessage());
+        		return null;
+        	}
+        }
+        return resultVO;
     }
     
 }

@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.add.frw.service.EgovFileReaderWriterAndroidAPIService;
 import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -79,6 +80,8 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
      */
     public FileReaderWriterAndroidAPIVO writeUploadedFile(MultipartFile file,
             FileReaderWriterAndroidAPIVO fileVO) throws Exception {
+
+        DeviceAPIFileUploadValidator.validateFrwUpload(file);
 
         String originFileName = file.getOriginalFilename();
         int index = originFileName.lastIndexOf(".");
@@ -153,6 +156,7 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
             HttpServletResponse response, FileReaderWriterAndroidAPIVO fileVO)
             throws Exception {
 
+        DeviceAPIFileUploadValidator.assertSafeStoredFileName(fileVO.getStreFileNm());
         File file = new File(propertiesService.getString("fileStorePath")
                 + fileVO.getStreFileNm());
 

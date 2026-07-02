@@ -126,7 +126,11 @@ public class EgovMediaAndroidAPIServiceImpl extends EgovAbstractServiceImpl impl
         ByteArrayOutputStream bStream = null;
         
         MediaAndroidAPIFileVO fileVO = mediaAPIDAO.selectMediaFileInfo(vo);
-        
+        if (fileVO == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "File access denied.");
+            return false;
+        }
+
         String type = "";
 
         boolean errorFlag = true;
