@@ -12,17 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import egovframework.hyb.mbl.jai.service.EgovJailbreakDetectionDeviceAPIService;
+import egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIDefaultVO;
 import egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
-
 /**  
  * @Class Name : EgovJailbreakDetectionDeviceAPIController
  * @Description : EgovJailbreakDetectionDeviceAPIController Class
  * @Modification Information  
  * @
- * @  수정일       수정자                  수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2016.07.26    신성학                최초 작성
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------------   -------------------------------
+ *   2016.07.26   신성학              최초 작성
+ *   2020.09.18   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 07. 26
@@ -31,7 +32,6 @@ import egovframework.rte.fdl.property.EgovPropertyService;
  * 
  *  Copyright (C) by Ministry of Interior All right reserved.
  */
-
 
 @Controller
 public class EgovJailbreakDetectionDeviceAPIController {
@@ -80,7 +80,7 @@ public class EgovJailbreakDetectionDeviceAPIController {
 	 * @exception Exception
 	 */
     @RequestMapping(value="/jai/JailbreakDetectionInfoList.do")
-    public ModelAndView selectJailbreakDetectionDevcieList(@ModelAttribute("searchVibratorVO") JailbreakDetectionDeviceAPIVO searchVO, 
+    public ModelAndView selectJailbreakDetectionDevcieList(@ModelAttribute("searchVibratorVO") JailbreakDetectionDeviceAPIDefaultVO searchVO, 
     		ModelMap model)
             throws Exception {
  

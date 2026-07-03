@@ -23,7 +23,6 @@ import egovframework.hyb.add.cps.service.CompassAndroidAPIVO;
 
 import org.springframework.stereotype.Repository;
 
-
 /**  
  * @Class Name : CompassAPIDAO.java
  * @Description : CompassAPI DAO Class

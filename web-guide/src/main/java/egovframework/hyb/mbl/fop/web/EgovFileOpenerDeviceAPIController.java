@@ -21,25 +21,28 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.ios.frw.service.impl.EgovFileMngiOSUtil;
 import egovframework.hyb.mbl.fop.service.EgovFileOpenerDeviceAPIService;
+import egovframework.hyb.mbl.fop.service.FileOpenerDeviceAPIDefaultVO;
 import egovframework.hyb.mbl.fop.service.FileOpenerDeviceAPIVO;
-import egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIVO;
-
 /**  
  * @Class Name : EgovFileOpenerAPIController
  * @Description : EgovFileOpenerAPI Controller Class
  * @Modification Information  
  * @
- * @  수정일       수정자                  수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2016.07.11   장성호                최초 작성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2016.07.11   장성호              최초 작성
+ *   2020.09.16   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 06. 24
@@ -51,6 +54,8 @@ import egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIVO;
 
 @Controller
 public class EgovFileOpenerDeviceAPIController {
+	
+	private final Logger log = LoggerFactory.getLogger(EgovFileOpenerDeviceAPIController.class);
 	
 	/** EgovFileOpenerDeviceAPIService */
     @Resource(name = "EgovFileOpenerDeviceAPIService")
@@ -69,7 +74,7 @@ public class EgovFileOpenerDeviceAPIController {
 	 * @exception Exception
 	 */
     @RequestMapping(value="/fop/FileOpenerDocumentList.do")
-    public ModelAndView selectDocumentList(@ModelAttribute("fileOpenerDviceAPIVO") FileOpenerDeviceAPIVO searchVO, 
+    public ModelAndView selectDocumentList(@ModelAttribute("fileOpenerDviceAPIVO") FileOpenerDeviceAPIDefaultVO searchVO, 
     		ModelMap model)
             throws Exception {
  
@@ -91,14 +96,14 @@ public class EgovFileOpenerDeviceAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@RequestMapping("/fop/FileOpenerfileDownload.do")
+    @RequestMapping("/fop/FileOpenerfileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response, FileOpenerDeviceAPIVO fileVO) throws Exception{
-		System.out.println(">>> fileVO.getOrignlFileNm() = "+fileVO.getOrignlFileNm());
-		System.out.println(">>> fileVO.getStreFileNm() = "+fileVO.getStreFileNm());
+		DeviceAPIFileUploadValidator.assertSafeStoredFileName(fileVO.getStreFileNm());
+		log.debug("fileVO.getOrignlFileNm() = "+fileVO.getOrignlFileNm());
+		log.debug(">>> fileVO.getStreFileNm() = "+fileVO.getStreFileNm());
 		egovFileMngUtil.fileDownload(request, response, fileVO.getOrignlFileNm(), fileVO.getStreFileNm());
 		
 	}
-
 
 }
 

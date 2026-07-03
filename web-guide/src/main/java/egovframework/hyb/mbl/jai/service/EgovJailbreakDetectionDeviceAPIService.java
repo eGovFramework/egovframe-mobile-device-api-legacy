@@ -34,6 +34,6 @@ public interface EgovJailbreakDetectionDeviceAPIService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-	List<?> selectJailbreakDetectionDevcieList(JailbreakDetectionDeviceAPIVO searchVO) throws Exception;
+	List<?> selectJailbreakDetectionDevcieList(JailbreakDetectionDeviceAPIDefaultVO searchVO) throws Exception;
 
 }

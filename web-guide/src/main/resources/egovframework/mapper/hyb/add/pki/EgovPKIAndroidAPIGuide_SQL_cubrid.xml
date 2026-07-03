@@ -36,6 +36,11 @@
 				SN, UUID, DN, 
 				CRTFC_DT CRTFCDT, ENTRPRS_SE_CODE ENTRPRSSECODE
 			FROM pki
+			<where>
+				<if test="uuid != null and uuid != ''">
+					AND UUID = #{uuid}
+				</if>
+			</where>
 			ORDER BY SN DESC				
 	</select>
 		
@@ -43,6 +48,11 @@
 
 			SELECT COUNT(*) totcnt
 			FROM pki
+			<where>
+				<if test="uuid != null and uuid != ''">
+					AND UUID = #{uuid}
+				</if>
+			</where>
 	</select>
 		
 </mapper>

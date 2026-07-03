@@ -1,5 +1,7 @@
 package egovframework.hyb.mbl.fop.service;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**  
@@ -7,9 +9,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @Description : FileOpenerDeviceAPIVO Class
  * @Modification Information  
  * @
- * @  수정일       수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2016.07.14  장성호                 최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2016.07.14   장성호             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 07. 14
@@ -18,16 +21,20 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * 
  *  Copyright (C) by MOPAS All right reserved.
  */
-public class FileOpenerDeviceAPIVO extends FileOpenerDeviceAPIDefaultVO {
-    
+
+public class FileOpenerDeviceAPIVO implements Serializable {
     
 	private static final long serialVersionUID = 5257330538525734667L;
 	
-	private String sn = "";
-    private String streFileNm = "";
-    private String orignlFileNm = "";
-    private String updDt = "";
-    private String fileSize = "";
+		private String sn = "";
+	
+	    private String streFileNm = "";
+	
+	    private String orignlFileNm = "";
+	
+	    private String updDt = "";
+	
+	    private String fileSize = "";
   	
 	public String getSn() {
 		return sn;
@@ -74,5 +81,4 @@ public class FileOpenerDeviceAPIVO extends FileOpenerDeviceAPIDefaultVO {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    
 }

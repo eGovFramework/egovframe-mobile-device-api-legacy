@@ -13,7 +13,7 @@
 		<result property="updateContent" column="UPDATE_CONTENT"/>		
 	</resultMap>
 	
-	<select id="selectResourceUpdateVersionInfo" parameterType="egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIDefaultVO" resultMap="resourceUpdateInfo">
+	<select id="selectResourceUpdateVersionInfo" parameterType="egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIVO" resultMap="resourceUpdateInfo">
 		SELECT
 			SN, 
 			APP_ID, 

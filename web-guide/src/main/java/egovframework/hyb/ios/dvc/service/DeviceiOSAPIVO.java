@@ -35,9 +35,10 @@ package egovframework.hyb.ios.dvc.service;
  * @Class Name : DeviceiOSAPIVO.java
  * @Description : DeviceiOSAPIVO
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012. 8. 6.                     최초생성
+ * @ 수정일                수정자             수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2012.08.06               최초생성
+ * @ 2020.07.29   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 6.
@@ -49,31 +50,33 @@ package egovframework.hyb.ios.dvc.service;
 public class DeviceiOSAPIVO{
 	
 	/** 일련번호 */
+	//required = true,
     private int sn;
     
     /** 기기식별 */
+	//required = true,
     private String uuid;
     
     /** OS */
-    private String os;
+	    private String os;
     
     /** 전화번호 */
-    private String telno;
+	    private String telno;
     
-    /** 스토리지 정  */
-    private String strgeInfo;
+    /** 스토리지 정보  */
+	    private String strgeInfo;
     
     /** 네트워크 디바이스 정보  */
-    private String ntwrkDeviceInfo;
+	    private String ntwrkDeviceInfo;
     
     /** 폰갭 버전 */
-    private String pgVer;
+	    private String pgVer;
     
     /** 디바이스 명  */
-    private String deviceNm;
+	    private String deviceNm;
     
     /** 활성화 여부  */
-    private String useyn;
+	    private String useyn;
 
 	/**
 	 * @return  sn을 반환한다
@@ -200,10 +203,6 @@ public class DeviceiOSAPIVO{
 	public void setUseyn(String useyn) {
 		this.useyn = useyn;
 	}
-
-
-
-
 
     
 

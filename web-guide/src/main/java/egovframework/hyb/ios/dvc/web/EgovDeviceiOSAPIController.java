@@ -17,25 +17,26 @@ package egovframework.hyb.ios.dvc.web;
 
 import java.util.List;
 
-import egovframework.hyb.ios.dvc.service.DeviceiOSAPIVO;
-import egovframework.hyb.ios.dvc.service.EgovDeviceiOSAPIService;
-
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
+import egovframework.hyb.ios.dvc.service.DeviceiOSAPIVO;
+import egovframework.hyb.ios.dvc.service.EgovDeviceiOSAPIService;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovDeviceiOSAPIController
  * @Description : EgovDeviceiOSAPIController Controller Class
  * @Modification Information  
  * @
- * @  수정일       수정자                  수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.30    서준식                  최초 작성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.30   서준식              최초 작성
+ *   2020.08.10   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 07. 30
@@ -45,8 +46,8 @@ import org.springframework.web.servlet.ModelAndView;
  *  Copyright (C) by MOPAS All right reserved.
  */
 
-@Controller
-public class EgovDeviceiOSAPIController {
+@RestController
+public class EgovDeviceIosAPIController {
 	
 	/** EgovNetworkAPIService */
     @Resource(name = "egovDeviceiOSAPIService")
@@ -74,7 +75,7 @@ public class EgovDeviceiOSAPIController {
 		jsonView.addObject("resultState","OK");
 		
 		return jsonView;
-    } 
+    }
     
     /**
 	 * 디바이스 상세 정보를 조회한다.
@@ -84,17 +85,20 @@ public class EgovDeviceiOSAPIController {
 	 * @exception Exception
 	 */
     @RequestMapping(value="/dvc/deviceInfo.do")
-    public ModelAndView selectDeviceInfo(DeviceiOSAPIVO vo)
+    public ModelAndView selectDeviceInfo(DeviceiOSAPIVO vo, HttpServletRequest request)
             throws Exception {
- 
+
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		DeviceiOSAPIVO deviceiOSAPIVO = egovDeviceiOSAPIService.selectDeviceInfo(vo);
+		if (deviceiOSAPIVO != null) {
+			DeviceAPIAuthSupport.assertOwnedUuid(request, deviceiOSAPIVO.getUuid());
+		}
 		
 		jsonView.addObject("deviceInfo", deviceiOSAPIVO);
 		jsonView.addObject("resultState","OK");
 		
 		return jsonView;
-    } 
+    }
     
     /**
 	 * 디바이스 정보를 등록한다.
@@ -104,10 +108,8 @@ public class EgovDeviceiOSAPIController {
 	 * @exception Exception
 	 */
     @RequestMapping("/dvc/addDeviceInfo.do")
-    public ModelAndView insertDeviceInfo(DeviceiOSAPIVO vo) 
+    public ModelAndView insertDeviceInfo(DeviceiOSAPIVO vo)
     throws Exception {
-    	
-    	
     	
     	ModelAndView jsonView = new ModelAndView("jsonView");
     	
@@ -125,11 +127,17 @@ public class EgovDeviceiOSAPIController {
 	 * @exception Exception
 	 */
     @RequestMapping("/dvc/deleteDeviceInfo.do")
-    public ModelAndView deleteDeviceInfo(
-    		DeviceiOSAPIVO vo)
+    public ModelAndView deleteDeviceInfo(DeviceiOSAPIVO vo, HttpServletRequest request)
             throws Exception {
-    	
-    	egovDeviceiOSAPIService.deleteDeviceInfo(vo);
+
+    	DeviceiOSAPIVO deviceInfo = egovDeviceiOSAPIService.selectDeviceInfo(vo);
+    	if (deviceInfo == null) {
+    		ModelAndView deniedView = new ModelAndView("jsonView");
+    		deniedView.addObject("resultState", "FAIL");
+    		return deniedView;
+    	}
+    	DeviceAPIAuthSupport.assertOwnedUuid(request, deviceInfo.getUuid());
+    	egovDeviceiOSAPIService.deleteDeviceInfo(deviceInfo);
         
         ModelAndView jsonView = new ModelAndView("jsonView");
         jsonView.addObject("resultState","OK");

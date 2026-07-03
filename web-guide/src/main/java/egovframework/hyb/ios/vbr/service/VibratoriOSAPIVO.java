@@ -15,14 +15,17 @@
  */
 package egovframework.hyb.ios.vbr.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : VibratorAPIVO.java
  * @Description : VibratorAPIVO Class
  * @Modification Information  
  * @
- * @  수정일      수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.18   이해성                최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.18   이해성             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 07. 18
@@ -31,18 +34,19 @@ package egovframework.hyb.ios.vbr.service;
  * 
  *  Copyright (C) by MOPAS All right reserved.
  */
-public class VibratoriOSAPIVO extends VibratoriOSAPIDefaultVO {
+
+public class VibratoriOSAPIVO implements Serializable {
 	
     private static final long serialVersionUID = 1L;
 
 	/** 일련번호 */
-    private int sn;
+        private int sn;
     
     /** 기기식별 */
-    private String uuid;
+        private String uuid;
     
     /** 사용여부 */
-    private String timeStamp;
+        private String timeStamp;
 
 	/**
 	 * @return  sn을 반환한다

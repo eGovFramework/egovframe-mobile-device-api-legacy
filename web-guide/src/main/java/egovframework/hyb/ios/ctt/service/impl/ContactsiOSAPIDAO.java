@@ -5,10 +5,10 @@ package egovframework.hyb.ios.ctt.service.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import egovframework.com.cmm.mapper.EgovComAbstractDAO;
 import egovframework.hyb.ios.ctt.service.ContactsiOSAPIVO;
-
-import org.springframework.stereotype.Repository;
 
 /**  
  * @Class Name : ContactsiOSAPIDAO.java

@@ -10,9 +10,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @Class Name : FileReaderWriterAndroidAPIVO.java
  * @Description : FileReaderWriterAndroidAPIVO
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012. 8. 6.  나신일                   최초생성
+ * @ 수정일                수정자             수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.08.06   나신일             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 6
@@ -25,50 +26,50 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class FileReaderWriterAndroidAPIVO {
 
-    /** 시리얼 넘버 */
-    private int sn;
+    /** 일련번호 */
+	    private int sn;
 
-    /** UUID */
-    private String uuid;
+    /** UUID(기기식별코드) */
+	    private String uuid;
 
-    /** 파일 시리얼 넘버 */
-    private int fileSn;
+    /** 파일 일련번호 */
+	    private int fileSn;
 
     /** 파일 이름 */
-    private String fileNm;
+	    private String fileNm;
 
     /** 파일 타입 */
-    private String fileType;
+	    private String fileType;
 
     /** 수정일 */
-    private String updtDt;
+	    private String updtDt;
 
     /** 사용 여부 */
-    private String useYn;
+	    private String useYn;
 
     /** 파일 저장 경로 */
-    private String fileStreCours;
+	    private String fileStreCours;
 
     /** 저장된 파일 이름 */
-    private String streFileNm;
+	    private String streFileNm;
 
     /** 원 파일 이름 */
-    private String orignlFileNm;
+	    private String orignlFileNm;
 
     /** 파일 확장자 명 */
-    private String fileExtsn;
+	    private String fileExtsn;
 
     /** 파일 내용 */
-    private String fileCn;
+	    private String fileCn;
 
     /** 파일 사이즈 */
-    private String fileSize;
+	    private String fileSize;
 
     /** resultState */
-    private String resultState;
+	    private String resultState;
 
     /** resultMessage */
-    private String resultMessage;
+	    private String resultMessage;
 
     /**
      * @return sn을 반환한다

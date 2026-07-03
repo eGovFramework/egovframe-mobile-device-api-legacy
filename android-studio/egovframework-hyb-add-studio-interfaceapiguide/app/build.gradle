@@ -29,7 +29,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:8.0.2'
         //
     }
 }
@@ -146,7 +146,7 @@ cdvBuildRelease.dependsOn {
     return computeBuildTargetName(false)
 }
 
-task cdvPrintProps << {
+task cdvPrintProps {
     println('cdvCompileSdkVersion=' + cdvCompileSdkVersion)
     println('cdvBuildToolsVersion=' + cdvBuildToolsVersion)
     println('cdvVersionCode=' + cdvVersionCode)
@@ -163,6 +163,7 @@ task cdvPrintProps << {
 }
 
 android {
+    namespace 'kr.go.egovframework.hyb.interfaceapp'
 
     packagingOptions {
         exclude 'META-INF/license.txt'
@@ -271,9 +272,9 @@ dependencies {
     implementation fileTree(include: '*.jar', dir: 'libs')
     // SUB-PROJECT DEPENDENCIES START
     implementation project(path: ':CordovaLib')
-    compile 'com.android.support:support-v4:24.1.1+'
+    implementation 'com.android.support:support-v4:24.1.1+'
     //compile 'com.google.android.gms:play-services-gcm:+'
-    compile 'com.android.support:support-v4:27.+'
+    implementation 'com.android.support:support-v4:27.+'
     // SUB-PROJECT DEPENDENCIES END
     //implementation files('libs/spring-android-core-1.0.1.RELEASE.jar')
     implementation files('libs/spring-android-rest-template-1.0.1.RELEASE.jar')

@@ -27,7 +27,7 @@ public interface EgovStreamingMediaAPIService {
      * @return 조회 목록
      * @exception Exception
      */
-    public List<?> selectMediaInfoList(StreamingMediaAPIVO vo) throws Exception;
+    public List<?> selectMediaInfoList(StreamingMediaAPIDefaultVO vo) throws Exception;
     
     
     /**

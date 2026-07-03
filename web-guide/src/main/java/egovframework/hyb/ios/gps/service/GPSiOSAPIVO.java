@@ -15,14 +15,17 @@
  */
 package egovframework.hyb.ios.gps.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : GPSAPIVO.java
  * @Description : GPSAPIVO Class
  * @Modification Information  
  * @
- * @  수정일               수정자                 수정내용
- * @ 
- * @ 2012.07.31   이한철                 최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.31   이한철              최초생성
+ *   2020.07.29   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 05. 14
@@ -32,24 +35,24 @@ package egovframework.hyb.ios.gps.service;
  *  Copyright (C) by MOPAS All right reserved.
  */
 
-public class GPSiOSAPIVO extends GPSiOSAPIDefaultVO {
+public class GPSiOSAPIVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /** 일련번호 */
-    private int sn;
+        private int sn;
 
-    /** 기기식별 */
-    private String uuid;
+    /** 기기식별코드 */
+        private String uuid;
 
-    /** latitude */
-    private String lat;
+    /** latitude(위도) */
+        private String lat;
 
-    /** longtitude */
-    private String lon;
+    /** longtitude(경도) */
+        private String lon;
 
     /** 사용여부 */
-    private String useYn;
+        private String useYn;
 
     /**
      * @return sn을 반환한다

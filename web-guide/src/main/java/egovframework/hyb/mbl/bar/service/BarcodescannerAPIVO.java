@@ -1,13 +1,16 @@
 package egovframework.hyb.mbl.bar.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : BarcodescannerAPIVO.java
  * @Description : BarcodescannerAPIVO Class
  * @Modification Information  
  * @
- * @  수정일                      수정자                  수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2016.07.26   신성학                 최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2016.07.26   신성학             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 07. 26
@@ -17,24 +20,24 @@ package egovframework.hyb.mbl.bar.service;
  *  Copyright (C) by MOPAS All right reserved.
  */
 
-public class BarcodescannerAPIVO extends BarcodescannerAPIDefaultVO {
+public class BarcodescannerAPIVO implements Serializable {
 
 	 private static final long serialVersionUID = 1L;
 	 
 	 /** 일련번호 */
-	 private int sn;
+	 	 private int sn;
 	
 	 /** 바코드 타입 */
-	 private String codeType;
+	 	 private String codeType;
 	 
 	 /** 바코드 내용 */
-	 private String codeText;
+	 	 private String codeText;
 	 
 	 /** 사용여부  */
-	 private String useYn;
+	 	 private String useYn;
 	 	 
 	 /** 저장 일시  */
-	 private String sndDt;
+	 	 private String sndDt;
 	
 	
 	 /** * @return  sn을 반환한다	 */
@@ -85,10 +88,5 @@ public class BarcodescannerAPIVO extends BarcodescannerAPIDefaultVO {
 		/** * @param 파라미터 useYn를 변수 useYn에 설정한다. */		
 		public void setUseYn(String useYn) {
 			this.useYn = useYn;
-		}	
-	 
-	 
-	 
-	 
-	
+		}
 }

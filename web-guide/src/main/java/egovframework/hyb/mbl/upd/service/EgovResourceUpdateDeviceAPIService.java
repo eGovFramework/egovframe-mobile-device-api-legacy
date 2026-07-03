@@ -15,8 +15,6 @@
  */
 package egovframework.hyb.mbl.upd.service;
 
-import java.util.List;
-
 /**  
  * @Class Name : EgovPushAPIService.java
  * @Description : EgovPushAPIService Class
@@ -42,7 +40,6 @@ public interface EgovResourceUpdateDeviceAPIService {
 	 * @return 네트워크 정보 목록
 	 * @exception Exception
 	 */
-	ResourceUpdateDeviceAPIVO selectResourceUpdateVersionInfo(ResourceUpdateDeviceAPIDefaultVO searchVO) throws Exception;
-
+	ResourceUpdateDeviceAPIVO selectResourceUpdateVersionInfo(ResourceUpdateDeviceAPIVO searchVO) throws Exception;
 
 }

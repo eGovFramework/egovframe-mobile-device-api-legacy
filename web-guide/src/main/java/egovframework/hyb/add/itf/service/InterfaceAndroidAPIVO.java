@@ -15,17 +15,21 @@
  */
 package egovframework.hyb.add.itf.service;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-/**  
+/**
  * @Class Name : InterfaceAndroidAPIVO.java
  * @Description : InterfaceAndroidAPIVO Class
  * @Modification Information  
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.09    나신일                  최초생성
+ * @ 수정일                수정자             수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.09   나신일             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 모바일 디바이스 API 팀
  * @since 2012. 07. 09
@@ -36,30 +40,30 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
-public class InterfaceAndroidAPIVO extends InterfaceAndroidAPIDefaultVO {
+public class InterfaceAndroidAPIVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /** 일련번호 */
-    private int sn;
+        private int sn;
 
-    /** 기기식별 */
-    private String uuid;
+    /** 기기식별코드 */
+        private String uuid;
 
     /** 아이디 */
-    private String userId;
+        private String userId;
 
     /** 비밀번호 */
-    private String userPw;
+        private String userPw;
 
     /** E-mail */
-    private String emails;
+        private String emails;
 
     /** resultState */
-    private String resultState;
+        private String resultState;
 
     /** resultMessage */
-    private String resultMessage;
+        private String resultMessage;
 
     /**
      * @return sn을 반환한다
@@ -114,6 +118,7 @@ public class InterfaceAndroidAPIVO extends InterfaceAndroidAPIDefaultVO {
      * @param userPw를
      *            반환한다
      */
+    @XmlTransient
     public String getUserPw() {
         return userPw;
     }

@@ -23,7 +23,6 @@ import com.google.android.gcm.server.Sender;
  * @ 2017.03.08   조성원        시큐어코딩(ES)-제거되지 않고 남은 디버그 코드[CWE-489]
  */
 
-
 public class GCMPushTest {
 
 	//2017-02-15 최두영 시큐어코딩(ES)-오류 메시지를 통한 정보 노출[CWE-209] 34-34 관

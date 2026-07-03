@@ -84,7 +84,7 @@ public class EgovGPSAndroidAPIServiceImpl extends EgovAbstractServiceImpl implem
      * @return gps 정보 목록
      * @exception Exception
      */
-    public List<?> selectGPSInfoList(GPSAndroidAPIVO searchVO) throws Exception {
+    public List<?> selectGPSInfoList(GPSAndroidAPIDefaultVO searchVO) throws Exception {
         return gpsAPIDAO.selectGPSInfoList(searchVO);
     }
 

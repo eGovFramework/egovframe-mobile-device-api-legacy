@@ -22,7 +22,6 @@ import egovframework.hyb.add.cps.service.CompassAndroidAPIVO;
 import egovframework.hyb.add.cps.service.CompassAndroidAPIVOList;
 import egovframework.hyb.add.cps.service.EgovCompassAndroidAPIService;
 import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -39,9 +38,10 @@ import org.springframework.web.bind.support.SessionStatus;
  * @Description : EgovCompassAPIController Class
  * @Modification Information  
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.23    서형주                  최초생성
+ * @ 수정일                수정자             수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.23   서형주              최초생성
+ *   2020.08.12   신용호              Swagger 적용
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 30
@@ -68,7 +68,7 @@ public class EgovCompassAndroidAPIController {
      * @return "/cps/xml/compassInfoList.do"
      * @exception Exception
      */
-    @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked")
 	@RequestMapping(value="/cps/xml/compassInfoList.do")
     public @ResponseBody CompassAndroidAPIVOList selectCompassInfoXMLList(@ModelAttribute("searchVO") CompassAndroidAPIDefaultVO searchVO, 
             ModelMap model)
@@ -93,7 +93,6 @@ public class EgovCompassAndroidAPIController {
      */
     @RequestMapping("/cps/xml/addCompassInfo.do")
     public @ResponseBody CompassAndroidAPIVO addCompassInfoXml(
-            @ModelAttribute("searchVO") CompassAndroidAPIDefaultVO searchVO,
                 CompassAndroidAPIVO compassVO,
             BindingResult bindingResult, Model model, SessionStatus status) 
             throws Exception {
@@ -121,7 +120,6 @@ public class EgovCompassAndroidAPIController {
      */
     @RequestMapping("/cps/xml/withdrawal.do")
     public @ResponseBody CompassAndroidAPIVO withdrawalXml(
-            @ModelAttribute("searchVO") CompassAndroidAPIDefaultVO searchVO,
                 CompassAndroidAPIVO compassVO,
             BindingResult bindingResult, Model model, SessionStatus status) 
     throws Exception {        

@@ -17,12 +17,11 @@ package egovframework.hyb.mbl.pus.service.impl;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import egovframework.com.cmm.mapper.EgovComAbstractDAO;
 import egovframework.hyb.mbl.pus.service.PushDeviceAPIDefaultVO;
 import egovframework.hyb.mbl.pus.service.PushDeviceAPIVO;
-
-import org.springframework.stereotype.Repository;
-
 
 /**  
  * @Class Name : PushAPIDAO.java
@@ -50,7 +49,7 @@ public class PushDeviceAPIDAO extends EgovComAbstractDAO {
 	 * @return Push Device 정보 목록
 	 * @exception Exception
 	 */
-    public List<?> selectPushDeviceList(PushDeviceAPIVO searchVO) throws Exception {
+    public List<?> selectPushDeviceList(PushDeviceAPIDefaultVO searchVO) throws Exception {
         return selectList("pushDeviceAPIDAO.selectPushDeviceList", searchVO);
     }
 

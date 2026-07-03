@@ -1,13 +1,17 @@
 package egovframework.hyb.mbl.jai.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : JailbreakDetectionDeviceAPIVO
  * @Description : JailbreakDetectionDeviceAPIVO Class
  * @Modification Information  
  * @
- * @  수정일       수정자                  수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2016.07.26    신성학                최초 작성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2016.07.26   신성학             최초 작성
+ *   2020.07.29   신용호             Swagger 적용
+ * 
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 07. 26
@@ -17,26 +21,24 @@ package egovframework.hyb.mbl.jai.service;
  *  Copyright (C) by Ministry of Interior All right reserved.
  */
 
-public class JailbreakDetectionDeviceAPIVO extends JailbreakDetectionDeviceAPIDefaultVO{
+public class JailbreakDetectionDeviceAPIVO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
     /** 일련번호 */
-    private int sn;
+	    private int sn;
     
     /** 기기식별 */
-    private String uuid;
+	    private String uuid;
     
     /** OS */
-    private String os;
+	    private String os;
     
     /** 폰갭 버전 */
-    private String pgVer;
+	    private String pgVer;
     
     /** 탈옥 및 루팅 여부 */
-    private String detection;
-    
-    
+	    private String detection;
 
 	/**
 	 * @return  sn을 반환한다

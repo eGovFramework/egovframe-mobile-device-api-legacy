@@ -15,15 +15,18 @@
  */
 package egovframework.hyb.ios.cmr.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : CameraIOSAPIVO.java
  * @Description : CameraIOSAPIVO Class
  * @Modification Information  
  * @
- * @  수정일			수정자		수정내용
- * @ ---------		---------	-------------------------------
- * @ 2012. 7. 23.		이율경		최초생성
- * @ 2012. 8. 03.  		이해성       커스터마이징
+ * @ 수정일               수정자		   수정내용
+ * @ ----------   ---------	  -------------------------------
+ * @ 2012.07.23	   이율경		   최초생성
+ * @ 2012.08.03   이해성             커스터마이징
+ * @ 2020.07.29   신용호             Swagger 적용
  *  
  * @author 디바이스 API 개발환경 팀
  * @since 2012. 7. 23.
@@ -31,25 +34,25 @@ package egovframework.hyb.ios.cmr.service;
  * @see
  * 
  */
-public class CameraiOSAPIVO extends CameraiOSAPIDefaultVO {
+public class CameraiOSAPIVO implements Serializable {
 
 	/** serialVersion UID*/
 	private static final long serialVersionUID = 1L;
 	
 	/** 일련번호 */
-	private String sn;
+		private String sn;
 	
 	/** 기기식별 */
-	private String uuid;
+		private String uuid;
 	
 	/** 사진제목 */
-	private String photoSj;
+		private String photoSj;
 	
 	/** 파일연번 */
-	private String fileSn;
+		private String fileSn;
 	
 	/** 활성화여부 */
-	private String useyn;
+		private String useyn;
 
 	/**
 	 * @return sn을 반환한다.

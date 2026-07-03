@@ -23,11 +23,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import egovframework.com.cmm.service.EgovProperties;
-import egovframework.hyb.mbl.pus.service.EgovPushDeviceAPIService;
-import egovframework.hyb.mbl.pus.service.PushDeviceAPIVO;
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -41,14 +36,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.google.android.gcm.server.Message;
-import com.google.android.gcm.server.MulticastResult;
-import com.google.android.gcm.server.Result;
-import com.google.android.gcm.server.Sender;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import egovframework.com.cmm.service.EgovProperties;
+import egovframework.hyb.mbl.pus.service.EgovPushDeviceAPIService;
+import egovframework.hyb.mbl.pus.service.PushDeviceAPIDefaultVO;
+import egovframework.hyb.mbl.pus.service.PushDeviceAPIVO;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import javapns.communication.ConnectionToAppleServer;
 import javapns.communication.exceptions.CommunicationException;
 import javapns.communication.exceptions.KeystoreException;
@@ -58,6 +52,8 @@ import javapns.notification.AppleNotificationServerBasicImpl;
 import javapns.notification.PushNotificationManager;
 import javapns.notification.PushNotificationPayload;
 import javapns.notification.PushedNotification;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 /**  
  * @Class Name : EgovPushDeviceAPIServiceImpl.java
  * @Description : EgovPushDeviceAPIServiceImpl Class
@@ -115,7 +111,7 @@ public class EgovPushDeviceAPIServiceImpl extends EgovAbstractServiceImpl implem
 	 * @return 알림 설정 정보 목록
 	 * @exception Exception
 	 */
-    public List<?> selectPushDeviceList(PushDeviceAPIVO searchVO) throws Exception {
+    public List<?> selectPushDeviceList(PushDeviceAPIDefaultVO searchVO) throws Exception {
         return pushDeviceAPIDAO.selectPushDeviceList(searchVO);
     }
     

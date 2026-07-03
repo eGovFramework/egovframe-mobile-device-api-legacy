@@ -20,8 +20,8 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import egovframework.com.cmm.mapper.EgovComAbstractDAO;
+import egovframework.hyb.mbl.bar.service.BarcodescannerAPIDefaultVO;
 import egovframework.hyb.mbl.bar.service.BarcodescannerAPIVO;
-import egovframework.hyb.mbl.pus.service.PushDeviceAPIVO;
 
 /**
  * @Class Name : BarcodescannerDeviceAPIDAO.java
@@ -63,7 +63,7 @@ public class BarcodescannerDeviceAPIDAO extends EgovComAbstractDAO {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-	public List<?> selectBarcodescannerDevcieList(BarcodescannerAPIVO searchVO) throws Exception {
+	public List<?> selectBarcodescannerDevcieList(BarcodescannerAPIDefaultVO searchVO) throws Exception {
 
 		return selectList("barcodescannerDeviceAPIDAO.selectBarcodescannerDevcieList", searchVO);
 	}

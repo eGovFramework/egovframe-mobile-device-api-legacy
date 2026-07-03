@@ -23,7 +23,6 @@ import egovframework.hyb.ios.vbr.service.VibratoriOSAPIVO;
 
 import org.springframework.stereotype.Repository;
 
-
 /**  
  * @Class Name : VibratoriOSAPIDAO.java
  * @Description : VibratoriOSAPI DAO Class

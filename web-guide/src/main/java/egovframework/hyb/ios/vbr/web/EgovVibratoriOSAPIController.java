@@ -17,12 +17,6 @@ package egovframework.hyb.ios.vbr.web;
 
 import java.util.List;
 
-import egovframework.hyb.ios.vbr.service.EgovVibratoriOSAPIService;
-import egovframework.hyb.ios.vbr.service.VibratoriOSAPIDefaultVO;
-import egovframework.hyb.ios.vbr.service.VibratoriOSAPIVO;
-
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -34,14 +28,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.hyb.ios.vbr.service.EgovVibratoriOSAPIService;
+import egovframework.hyb.ios.vbr.service.VibratoriOSAPIDefaultVO;
+import egovframework.hyb.ios.vbr.service.VibratoriOSAPIVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovVibratorAPIController
  * @Description : EgovVibratorAPI Controller Class
  * @Modification Information  
  * @
- * @  수정일       수정자                  수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.18    이해성                 최초 작성
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------------   -------------------------------
+ *   2012.07.18   이해성              최초 작성
+ *   2020.09.07   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 07. 18
@@ -52,7 +51,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller
-public class EgovVibratoriOSAPIController {
+public class EgovVibratorIosAPIController {
 	
 	/** EgovVibratorIOSAPIService */
     @Resource(name = "EgovVibratoriOSAPIService")
@@ -92,7 +91,6 @@ public class EgovVibratoriOSAPIController {
 	 */
     @RequestMapping("/vbr/addVibratoriOSInfo.do")
     public ModelAndView insertVibratorInfo(
-    		@ModelAttribute("searchVibratoriOSVO") VibratoriOSAPIDefaultVO searchVO,
        	 	VibratoriOSAPIVO sampleVO,
             BindingResult bindingResult, Model model, SessionStatus status) 
     throws Exception {

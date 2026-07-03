@@ -1,5 +1,38 @@
-*.mode1v3
-*.perspectivev3
+# iOS Cordova + Xcode (eGov Device API 3.9.x)
+
+# Xcode user-specific
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
 *.pbxuser
-.DS_Store
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.hmap
+
+# Build
 build/
+DerivedData/
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# IntelliJ / AppCode
+.idea/
+
+# Cordova / Node
+node_modules/
+cordova/node_modules/
+cordova/platforms/
+cordova/plugins/
+platforms/
+plugins/
+
+# OS
+.DS_Store

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Local development: HTTP allowed. Release build uses require_https=true. -->
+    <bool name="require_https">false</bool>
+</resources>

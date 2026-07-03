@@ -2,9 +2,9 @@ package egovframework.hyb.ios.ctt.web;
 
 import java.util.List;
 
+import egovframework.hyb.add.ctt.service.ContactsAndroidAPIVO;
 import egovframework.hyb.ios.ctt.service.ContactsiOSAPIVO;
 import egovframework.hyb.ios.ctt.service.EgovContactsiOSAPIService;
-
 import javax.annotation.Resource;
 
 import net.sf.json.JSONArray;
@@ -19,10 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
  * @Class Name : EgovContactsiOSAPIController.java
  * @Description : EgovContactsiOSAPIController
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012. 8. 13.  나신일                   최초생성
- * @ 2012. 8. 23.  이해성                   커스터마이징
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.08.13   나신일              최초생성
+ *   2012.08.23   이해성              커스터마이징
+ *   2020.08.14   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 13
@@ -31,7 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  */
 @Controller
-public class EgovContactsiOSAPIController {
+public class EgovContactsIosAPIController {
 	
 	/** EgovContactsiOSAPIService */
 	@Resource(name="egovContactsiOSAPIService")
@@ -43,7 +44,7 @@ public class EgovContactsiOSAPIController {
 	 * @return ContactsiOSAPIVOList
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unchecked")
+        	@SuppressWarnings("unchecked")
 	@RequestMapping("/ctt/contactsiOSInfoList.do")
 	public ModelAndView selectContactsInfoListXml(ContactsiOSAPIVO contactVO) throws Exception{
 		
@@ -63,15 +64,15 @@ public class EgovContactsiOSAPIController {
 	 * @return ContactsiOSAPIVO
 	 * @exception Exception
 	 */
-	@RequestMapping("/ctt/addContactsiOSInfo.do")
+    @RequestMapping("/ctt/addContactsiOSInfo.do")
 	public @ResponseBody ContactsiOSAPIVO addContactsInfoXml(ContactsiOSAPIVO contactVO) throws Exception{
 		String makeJSONString = contactVO.getContactsList().replaceAll("&quot;", "\"");
 		String decodeName = java.net.URLDecoder.decode(makeJSONString,"utf-8");
 		JSONObject jsonObject = JSONObject.fromObject(decodeName);
-		JSONArray jsonArray = jsonObject.getJSONArray("contactsList");	
+		JSONArray jsonArray = jsonObject.getJSONArray("contactsList");
 		
 		int nGetCount = jsonArray.size();
-		ContactsiOSAPIVO inputVO = null, selectVO = null;		
+		ContactsiOSAPIVO inputVO = null, selectVO = null;
 		for(int i = 0 ; i < nGetCount ; i++) {
 			inputVO = (ContactsiOSAPIVO) JSONObject.toBean((JSONObject)jsonArray.get(i), ContactsiOSAPIVO.class);
 			selectVO = egovContactsiOSAPIService.selectContactsInfo(inputVO);
@@ -107,7 +108,7 @@ public class EgovContactsiOSAPIController {
 	 * @return ContactsiOSAPIVO
 	 * @exception Exception
 	 */
-	@RequestMapping("/ctt/updateContactsiOS.do")
+    @RequestMapping("/ctt/updateContactsiOS.do")
 	public @ResponseBody ContactsiOSAPIVO updateContactsiOS(ContactsiOSAPIVO contactVO) throws Exception{
 		String makeJSONString = contactVO.getContactsList().replaceAll("&quot;", "\"");
 		
@@ -138,7 +139,6 @@ public class EgovContactsiOSAPIController {
     		contactsiOSAPIVO.setResultState("FAIL");
     		contactsiOSAPIVO.setResultMessage("업데이트에 실패하였습니다.");
     	}
-
 		
 		return contactsiOSAPIVO;
 	}
@@ -149,7 +149,7 @@ public class EgovContactsiOSAPIController {
 	 * @return ContactsiOSAPIVO
 	 * @exception Exception
 	 */
-	@RequestMapping("/ctt/deleteContactsiOS.do")
+    @RequestMapping("/ctt/deleteContactsiOS.do")
 	public @ResponseBody ContactsiOSAPIVO deleteContactsiOS(ContactsiOSAPIVO contactVO) throws Exception{
 		
 		ContactsiOSAPIVO contactsiOSAPIVO = new ContactsiOSAPIVO();
@@ -173,7 +173,7 @@ public class EgovContactsiOSAPIController {
 	 * @return ContactsiOSAPIVOList
 	 * @exception Exception
 	 */
-	@RequestMapping("/ctt/selectBackupCountiOS.do")
+    @RequestMapping("/ctt/selectBackupCountiOS.do")
 	public @ResponseBody ContactsiOSAPIVO selectContactsCount(ContactsiOSAPIVO fileVO) throws Exception{
 		int nCount = egovContactsiOSAPIService.selectContactsCount(fileVO);
 		ContactsiOSAPIVO contactsiOSAPIVO  = new ContactsiOSAPIVO();

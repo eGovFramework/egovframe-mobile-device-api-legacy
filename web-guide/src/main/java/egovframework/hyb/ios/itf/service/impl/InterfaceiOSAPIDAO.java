@@ -15,11 +15,10 @@
  */
 package egovframework.hyb.ios.itf.service.impl;
 
-import egovframework.com.cmm.mapper.EgovComAbstractDAO;
-import egovframework.hyb.ios.itf.service.InterfaceiOSAPIVO;
-
 import org.springframework.stereotype.Repository;
 
+import egovframework.com.cmm.mapper.EgovComAbstractDAO;
+import egovframework.hyb.ios.itf.service.InterfaceiOSAPIVO;
 
 /**  
  * @Class Name : InterfaceiOSAPIDAO.java
@@ -80,6 +79,12 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
                 "interfaceiOSAPIDAO.selectInterfaceInfo", vo);
     }
 
+    public InterfaceiOSAPIVO selectInterfaceInfoByUserId(InterfaceiOSAPIVO vo)
+            throws Exception {
+        return (InterfaceiOSAPIVO) selectOne(
+                "interfaceiOSAPIDAO.selectInterfaceInfoByUserId", vo);
+    }
+
     /**
      * 회원탈퇴를 한다.
      * 
@@ -90,6 +95,10 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
      */
     public int deleteInterfaceInfo(InterfaceiOSAPIVO vo) throws Exception {
         return delete("interfaceiOSAPIDAO.deleteInterfaceInfo", vo);
+    }
+
+    public int deleteInterfaceInfoByUserId(InterfaceiOSAPIVO vo) throws Exception {
+        return delete("interfaceiOSAPIDAO.deleteInterfaceInfoByUserId", vo);
     }
 
 }

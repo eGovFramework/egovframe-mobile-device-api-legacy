@@ -50,7 +50,7 @@ public interface EgovPushDeviceAPIService {
 	 * @return 네트워크 정보 목록
 	 * @exception Exception
 	 */
-    List<?> selectPushDeviceList(PushDeviceAPIVO searchVO) throws Exception;
+    List<?> selectPushDeviceList(PushDeviceAPIDefaultVO searchVO) throws Exception;
 
 	/**
 	 * Push Notification을 위해 Device 정보를 등록한다.

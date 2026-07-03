@@ -17,13 +17,6 @@ package egovframework.hyb.ios.mda.web;
 
 import java.util.List;
 
-import egovframework.hyb.ios.mda.service.EgovMediaiOSAPIService;
-import egovframework.hyb.ios.mda.service.MediaiOSAPIFileVO;
-import egovframework.hyb.ios.mda.service.MediaiOSAPIVO;
-import egovframework.hyb.ios.mda.service.MediaiOSAPIXmlVO;
-import egovframework.hyb.ios.mda.service.impl.EgovMediaiOSFileMngUtil;
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,15 +28,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
+import egovframework.hyb.ios.mda.service.EgovMediaiOSAPIService;
+import egovframework.hyb.ios.mda.service.MediaiOSAPIFileVO;
+import egovframework.hyb.ios.mda.service.MediaiOSAPIVO;
+import egovframework.hyb.ios.mda.service.MediaiOSAPIXmlVO;
+import egovframework.hyb.ios.mda.service.impl.EgovMediaiOSFileMngUtil;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovMediaiOSAPIController.java
  * @Description : EgovMediaiOSAPIController Class
  * @Modification Information  
  * @
- * @  수정일			수정자		수정내용
- * @ ---------		---------	-------------------------------
- * @ 2012. 7. 30.		이율경		최초생성
- * @ 2012. 8. 14.		이해성       커스터마이징
+ * @ 수정일         수정자             수정내용
+ * @ ----------	  ---------------	-------------------------------
+ *   2012.07.30	  이율경              최초생성
+ *   2012.08.14	  이해성              커스터마이징
+ *   2020.09.07   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 7. 30.
@@ -52,7 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 
  */
 @Controller
-public class EgovMediaiOSAPIController {
+public class EgovMediaIosAPIController {
 
 	/** EgovMediaiOSAPIService */
     @Resource(name = "EgovMediaiOSAPIService")
@@ -132,7 +133,7 @@ public class EgovMediaiOSAPIController {
 	 * @return 조회 목록
 	 * @exception Exception
 	 */
-    @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked")
 	@RequestMapping("/mda/mediaiOSInfoList.do")
 	public @ResponseBody MediaiOSAPIXmlVO selectMediaInfoList(MediaiOSAPIVO vo) throws Exception {
 		
@@ -154,11 +155,13 @@ public class EgovMediaiOSAPIController {
 	 * @exception Exception
 	 */
     @RequestMapping("/mda/getMediaiOS.do")
-    public void getSoundFile(@RequestParam("sn") String sn, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	if(sn != null && "".equals(sn) == false) {
+    public void getSoundFile(@RequestParam("sn") String sn,
+            @RequestParam(value = "uuid", required = false) String uuid,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	if(sn != null && !"".equals(sn)) {
     		MediaiOSAPIFileVO vo = new MediaiOSAPIFileVO();
 			vo.setSn(Integer.parseInt(sn));
-		
+			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, uuid));
 			egovMediaiOSAPIService.selectMediaFileInf(response, vo);
     	}
     }

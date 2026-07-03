@@ -17,11 +17,6 @@ package egovframework.hyb.ios.acl.web;
 
 import java.util.List;
 
-import egovframework.hyb.ios.acl.service.AcceleratoriOSAPIDefaultVO;
-import egovframework.hyb.ios.acl.service.AcceleratoriOSAPIVO;
-import egovframework.hyb.ios.acl.service.EgovAcceleratoriOSAPIService;
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -33,15 +28,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.hyb.ios.acl.service.AcceleratoriOSAPIDefaultVO;
+import egovframework.hyb.ios.acl.service.AcceleratoriOSAPIVO;
+import egovframework.hyb.ios.acl.service.EgovAcceleratoriOSAPIService;
+import egovframework.hyb.ios.dvc.service.DeviceiOSAPIVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovAcceleratoriOSAPIController
  * @Description : EgovAcceleratoriOSAPIController Class
  * @Modification Information  
  * @
- * @  수정일         수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.23    서형주                  최초생성
- *   2012.08.16    서준식                 json 버전으로 변경 
+ * @ 수정일                수정자             수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.23   서형주              최초생성
+ *   2012.08.16   서준식              json 버전으로 변경
+ *   2020.08.11   신용호              Swagger 적용
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 23
@@ -51,7 +52,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller
-public class EgovAcceleratoriOSAPIController {
+public class EgovAcceleratorIosAPIController {
 
 	/** EgovAcceleratorAPIService */
 	@Resource(name = "EgovAcceleratoriOSAPIService")
@@ -68,7 +69,7 @@ public class EgovAcceleratoriOSAPIController {
 	 * @return "/acl/acceleratorInfoList.do"
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unchecked")
+    	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/acl/acceleratorInfoList.do")
 	public ModelAndView selectAcceleratorInfoXMLList(@ModelAttribute("searchVO") AcceleratoriOSAPIDefaultVO searchVO, ModelMap model) throws Exception {
 		ModelAndView jsonView = new ModelAndView("jsonView");
@@ -88,13 +89,11 @@ public class EgovAcceleratoriOSAPIController {
 	 * @return "forward:/acl/addAcceleratorInfo.do"
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unused")
-	@RequestMapping("/acl/addAcceleratorInfo.do")
-	public ModelAndView addAcceleratorInfoXml(@ModelAttribute("searchVO") AcceleratoriOSAPIDefaultVO searchVO, AcceleratoriOSAPIVO acceleratorVO, BindingResult bindingResult,
+    @RequestMapping("/acl/addAcceleratorInfo.do")
+	public ModelAndView addAcceleratorInfoXml(AcceleratoriOSAPIVO acceleratorVO, BindingResult bindingResult,
 			Model model, SessionStatus status) throws Exception {
+    	
 		ModelAndView jsonView = new ModelAndView("jsonView");
-
-		AcceleratoriOSAPIVO acceleratorAPIVO = new AcceleratoriOSAPIVO();
 
 		int success = egovAcceleratoriOSAPIService.insertAcceleratorInfo(acceleratorVO);
 
@@ -117,15 +116,12 @@ public class EgovAcceleratoriOSAPIController {
 	 * @return "forward:/acl/withdrawal.do"
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unused")
-	@RequestMapping("/acl/withdrawal.do")
-	public ModelAndView withdrawalXml(@ModelAttribute("searchVO") AcceleratoriOSAPIDefaultVO searchVO, AcceleratoriOSAPIVO acceleratorVO, BindingResult bindingResult, Model model,
+    	@RequestMapping("/acl/withdrawal.do")
+	public ModelAndView withdrawalXml(AcceleratoriOSAPIVO acceleratorVO, BindingResult bindingResult, Model model,
 			SessionStatus status) throws Exception {
 		ModelAndView jsonView = new ModelAndView("jsonView");
 
 		int cnt = egovAcceleratoriOSAPIService.deleteAcceleratorInfo(acceleratorVO);
-
-		AcceleratoriOSAPIVO acceleratorAPIVO = new AcceleratoriOSAPIVO();
 
 		if (cnt > 0) {
 			jsonView.addObject("resultState", "OK");

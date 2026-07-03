@@ -39,10 +39,12 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
  * @Description : EgovNetworkAndroidAPIServiceImpl Class
  * @Modification Information  
  * @
- * @  수정일            수정자        수정내용
- * @ ---------        ---------   -----------------------------------------------------------
- * @ 2012. 8. 20.     이율경        최초생성
- * @ 2017.02.27       최두영        시큐어코딩(ES)-36. 부적절한 예외 처리[CWE253, CWE-440, CWE-754]
+ * @ 수정일         수정자        수정내용
+ * @ ----------   ---------   -----------------------------------------------------------
+ * @ 2012.08.20   이율경        최초생성
+ * @ 2017.02.27   최두영        시큐어코딩(ES)-36. 부적절한 예외 처리[CWE253, CWE-440, CWE-754]
+ *   2020.09.07   신용호        Content-Type 수정
+ *           
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 8. 20.
  * @version 1.0
@@ -138,7 +140,7 @@ public class EgovNetworkAndroidAPIServiceImpl extends EgovAbstractServiceImpl im
                 bStream.write(imgByte);
             }
     
-            response.setHeader("Content-Type","mp3");
+            response.setHeader("Content-Type","audio/mp3");
             response.setContentLength(bStream.size());
         
             bStream.writeTo(response.getOutputStream());

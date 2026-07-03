@@ -15,22 +15,16 @@
  */
 package egovframework.hyb.mbl.upd.service.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import egovframework.hyb.mbl.upd.service.EgovResourceUpdateDeviceAPIService;
-import egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIDefaultVO;
-import egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIVO;
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import egovframework.hyb.ios.frw.service.impl.EgovFileMngiOSUtil;
+import egovframework.hyb.mbl.upd.service.EgovResourceUpdateDeviceAPIService;
+import egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIVO;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 /**  
  * @Class Name : EgovPushDeviceAPIServiceImpl.java
@@ -58,14 +52,26 @@ public class EgovResourceUpdateDeviceAPIServiceImpl extends EgovAbstractServiceI
     @Resource(name="ResourceUpdateDeviceAPIDAO")
     private ResourceUpdateDeviceAPIDAO resourceUpdateDeviceAPIDAO;
 
+    @Resource(name = "egovFileMngiOSUtil")
+    private EgovFileMngiOSUtil egovFileMngUtil;
+
     /**
 	 * 알림 설정 정보 목록을 조회한다.
 	 * @param VO - 조회할 정보가 담긴 ResourceUpdateDeviceAPIVO
 	 * @return 알림 설정 정보 목록
 	 * @exception Exception
 	 */
-    public ResourceUpdateDeviceAPIVO selectResourceUpdateVersionInfo(ResourceUpdateDeviceAPIDefaultVO searchVO) throws Exception {
-        return resourceUpdateDeviceAPIDAO.selectResourceUpdateVersionInfo(searchVO);
+    public ResourceUpdateDeviceAPIVO selectResourceUpdateVersionInfo(ResourceUpdateDeviceAPIVO searchVO) throws Exception {
+        ResourceUpdateDeviceAPIVO resultVO = resourceUpdateDeviceAPIDAO.selectResourceUpdateVersionInfo(searchVO);
+        if (resultVO != null && resultVO.getStreFileNm() != null && !resultVO.getStreFileNm().isEmpty()) {
+        	try {
+        		resultVO.setFileSha256(egovFileMngUtil.computeFileSha256(resultVO.getStreFileNm()));
+        	} catch (Exception e) {
+        		LOGGER.warn("Failed to compute resource update file SHA-256: {}", e.getMessage());
+        		return null;
+        	}
+        }
+        return resultVO;
     }
     
 }

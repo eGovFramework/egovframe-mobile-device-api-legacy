@@ -32,7 +32,7 @@
 		
 	</insert>
 	
-	<select id="selectBarcodescannerDevcieList" parameterType="egovframework.hyb.mbl.bar.service.BarcodescannerAPIVO" resultMap="BarcodescannerInfo">
+	<select id="selectBarcodescannerDevcieList" parameterType="egovframework.hyb.mbl.bar.service.BarcodescannerAPIDefaultVO" resultMap="BarcodescannerInfo">
 			SELECT
 				SN, CODE_TYPE, CODE_TEXT, USEYN, CODE_DT
 			FROM BARCODE_INFO

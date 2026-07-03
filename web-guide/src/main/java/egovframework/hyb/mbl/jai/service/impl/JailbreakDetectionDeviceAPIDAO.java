@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import egovframework.com.cmm.mapper.EgovComAbstractDAO;
+import egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIDefaultVO;
 import egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIVO;
 
 /**  
@@ -47,7 +48,7 @@ public class JailbreakDetectionDeviceAPIDAO extends EgovComAbstractDAO{
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-	public List<?> selectJailbreakDetectionDevcieList(JailbreakDetectionDeviceAPIVO searchVO) throws Exception{
+	public List<?> selectJailbreakDetectionDevcieList(JailbreakDetectionDeviceAPIDefaultVO searchVO) throws Exception{
 
 		return selectList("jailbreakDetectionDeviceAPIDAO.selectJailbreakDetectionDevcieList", searchVO);
 	}

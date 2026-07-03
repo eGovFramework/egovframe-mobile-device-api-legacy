@@ -17,15 +17,14 @@ package egovframework.hyb.add.dvc.service.impl;
 
 import java.util.List;
 
-import egovframework.hyb.add.dvc.service.DeviceAndroidAPIDefaultVO;
-import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVO;
-import egovframework.hyb.add.dvc.service.EgovDeviceAndroidAPIService;
-
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+
+import egovframework.hyb.add.dvc.service.DeviceAndroidAPIDefaultVO;
+import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVO;
+import egovframework.hyb.add.dvc.service.EgovDeviceAndroidAPIService;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
 /**  
  * @Class Name : EgovDeviceAPIServiceImpl.java

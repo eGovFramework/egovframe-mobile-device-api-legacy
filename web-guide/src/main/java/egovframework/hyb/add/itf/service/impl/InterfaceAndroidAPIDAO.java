@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import egovframework.com.cmm.mapper.EgovComAbstractDAO;
 import egovframework.hyb.add.itf.service.InterfaceAndroidAPIVO;
 
-
 /**  
  * @Class Name : InterfaceAndroidAPIDAO.java
  * @Description : InterfaceAndroidAPIDAO DAO Class
@@ -81,6 +80,12 @@ public class InterfaceAndroidAPIDAO extends EgovComAbstractDAO {
                 "interfaceAndroidAPIDAO.selectInterfaceInfo", vo);
     }
 
+    public InterfaceAndroidAPIVO selectInterfaceInfoByUserId(InterfaceAndroidAPIVO vo)
+            throws Exception {
+        return (InterfaceAndroidAPIVO) selectOne(
+                "interfaceAndroidAPIDAO.selectInterfaceInfoByUserId", vo);
+    }
+
     /**
      * 회원탈퇴를 한다.
      * 
@@ -91,6 +96,10 @@ public class InterfaceAndroidAPIDAO extends EgovComAbstractDAO {
      */
     public int deleteInterfaceInfo(InterfaceAndroidAPIVO vo) throws Exception {
         return delete("interfaceAndroidAPIDAO.deleteInterfaceInfo", vo);
+    }
+
+    public int deleteInterfaceInfoByUserId(InterfaceAndroidAPIVO vo) throws Exception {
+        return delete("interfaceAndroidAPIDAO.deleteInterfaceInfoByUserId", vo);
     }
 
 }

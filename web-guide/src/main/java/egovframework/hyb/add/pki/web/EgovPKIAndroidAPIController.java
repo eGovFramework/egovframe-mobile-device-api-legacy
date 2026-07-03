@@ -17,6 +17,7 @@ package egovframework.hyb.add.pki.web;
 
 import java.util.List;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.add.pki.service.EgovPKIAndroidAPIService;
 import egovframework.hyb.add.pki.service.PKIAndroidAPIDefaultVO;
 import egovframework.hyb.add.pki.service.PKIAndroidAPIVO;
@@ -24,6 +25,7 @@ import egovframework.hyb.add.pki.service.PKIAndroidAPIVOList;
 import egovframework.rte.fdl.property.EgovPropertyService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,47 +36,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-/**  
- * @Class Name : EgovPKIAndroidAPIController
- * @Description : EgovPKIAndroidAPIController Controller Class
- * @Modification Information  
- * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.23    나신일                  최초생성
- * 
- * @author 모바일 디바이스 API 팀
- * @since 2012. 07. 23
- * @version 1.0
- * @see
- * 
- *  Copyright (C) by MOPAS All right reserved.
- */
-
 @Controller
 public class EgovPKIAndroidAPIController {
 
-	/** EgovPKIAPIService */
 	@Resource(name = "EgovPKIAndroidAPIService")
 	private EgovPKIAndroidAPIService egovPKIAPIService;
 
-	/** propertiesService */
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
 
-	/**
-	 * pki 정보 목록을 조회한다.
-	 * 
-	 * @param searchPKIVO
-	 *            - 조회할 정보가 담긴 PKIAndroidAPIVO
-	 * @param model
-	 * @return ModelAndView
-	 * @exception Exception
-	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/pki/xml/pkiInfoList.do")
 	public @ResponseBody
-	PKIAndroidAPIVOList selectPKIInfoListXml(@ModelAttribute("searchPKIVO") PKIAndroidAPIDefaultVO searchVO, ModelMap model) throws Exception {
+	PKIAndroidAPIVOList selectPKIInfoListXml(@ModelAttribute("searchPKIVO") PKIAndroidAPIDefaultVO searchVO,
+			HttpServletRequest request, ModelMap model) throws Exception {
+
+		DeviceAPIAuthSupport.ensureDeviceAccess(request);
+		searchVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, searchVO.getUuid()));
 
 		List<PKIAndroidAPIVO> pkiInfoList = (List<PKIAndroidAPIVO>) egovPKIAPIService.selectPKIInfoList(searchVO);
 
@@ -86,8 +64,13 @@ public class EgovPKIAndroidAPIController {
 
 	@RequestMapping("/pki/xml/addPKIInfo.do")
 	public @ResponseBody
-	PKIAndroidAPIVO addPKIInfoXml(@ModelAttribute("searchVO") PKIAndroidAPIDefaultVO searchVO, PKIAndroidAPIVO PKIVO, BindingResult bindingResult, Model model, SessionStatus status)
+	PKIAndroidAPIVO addPKIInfoXml(@ModelAttribute("searchVO") PKIAndroidAPIDefaultVO searchVO, PKIAndroidAPIVO PKIVO,
+			BindingResult bindingResult, HttpServletRequest request, Model model, SessionStatus status)
 			throws Exception {
+
+		DeviceAPIAuthSupport.ensureDeviceAccess(request);
+		PKIVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, PKIVO.getUuid()));
+
 		String sClientName = egovPKIAPIService.verifyCert(PKIVO);
 		PKIAndroidAPIVO pkiAPIVO = new PKIAndroidAPIVO();
 

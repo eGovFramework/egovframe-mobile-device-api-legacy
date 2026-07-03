@@ -7,6 +7,7 @@
  * @  수정일			수정자		수정내용
  * @ ---------		---------	-------------------------------
  * @ 2015. 4. 20.   신용호 		iscroll5 적용 
+ * @ 2024. 5. 02.   우시재		NSR 보안조치 ( 사진 제목에 XSS 방지 구현 추가 )
  */
 
 /*********************************************************
@@ -85,19 +86,44 @@ function fn_egov_displayDetail(imageSrc, xmldata) {
  * @returns 
  * @type 
  */
+
+/** HTML 출력용 XSS 이스케이프 */
+function fn_egov_escapeHtml(value) {
+    if (value == null) {
+        return "";
+    }
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&#34;")
+        .replaceAll("'", "&#39;")
+        .replaceAll("\\.", "&#46;")
+        .replaceAll("%2E", "&#46;")
+        .replaceAll("%2F", "&#47;");
+}
+
 function fn_egov_displayList(xmldata) {
     
     var html = "";
     
     $(xmldata).find("cameraAndroidAPIVOList").each(function(){
         
-                    var fileSn = $(this).find("fileSn").text();
+            var fileSn = $(this).find("fileSn").text();
                     var sn = $(this).find("sn").text();
-                    var photoSj = $(this).find("photoSj").text();
-                    
+            // 20240502 NSR 보안조치 ( 사진 제목에 XSS 방지 구현 추가 )
+				    var photoSj = $(this).find("photoSj").text()
+				                                            .replaceAll("&", "&amp;")
+				                                            .replaceAll("<", "&lt;")
+				                                            .replaceAll(">", "&gt;")
+				                                            .replaceAll("\"", "&#34;")
+				                                            .replaceAll("\'", "&#39;")
+				                                            .replaceAll("\\.", "&#46;")
+				                                            .replaceAll("%2E", "&#46;")
+				                                            .replaceAll("%2F", "&#47;");
                     html += '<li>';
                     html += '     <a href="#" onclick="javascript:fn_egov_detailPhotoAlbum(\'' + sn + '\', \'' + fileSn + '\');">';
-                    html += '         <img src="' + context + '/cmr/getImage.do?fileSn=' + fileSn + '" style="max-width: 100;" />';
+                    html += '         <img src="' + context + '/cmr/getImage.do?fileSn=' + fileSn + '&uuid=' + encodeURIComponent(device.uuid) + '" style="max-width: 100;" />';
                     html += '        <h3>' + photoSj + '</h3>';
                     html += '    </a>';
                     html += '</li>';        
@@ -327,7 +353,7 @@ function fn_egov_savePhotoAlbum() {
  */
 function fn_egov_detailPhotoAlbum(sn, fileSn) {
     
-    var imageSrc = context + '/cmr/getImage.do?fileSn=' + fileSn;
+    var imageSrc = context + '/cmr/getImage.do?fileSn=' + fileSn + '&uuid=' + encodeURIComponent(device.uuid);
     currentImageSn = sn;
     
     if(fn_egov_network_check(true)) {

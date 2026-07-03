@@ -10,6 +10,16 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+/**
+ * @Class Name : ResponseHandler.java
+ * @Description : ResponseHandler
+ * @Modification : 
+ * @
+ * @ 수정일               수정자              수정내용
+ * @ ----------   --------    ---------------------------
+ * @ 2019.08.16   신용호              최초 작성
+ */
+
 public class ResponseHandler implements Observer {
 
 	private String resp;

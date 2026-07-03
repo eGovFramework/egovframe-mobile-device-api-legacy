@@ -15,6 +15,8 @@
  */
 package egovframework.hyb.add.gps.service;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -23,9 +25,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @Description : GPSAndroidAPIVO Class
  * @Modification Information  
  * @
- * @  수정일              수정자                   수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.08.27    나신일                   최초생성
+ * @ 수정일                수정자            수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.08.27   나신일             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 08.27
@@ -35,33 +38,33 @@ import javax.xml.bind.annotation.XmlRootElement;
  *  Copyright (C) by MOPAS All right reserved.
  */
 @XmlRootElement
-public class GPSAndroidAPIVO extends GPSAndroidAPIDefaultVO {
+public class GPSAndroidAPIVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /** 일련번호 */
-    private int sn;
+        private int sn;
 
-    /** 기기식별 */
-    private String uuid;
+    /** 기기식별코드 */
+        private String uuid;
 
-    /** latitude */
-    private String lat;
+    /** latitude(위도) */
+        private String lat;
 
-    /** longtitude */
-    private String lon;
+    /** longtitude(경도) */
+        private String lon;
 
-    /** accuracy */
-    private String accrcy;
+    /** 정확도 */
+        private String accrcy;
 
     /** 사용여부 */
-    private String useYn;
+        private String useYn;
 
     /** resultState */
-    private String resultState;
+        private String resultState;
 
     /** resultMessage */
-    private String resultMessage;
+        private String resultMessage;
 
     /**
      * @return sn을 반환한다

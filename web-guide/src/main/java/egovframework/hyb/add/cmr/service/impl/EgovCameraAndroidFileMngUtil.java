@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.add.cmr.service.CameraAndroidAPIFileVO;
 import egovframework.hyb.add.cmr.service.EgovCameraAndroidAPIService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -59,6 +60,8 @@ public class EgovCameraAndroidFileMngUtil extends EgovAbstractServiceImpl {
     
     public CameraAndroidAPIFileVO writeUploadedFile(MultipartFile file) throws Exception{
         
+        DeviceAPIFileUploadValidator.validateCmrUpload(file);
+
         String originFileName = file.getOriginalFilename();
         int index = originFileName.lastIndexOf(".");
         String fileExt = originFileName.substring(index + 1);

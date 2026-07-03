@@ -17,8 +17,6 @@ package egovframework.hyb.mbl.bar.service;
 
 import java.util.List;
 
-import egovframework.hyb.mbl.pus.service.PushDeviceAPIVO;
-
 /**  
  * @Class Name : EgovBarcodescannerAPIService.java
  * @Description : EgovBarcodescannerAPIService Class
@@ -51,6 +49,6 @@ public interface EgovBarcodescannerAPIService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-	List<?> selectBarcodescannerList(BarcodescannerAPIVO searchVO) throws Exception;
+	List<?> selectBarcodescannerList(BarcodescannerAPIDefaultVO searchVO) throws Exception;
 
 }

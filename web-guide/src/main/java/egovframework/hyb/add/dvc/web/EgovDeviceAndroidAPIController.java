@@ -17,13 +17,8 @@ package egovframework.hyb.add.dvc.web;
 
 import java.util.List;
 
-import egovframework.hyb.add.dvc.service.DeviceAndroidAPIDefaultVO;
-import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVO;
-import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVOList;
-import egovframework.hyb.add.dvc.service.EgovDeviceAndroidAPIService;
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,14 +29,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import egovframework.hyb.add.dvc.service.DeviceAndroidAPIDefaultVO;
+import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVO;
+import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVOList;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
+import egovframework.hyb.add.dvc.service.EgovDeviceAndroidAPIService;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovDeviceAPIController
  * @Description : EgovDeviceAPIController Class
  * @Modification Information  
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.23    서형주                  최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.23   서형주              최초생성
+ *   2020.08.10   신용호              Swagger 적용
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 23
@@ -69,12 +71,14 @@ public class EgovDeviceAndroidAPIController {
      * @exception Exception
      */
     @RequestMapping(value="/dvc/xml/deviceInfo.do")
-    public @ResponseBody DeviceAndroidAPIVO selectDeviceInfoXML(@ModelAttribute("searchVO") DeviceAndroidAPIVO searchVO, 
-            ModelMap model)
+    public @ResponseBody DeviceAndroidAPIVO selectDeviceInfoXML(@ModelAttribute("searchVO") DeviceAndroidAPIVO searchVO,
+            HttpServletRequest request, ModelMap model)
             throws Exception {
- 
+
         DeviceAndroidAPIVO deviceInfo = egovDeviceAndroidAPIService.selectDeviceInfo(searchVO);
-        
+        if (deviceInfo != null) {
+            DeviceAPIAuthSupport.assertOwnedUuid(request, deviceInfo.getUuid());
+        }
         return deviceInfo;
     }
     
@@ -85,12 +89,12 @@ public class EgovDeviceAndroidAPIController {
      * @return "/dvc/xml/deviceInfoList.do"
      * @exception Exception
      */
-    @SuppressWarnings("unchecked")
+            @SuppressWarnings("unchecked")
 	@RequestMapping(value="/dvc/xml/deviceInfoList.do")
-    public @ResponseBody DeviceAndroidAPIVOList selectDeviceInfoXMLList(@ModelAttribute("searchVO") DeviceAndroidAPIVO searchVO, 
+    public @ResponseBody DeviceAndroidAPIVOList selectDeviceInfoXMLList(@ModelAttribute("searchVO") DeviceAndroidAPIDefaultVO searchVO, 
             ModelMap model)
             throws Exception {
-         
+        
         List<DeviceAndroidAPIVO> deviceInfoList = (List<DeviceAndroidAPIVO>) egovDeviceAndroidAPIService.selectDeviceInfoList(searchVO);
         
         DeviceAndroidAPIVOList deviceAndroidAPIVOList = new DeviceAndroidAPIVOList();
@@ -110,7 +114,6 @@ public class EgovDeviceAndroidAPIController {
      */
     @RequestMapping("/dvc/xml/addDeviceInfo.do")
     public @ResponseBody DeviceAndroidAPIVO addDeviceInfoXml(
-            @ModelAttribute("searchVO") DeviceAndroidAPIDefaultVO searchVO,
                 DeviceAndroidAPIVO deviceVO,
             BindingResult bindingResult, Model model, SessionStatus status) 
             throws Exception {
@@ -138,12 +141,19 @@ public class EgovDeviceAndroidAPIController {
      */
     @RequestMapping("/dvc/xml/withdrawal.do")
     public @ResponseBody DeviceAndroidAPIVO withdrawalXml(
-            @ModelAttribute("searchVO") DeviceAndroidAPIDefaultVO searchVO,
                 DeviceAndroidAPIVO deviceVO,
+            HttpServletRequest request,
             BindingResult bindingResult, Model model, SessionStatus status) 
     throws Exception {
-              
-        int cnt = egovDeviceAndroidAPIService.deleteDeviceInfo(deviceVO);
+
+        DeviceAndroidAPIVO deviceInfo = egovDeviceAndroidAPIService.selectDeviceInfo(deviceVO);
+        if (deviceInfo == null) {
+            DeviceAndroidAPIVO deviceAPIVO = new DeviceAndroidAPIVO();
+            deviceAPIVO.setUseYn("FAIL");
+            return deviceAPIVO;
+        }
+        DeviceAPIAuthSupport.assertOwnedUuid(request, deviceInfo.getUuid());
+        int cnt = egovDeviceAndroidAPIService.deleteDeviceInfo(deviceInfo);
                 
         DeviceAndroidAPIVO deviceAPIVO = new DeviceAndroidAPIVO();
         

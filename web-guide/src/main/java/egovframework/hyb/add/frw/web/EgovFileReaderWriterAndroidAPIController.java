@@ -2,28 +2,30 @@ package egovframework.hyb.add.frw.web;
 
 import java.util.List;
 
-import egovframework.hyb.add.frw.service.EgovFileReaderWriterAndroidAPIService;
-import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVO;
-import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVOList;
-import egovframework.hyb.add.frw.service.impl.EgovFileMngAndroidUtil;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.hyb.add.frw.service.EgovFileReaderWriterAndroidAPIService;
+import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVO;
+import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVOList;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
+import egovframework.hyb.add.frw.service.impl.EgovFileMngAndroidUtil;
 /**  
  * @Class Name : EgovFileReaderWriterAndroidAPIController.java
  * @Description : EgovFileReaderWriterAndroidAPIController
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012. 8. 6.  나신일                   최초생성
+ * @ 수정일         수정자        수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.08.06   나신일        최초생성
+ *   2020.08.24   신용호        Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 6
@@ -51,7 +53,7 @@ public class EgovFileReaderWriterAndroidAPIController {
 	 * @return FileReaderWriterAndroidAPIVOList
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unchecked")
+        	@SuppressWarnings("unchecked")
 	@RequestMapping("/frw/xml/fileInfoList.do")
 	public @ResponseBody
 	FileReaderWriterAndroidAPIVOList selectFileInfoListXml(FileReaderWriterAndroidAPIVO fileVO) throws Exception {
@@ -73,14 +75,20 @@ public class EgovFileReaderWriterAndroidAPIController {
 	 * @return FileReaderWriterAndroidAPIVO
 	 * @exception Exception
 	 */
-	@RequestMapping("/frw/xml/deleteFile.do")
+    @RequestMapping("/frw/xml/deleteFile.do")
 	public @ResponseBody
-	FileReaderWriterAndroidAPIVO deleteFile(FileReaderWriterAndroidAPIVO fileVO) throws Exception {
+	FileReaderWriterAndroidAPIVO deleteFile(FileReaderWriterAndroidAPIVO fileVO, HttpServletRequest request) throws Exception {
 
 		FileReaderWriterAndroidAPIVO fileReaderWriterAndroidAPIVO = new FileReaderWriterAndroidAPIVO();
 
-		// fileSN 과 uuid 를 이용하여 삭제할 파일 검색
+		fileVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, fileVO.getUuid()));
 		FileReaderWriterAndroidAPIVO selectInfoVO = egovFileReaderWriterAndroidAPIService.selectFileInfo(fileVO);
+
+		if (selectInfoVO == null) {
+			fileReaderWriterAndroidAPIVO.setResultState("FAIL");
+			fileReaderWriterAndroidAPIVO.setResultMessage("삭제 권한이 없거나 파일을 찾을 수 없습니다.");
+			return fileReaderWriterAndroidAPIVO;
+		}
 
 		if (egovFileMngAndroidUtil.deleteFile(selectInfoVO)) {
 
@@ -107,7 +115,7 @@ public class EgovFileReaderWriterAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@RequestMapping("/frw/xml/fileUpload.do")
+    @RequestMapping(value="/frw/xml/fileUpload.do", method=RequestMethod.POST)
 	public @ResponseBody
 	String fileUpload(@RequestParam("file") MultipartFile file, FileReaderWriterAndroidAPIVO fileVO, HttpServletRequest request) throws Exception {
 
@@ -143,12 +151,16 @@ public class EgovFileReaderWriterAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@RequestMapping("/frw/xml/fileDownload.do")
+    @RequestMapping("/frw/xml/fileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response, FileReaderWriterAndroidAPIVO fileVO) throws Exception {
 
+		fileVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, fileVO.getUuid()));
 		FileReaderWriterAndroidAPIVO selectInfoVO = egovFileReaderWriterAndroidAPIService.selectFileInfo(fileVO);
+		if (selectInfoVO == null) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN, "File access denied.");
+			return;
+		}
 		egovFileMngAndroidUtil.fileDownload(request, response, selectInfoVO);
-
 	}
 
 }

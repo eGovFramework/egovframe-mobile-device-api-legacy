@@ -129,7 +129,11 @@ public class EgovMediaiOSAPIServiceImpl extends EgovAbstractServiceImpl implemen
 		BufferedInputStream in = null;
 		ByteArrayOutputStream bStream = null;
 		MediaiOSAPIFileVO fileVO = mediaAPIDAO.selectMediaFileInfo(vo);
-		
+		if (fileVO == null) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN, "File access denied.");
+			return false;
+		}
+
 		String type = "";
 		boolean errorFlag = true;
 		try {

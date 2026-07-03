@@ -67,6 +67,17 @@ public class PKIiOSAPIDefaultVO implements Serializable {
     /** recordCountPerPage */
     private int recordCountPerPage = 10;
 
+    /** 기기식별 */
+    private String uuid;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     /** 첫번째 페이지를반환 한다. */
     public int getFirstIndex() {
         return firstIndex;

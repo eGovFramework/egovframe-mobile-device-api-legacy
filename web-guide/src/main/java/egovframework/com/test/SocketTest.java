@@ -9,7 +9,6 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class SocketTest {
 	
 	//2017-03-08 조성원 시큐어코딩(ES)-제거되지 않고 남은 디버그 코드[CWE-489]

@@ -7,8 +7,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import javapns.communication.ConnectionToAppleServer;
 import javapns.communication.exceptions.CommunicationException;
 import javapns.communication.exceptions.KeystoreException;
@@ -18,6 +16,8 @@ import javapns.notification.AppleNotificationServerBasicImpl;
 import javapns.notification.PushNotificationManager;
 import javapns.notification.PushNotificationPayload;
 import javapns.notification.PushedNotification;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * @Class Name : ANPSPushTest.java

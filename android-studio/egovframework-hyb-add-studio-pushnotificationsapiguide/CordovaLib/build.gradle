@@ -39,13 +39,14 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'org.apache.cordova'
 version = '7.1.4'
 
 android {
+    namespace 'org.apache.cordova'
     compileSdkVersion cdvCompileSdkVersion
     buildToolsVersion cdvBuildToolsVersion
     publishNonDefault true
@@ -75,7 +76,7 @@ android {
     }
 }
 
-install {
+/*install {
     repositories.mavenInstaller {
         pom {
             project {
@@ -103,11 +104,11 @@ install {
             }
         }
     }
-}
+}*/
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+//    classifier = 'sources'
 }
 
 artifacts {

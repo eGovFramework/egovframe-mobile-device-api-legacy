@@ -15,14 +15,17 @@
  */
 package egovframework.hyb.add.vbr.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : VibratorAndroidAPIVO.java
  * @Description : VibratorAndroidAPIVO Class
  * @Modification Information  
  * @
- * @  수정일            수정자        수정내용
- * @ ---------        ---------    -------------------------------
- * @ 2012. 8. 16.        이율경        최초생성
+ * @ 수정일                수정자             수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.08.16   이율경             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 8. 16.
@@ -30,18 +33,19 @@ package egovframework.hyb.add.vbr.service;
  * @see
  * 
  */
-public class VibratorAndroidAPIVO extends VibratorAndroidAPIDefaultVO {
+
+public class VibratorAndroidAPIVO implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
     /** 일련번호 */
-    private int sn;
+        private int sn;
     
     /** 기기식별 */
-    private String uuid;
+        private String uuid;
     
     /** 사용여부 */
-    private String timeStamp;
+        private String timeStamp;
 
     /**
      * @return  sn을 반환한다

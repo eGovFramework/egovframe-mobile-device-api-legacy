@@ -16,8 +16,8 @@
 package egovframework.hyb.ios.mda.service;
 
 /**  
- * @Class Name : MediaAndroidAPIFileVO.java
- * @Description : MediaAndroidAPIFileVO Class
+ * @Class Name : MediaiOSAPIFileVO.java
+ * @Description : MediaiOSAPIFileVO Class
  * @Modification Information  
  * @
  * @  수정일			수정자		수정내용

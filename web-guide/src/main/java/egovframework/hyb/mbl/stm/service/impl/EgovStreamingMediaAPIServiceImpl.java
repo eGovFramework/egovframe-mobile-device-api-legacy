@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.hyb.mbl.stm.service.EgovStreamingMediaAPIService;
+import egovframework.hyb.mbl.stm.service.StreamingMediaAPIDefaultVO;
 import egovframework.hyb.mbl.stm.service.StreamingMediaAPIFileVO;
 import egovframework.hyb.mbl.stm.service.StreamingMediaAPIVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -51,7 +52,7 @@ public class EgovStreamingMediaAPIServiceImpl extends EgovAbstractServiceImpl im
      * @return 조회 목록
      * @exception Exception
      */
-    public List<?> selectMediaInfoList(StreamingMediaAPIVO vo) throws Exception {
+    public List<?> selectMediaInfoList(StreamingMediaAPIDefaultVO vo) throws Exception {
         
         return mediaAPIDAO.selectMediaInfoList(vo);
     }

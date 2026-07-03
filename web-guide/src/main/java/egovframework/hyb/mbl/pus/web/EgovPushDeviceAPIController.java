@@ -18,6 +18,7 @@ package egovframework.hyb.mbl.pus.web;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,159 +29,111 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.mbl.pus.service.EgovPushDeviceAPIService;
 import egovframework.hyb.mbl.pus.service.PushDeviceAPIDefaultVO;
 import egovframework.hyb.mbl.pus.service.PushDeviceAPIVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
 
-/**  
- * @Class Name : EgovPushDeviceAPIController
- * @Description : EgovPushDeviceAPIController Class
- * @Modification Information  
- * @
- * @  수정일       수정자                  수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2016.06.20    신성학                최초 작성
- * 
- * @author 디바이스 API 실행환경 개발팀
- * @since 2016. 06. 20
- * @version 1.0
- * @see
- * 
- *  Copyright (C) by Ministry of Interior All right reserved.
- */
-
 @Controller
 public class EgovPushDeviceAPIController {
-	
-	/** EgovPushDeviceAPIService */
+
     @Resource(name = "EgovPushDeviceAPIService")
     private EgovPushDeviceAPIService egovPushDeviceAPIService;
-    
-    /** propertiesService */
+
     @Resource(name = "propertiesService")
     protected EgovPropertyService propertiesService;
- 
-    /**
-	 * Push Device 목록을 조회한다.
-	 * @param searchVO - 조회할 정보가 담긴 PushDeviceAPIDefaultVO
-	 * @param model
-	 * @return ModelAndView
-	 * @exception Exception
-	 */
-    @RequestMapping(value="/pus/pushDeviceInfoList.do")
-    public ModelAndView selectVibratorInfoList(@ModelAttribute("searchVibratorVO") PushDeviceAPIVO searchVO, 
-    		ModelMap model)
-            throws Exception {
- 
-		ModelAndView jsonView = new ModelAndView("jsonView");
-		List<?> PushDeviceInfoList = egovPushDeviceAPIService.selectPushDeviceList(searchVO);
-		
-		jsonView.addObject("pushDeviceInfoList", PushDeviceInfoList);
-		jsonView.addObject("resultState","OK");
-		
-		return jsonView;
-    } 
 
-    /**
-	 * Push Notification을 위하여 Device정보를 등록한다.
-	 * @param searchVO - 등록할 정보가 담긴 PushAPIDefaultVO
-	 * @param status
-	 * @return ModelAndView
-	 * @exception Exception
-	 */
+    @RequestMapping(value = "/pus/pushDeviceInfoList.do")
+    public ModelAndView selectVibratorInfoList(@ModelAttribute("searchVO") PushDeviceAPIDefaultVO searchVO,
+            HttpServletRequest request, ModelMap model) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        searchVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, searchVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+        List<?> pushDeviceInfoList = egovPushDeviceAPIService.selectPushDeviceList(searchVO);
+
+        jsonView.addObject("pushDeviceInfoList", pushDeviceInfoList);
+        jsonView.addObject("resultState", "OK");
+
+        return jsonView;
+    }
+
     @RequestMapping("/pus/addPushDeviceInfo.do")
-    public ModelAndView insertDeviceInfo(
-    		@ModelAttribute("searchPushVO") PushDeviceAPIDefaultVO searchVO,
-    		PushDeviceAPIVO sampleVO,
-            BindingResult bindingResult, Model model, SessionStatus status) 
-    throws Exception {
-    	
-    	ModelAndView jsonView = new ModelAndView("jsonView");
-    	
-    	int success = egovPushDeviceAPIService.insertPushDevice(sampleVO);
-    	if(success > 0) {
-			jsonView.addObject("resultState","OK");
-			jsonView.addObject("resultMessage","insert success");
-		} else {
-			jsonView.addObject("resultState","FAIL");
-			jsonView.addObject("resultMessage","insert fail");
-		}
+    public ModelAndView insertDeviceInfo(PushDeviceAPIVO sampleVO, BindingResult bindingResult,
+            HttpServletRequest request, Model model, SessionStatus status) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        sampleVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, sampleVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+
+        int success = egovPushDeviceAPIService.insertPushDevice(sampleVO);
+        if (success > 0) {
+            jsonView.addObject("resultState", "OK");
+            jsonView.addObject("resultMessage", "insert success");
+        } else {
+            jsonView.addObject("resultState", "FAIL");
+            jsonView.addObject("resultMessage", "insert fail");
+        }
 
         return jsonView;
     }
 
-
-    /**
-	 * Push Notification을 서버에 요청한다.
-	 * @param searchVO - 등록할 정보가 담긴 PushAPIDefaultVO
-	 * @param status
-	 * @return ModelAndView
-	 * @exception Exception
-	 */
     @RequestMapping("/pus/requestPushInfo.do")
-    public ModelAndView insertVibratorInfo(
-    		@ModelAttribute("searchPushVO") PushDeviceAPIDefaultVO searchVO,
-    		PushDeviceAPIVO sampleVO,
-            BindingResult bindingResult, Model model, SessionStatus status) 
-    throws Exception {
-    	
-    	ModelAndView jsonView = new ModelAndView("jsonView");
-    	
-    	int success = egovPushDeviceAPIService.insertPushInfo(sampleVO);
-    	if(success > 0) {
-			jsonView.addObject("resultState","OK");
-			jsonView.addObject("resultMessage","insert success");
-		} else {
-			jsonView.addObject("resultState","FAIL");
-			jsonView.addObject("resultMessage","insert fail");
-		}
+    public ModelAndView insertVibratorInfo(PushDeviceAPIVO sampleVO, BindingResult bindingResult,
+            HttpServletRequest request, Model model, SessionStatus status) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        sampleVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, sampleVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+
+        int success = egovPushDeviceAPIService.insertPushInfo(sampleVO);
+        if (success > 0) {
+            jsonView.addObject("resultState", "OK");
+            jsonView.addObject("resultMessage", "insert success");
+        } else {
+            jsonView.addObject("resultState", "FAIL");
+            jsonView.addObject("resultMessage", "insert fail");
+        }
 
         return jsonView;
     }
 
-    /**
-	 * Push Device 목록을 조회한다.
-	 * @param searchVO - 조회할 정보가 담긴 PushDeviceAPIDefaultVO
-	 * @param model
-	 * @return ModelAndView
-	 * @exception Exception
-	 */
-    @RequestMapping(value="/pus/pushDeviceInfo.do")
-    public ModelAndView selectVibratorInfo(@ModelAttribute("searchVibratorVO") PushDeviceAPIVO searchVO, 
-    		ModelMap model)
-            throws Exception {
- 
-		ModelAndView jsonView = new ModelAndView("jsonView");
-		PushDeviceAPIVO pushDeviceAPIVO = egovPushDeviceAPIService.selectPushDevice(searchVO);
-		
-		jsonView.addObject("pushDeviceInfo", pushDeviceAPIVO);
-		jsonView.addObject("resultState","OK");
-		
-		return jsonView;
-    } 
-    
-    /**
-	 * Push 송신 메세지 목록을 조회한다.
-	 * @param searchVO - 조회할 정보가 담긴 PushDeviceAPIDefaultVO
-	 * @param model
-	 * @return ModelAndView
-	 * @exception Exception
-	 */
-    @RequestMapping(value="/pus/PushMessageList.do")
-    public ModelAndView selectPushMessageList(@ModelAttribute("searchVibratorVO") PushDeviceAPIVO searchVO, 
-    		ModelMap model)
-            throws Exception {
- 
-		ModelAndView jsonView = new ModelAndView("jsonView");
-		List<?> PushMessageList = egovPushDeviceAPIService.selectPushMessageList(searchVO);
-		
-		jsonView.addObject("PushMessageList", PushMessageList);
-		jsonView.addObject("resultState","OK");
-		
-		return jsonView;
-    } 
-    
-    
-}
+    @RequestMapping(value = "/pus/pushDeviceInfo.do")
+    public ModelAndView selectVibratorInfo(@ModelAttribute("searchVO") PushDeviceAPIVO searchVO,
+            HttpServletRequest request, ModelMap model) throws Exception {
 
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        searchVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, searchVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+        PushDeviceAPIVO pushDeviceAPIVO = egovPushDeviceAPIService.selectPushDevice(searchVO);
+        if (pushDeviceAPIVO != null) {
+            DeviceAPIAuthSupport.assertOwnedUuid(request, pushDeviceAPIVO.getUuid());
+        }
+
+        jsonView.addObject("pushDeviceInfo", pushDeviceAPIVO);
+        jsonView.addObject("resultState", "OK");
+
+        return jsonView;
+    }
+
+    @RequestMapping(value = "/pus/PushMessageList.do")
+    public ModelAndView selectPushMessageList(@ModelAttribute("searchVO") PushDeviceAPIVO searchVO,
+            HttpServletRequest request, ModelMap model) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        searchVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, searchVO.getUuid()));
+
+        ModelAndView jsonView = new ModelAndView("jsonView");
+        List<?> pushMessageList = egovPushDeviceAPIService.selectPushMessageList(searchVO);
+
+        jsonView.addObject("PushMessageList", pushMessageList);
+        jsonView.addObject("resultState", "OK");
+
+        return jsonView;
+    }
+}

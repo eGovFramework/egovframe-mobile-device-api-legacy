@@ -42,9 +42,8 @@ public interface EgovFileOpenerDeviceAPIService {
 	 * @return 네트워크 정보 목록
 	 * @exception Exception
 	 */
-	List<?> selectFileOpenerDocumentListInfo(FileOpenerDeviceAPIVO searchVO) throws Exception;
+	List<?> selectFileOpenerDocumentListInfo(FileOpenerDeviceAPIDefaultVO searchVO) throws Exception;
 	
 	//FileOpenerDeviceAPIVO selectFileOpenerDocumentListInfo(FileOpenerDeviceAPIVO searchVO) throws Exception;
-
 
 }

@@ -17,13 +17,6 @@ package egovframework.hyb.add.mda.web;
 
 import java.util.List;
 
-import egovframework.hyb.add.mda.service.EgovMediaAndroidAPIService;
-import egovframework.hyb.add.mda.service.MediaAndroidAPIFileVO;
-import egovframework.hyb.add.mda.service.MediaAndroidAPIVO;
-import egovframework.hyb.add.mda.service.MediaAndroidAPIXmlVO;
-import egovframework.hyb.add.mda.service.impl.EgovMediaAndroidFileMngUtil;
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,14 +28,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.hyb.add.mda.service.EgovMediaAndroidAPIService;
+import egovframework.hyb.add.mda.service.MediaAndroidAPIFileVO;
+import egovframework.hyb.add.mda.service.MediaAndroidAPIVO;
+import egovframework.hyb.add.mda.service.MediaAndroidAPIXmlVO;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
+import egovframework.hyb.add.mda.service.impl.EgovMediaAndroidFileMngUtil;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovMediaAndroidAPIController.java
  * @Description : EgovMediaAndroidAPIController Class
  * @Modification Information  
  * @
- * @  수정일            수정자        수정내용
- * @ ---------        ---------    -------------------------------
- * @ 2012. 7. 30.        이율경        최초생성
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------------   -------------------------------
+ *   2012.07.30   이율경              최초생성
+ *   2020.09.07   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 7. 30.
@@ -72,7 +73,7 @@ public class EgovMediaAndroidAPIController {
 	 * @return boolean
 	 * @exception Exception
 	 */
-	@RequestMapping("/mda/mediaRecordUpload.do")
+    @RequestMapping("/mda/mediaRecordUpload.do")
 	public @ResponseBody
 	boolean fileUpload(@RequestParam("file") MultipartFile file, MediaAndroidAPIVO vo, HttpServletRequest request) throws Exception {
 
@@ -95,7 +96,7 @@ public class EgovMediaAndroidAPIController {
 	 * @return 조회 목록
 	 * @exception Exception
 	 */
-	@RequestMapping("/mda/mediaInfoDetail.do")
+    @RequestMapping("/mda/mediaInfoDetail.do")
 	public @ResponseBody
 	MediaAndroidAPIXmlVO selectMediaInfoDetail(MediaAndroidAPIVO vo) throws Exception {
 
@@ -113,7 +114,7 @@ public class EgovMediaAndroidAPIController {
 	 * @return 조회 목록
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unchecked")
+        	@SuppressWarnings("unchecked")
 	@RequestMapping("/mda/mediaInfoList.do")
 	public @ResponseBody
 	MediaAndroidAPIXmlVO selectMediaInfoList(MediaAndroidAPIVO vo) throws Exception {
@@ -134,14 +135,15 @@ public class EgovMediaAndroidAPIController {
 	 * @return jsonView
 	 * @exception Exception
 	 */
-	@RequestMapping("/mda/getMedia.do")
-	public void getImageInf(@RequestParam("sn") String sn, ModelMap model, HttpServletResponse response) throws Exception {
+    @RequestMapping("/mda/getMedia.do")
+	public void getImageInf(@RequestParam("sn") String sn,
+			@RequestParam(value = "uuid", required = false) String uuid,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		if (sn != null && "".equals(sn) == false) {
-
+		if (sn != null && !"".equals(sn)) {
 			MediaAndroidAPIFileVO vo = new MediaAndroidAPIFileVO();
 			vo.setSn(Integer.parseInt(sn));
-
+			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, uuid));
 			egovMediaAndroidAPIService.selectMediaFileInf(response, vo);
 		}
 	}

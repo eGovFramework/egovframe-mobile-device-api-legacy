@@ -22,7 +22,6 @@ import egovframework.hyb.ios.dvc.service.DeviceiOSAPIVO;
 
 import org.springframework.stereotype.Repository;
 
-
 /**  
  * @Class Name : DeviceiOSAPIDAO.java
  * @Description : DeviceiOSAPIDAO DAO Class
@@ -52,8 +51,6 @@ public class DeviceiOSAPIDAO extends EgovComAbstractDAO {
     public void insertDeviceInfo(DeviceiOSAPIVO vo) throws Exception {
         insert("deviceiOSAPIDAO.insertDeviceInfo", vo);
     }
-
-
 
     /**
 	 * 디바이스 정보를 삭제한다.

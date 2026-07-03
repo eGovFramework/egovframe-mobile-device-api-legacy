@@ -17,6 +17,7 @@ package egovframework.hyb.ios.pki.web;
 
 import java.util.List;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.ios.pki.service.EgovPKIiOSAPIService;
 import egovframework.hyb.ios.pki.service.PKIiOSAPIDefaultVO;
 import egovframework.hyb.ios.pki.service.PKIiOSAPIVO;
@@ -24,6 +25,7 @@ import egovframework.hyb.ios.pki.service.PKIiOSAPIVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,47 +36,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-/**  
- * @Class Name : EgovPKIiOSAPIController
- * @Description : EgovPKIiOSAPIController Controller Class
- * @Modification Information  
- * @
- * @  수정일                 수정자                 수정내용
- * @ 
- * @ 2012.07.16    이한철                  최초생성
- * 
- * @author 모바일 디바이스 API 팀
- * @since 2012. 07. 11
- * @version 1.0
- * @see
- * 
- *  Copyright (C) by MOPAS All right reserved.
- */
-
 @Controller
 public class EgovPKIiOSAPIController {
 
-    /** EgovPKIAPIService */
     @Resource(name = "EgovPKIiOSAPIService")
     private EgovPKIiOSAPIService egovPKIAPIService;
 
-    /** propertiesService */
     @Resource(name = "propertiesService")
     protected EgovPropertyService propertiesService;
 
-    /**
-     * pki 정보 목록을 조회한다.
-     * 
-     * @param searchPKIVO
-     *            - 조회할 정보가 담긴 PKIiOSAPIDefaultVO
-     * @param model
-     * @return ModelAndView
-     * @exception Exception
-     */
     @RequestMapping(value = "/pki/pkiInfoList.do")
-    public ModelAndView selectPKIInfoList(
-            @ModelAttribute("searchPKIVO") PKIiOSAPIDefaultVO searchVO,
-            ModelMap model) throws Exception {
+    public ModelAndView selectPKIInfoList(@ModelAttribute("searchPKIVO") PKIiOSAPIDefaultVO searchVO,
+            HttpServletRequest request, ModelMap model) throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        searchVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, searchVO.getUuid()));
 
         ModelAndView jsonView = new ModelAndView("jsonView");
         List<?> pkiInfoList = egovPKIAPIService.selectPKIInfoList(searchVO);
@@ -85,45 +61,14 @@ public class EgovPKIiOSAPIController {
         return jsonView;
     }
 
-    /**
-     * 인증서로그인한 정보를 등록한다.
-     * 
-     * @param searchVO
-     *            - 등록할 정보가 담긴 PKIAPIDefaultVO
-     * @param status
-     * @return "forward:/pki/addPKIInfo.do"
-     * @exception Exception
-     */
-    /**
-     * @RequestMapping("/pki/addPKIiOSInfo.do") public ModelAndView addPKIInfo2(
-     * @ModelAttribute("searchPKIVO") PKIiOSAPIDefaultVO searchVO, PKIiOSAPIVO
-     *                                PKIVO, BindingResult bindingResult, Model
-     *                                model, SessionStatus status) throws
-     *                                Exception {
-     * 
-     *                                ModelAndView jsonView = new
-     *                                ModelAndView("jsonView");
-     * 
-     *                                int success =
-     *                                EgovPKIAPIService.insertPKIInfo(PKIVO);
-     *                                if(success > 0) {
-     *                                jsonView.addObject("resultState","OK");
-     *                                jsonView
-     *                                .addObject("resultMessage","저장에 성공하였습니다."
-     *                                ); } else {
-     *                                jsonView.addObject("resultState","FAIL");
-     *                                jsonView
-     *                                .addObject("resultMessage","저장에 실패하였습니다."
-     *                                ); }
-     * 
-     *                                return jsonView; }
-     */
-
     @RequestMapping("/pki/addPKIiOSInfo.do")
-    public ModelAndView addPKIInfo(
-            @ModelAttribute("searchPKIVO") PKIiOSAPIDefaultVO searchVO,
-            PKIiOSAPIVO PKIVO, BindingResult bindingResult, Model model,
-            SessionStatus status) throws Exception {
+    public ModelAndView addPKIInfo(@ModelAttribute("searchPKIVO") PKIiOSAPIDefaultVO searchVO, PKIiOSAPIVO PKIVO,
+            BindingResult bindingResult, HttpServletRequest request, Model model, SessionStatus status)
+            throws Exception {
+
+        DeviceAPIAuthSupport.ensureDeviceAccess(request);
+        PKIVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, PKIVO.getUuid()));
+
         String sClientName = egovPKIAPIService.verifyCert(PKIVO);
         ModelAndView jsonView = new ModelAndView("jsonView");
 

@@ -15,30 +15,31 @@
  */
 package egovframework.hyb.ios.itf.web;
 
-import egovframework.hyb.ios.itf.service.EgovInterfaceiOSAPIService;
-import egovframework.hyb.ios.itf.service.InterfaceiOSAPIDefaultVO;
-import egovframework.hyb.ios.itf.service.InterfaceiOSAPIVO;
-
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
+import egovframework.com.cmm.security.DeviceAPILoginVO;
+import egovframework.hyb.ios.itf.service.EgovInterfaceiOSAPIService;
+import egovframework.hyb.ios.itf.service.InterfaceiOSAPIVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovInterfaceiOSAPIController
  * @Description : EgovInterfaceiOSAPIController Controller Class
  * @Modification Information  
  * @
- * @  수정일                 수정자                 수정내용
- * @ 
- * @ 2012.07.11    이한철                  최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.11   이한철             최초생성
+ *   2020.09.02   신용호             Swagger 적용
+ * 
  * 
  * @author 모바일 디바이스 API 팀
  * @since 2012. 07. 11
@@ -49,7 +50,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller
-public class EgovInterfaceiOSAPIController {
+public class EgovInterfaceIosAPIController {
 
     /** EgovInterfaceAPIService */
     @Resource(name = "EgovInterfaceiOSAPIService")
@@ -70,7 +71,6 @@ public class EgovInterfaceiOSAPIController {
      */
     @RequestMapping("/itf/addInterfaceiOSInfo.do")
     public ModelAndView addInterfaceInfo(
-            @ModelAttribute("searchInterfaceVO") InterfaceiOSAPIDefaultVO searchVO,
             InterfaceiOSAPIVO interfaceVO, BindingResult bindingResult,
             Model model, SessionStatus status) throws Exception {
 
@@ -108,22 +108,25 @@ public class EgovInterfaceiOSAPIController {
      */
     @RequestMapping("/itf/logIniOS.do")
     public ModelAndView logIn(
-            @ModelAttribute("searchInterfaceVO") InterfaceiOSAPIDefaultVO searchVO,
             InterfaceiOSAPIVO interfaceVO, BindingResult bindingResult,
-            Model model, SessionStatus status) throws Exception {
+            Model model, SessionStatus status, HttpServletRequest request) throws Exception {
 
         ModelAndView jsonView = new ModelAndView("jsonView");
 
-        InterfaceiOSAPIVO interfaceiOSAPIVO = null;
-        interfaceiOSAPIVO = egovInterfaceAPIService
+        InterfaceiOSAPIVO interfaceiOSAPIVO = egovInterfaceAPIService
                 .selectInterfaceInfo(interfaceVO);
 
-        if (interfaceVO.getUserId().equals(interfaceiOSAPIVO.getUserId())) {
-            jsonView.addObject("resultState", "OK");
-            jsonView.addObject("resultMessage", "로그인에 성공하였습니다.");
-        } else {
+        if (interfaceiOSAPIVO == null) {
             jsonView.addObject("resultState", "FAIL");
             jsonView.addObject("resultMessage", "로그인에 실패하였습니다.");
+        } else {
+            DeviceAPILoginVO loginVO = new DeviceAPILoginVO();
+            loginVO.setSn(interfaceiOSAPIVO.getSn());
+            loginVO.setUserId(interfaceiOSAPIVO.getUserId());
+            loginVO.setUuid(interfaceVO.getUuid());
+            DeviceAPIAuthSupport.bindLogin(request, loginVO);
+            jsonView.addObject("resultState", "OK");
+            jsonView.addObject("resultMessage", "로그인에 성공하였습니다.");
         }
 
         return jsonView;
@@ -140,7 +143,6 @@ public class EgovInterfaceiOSAPIController {
      */
     @RequestMapping("/itf/withdrawaliOS.do")
     public ModelAndView withdrawal(
-            @ModelAttribute("searchInterfaceVO") InterfaceiOSAPIDefaultVO searchVO,
             InterfaceiOSAPIVO interfaceVO, BindingResult bindingResult,
             Model model, SessionStatus status) throws Exception {
 

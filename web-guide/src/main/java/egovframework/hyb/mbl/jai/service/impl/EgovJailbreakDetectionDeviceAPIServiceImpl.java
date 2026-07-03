@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.hyb.mbl.jai.service.EgovJailbreakDetectionDeviceAPIService;
+import egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIDefaultVO;
 import egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -57,9 +58,8 @@ public class EgovJailbreakDetectionDeviceAPIServiceImpl extends EgovAbstractServ
 	 * @return 알림 설정 정보 목록
 	 * @exception Exception
 	 */
-    public List<?> selectJailbreakDetectionDevcieList(JailbreakDetectionDeviceAPIVO searchVO) throws Exception {
+    public List<?> selectJailbreakDetectionDevcieList(JailbreakDetectionDeviceAPIDefaultVO searchVO) throws Exception {
         return jailbreakdetectionDeviceAPIDAO.selectJailbreakDetectionDevcieList(searchVO);
     }
-
 
 }

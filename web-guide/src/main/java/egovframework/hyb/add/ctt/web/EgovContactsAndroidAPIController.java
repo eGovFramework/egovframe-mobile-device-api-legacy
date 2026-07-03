@@ -2,26 +2,26 @@ package egovframework.hyb.add.ctt.web;
 
 import java.util.List;
 
-import egovframework.hyb.add.ctt.service.ContactsAndroidAPIVO;
-import egovframework.hyb.add.ctt.service.ContactsAndroidAPIVOList;
-import egovframework.hyb.add.ctt.service.EgovContactsAndroidAPIService;
-
 import javax.annotation.Resource;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import egovframework.hyb.add.ctt.service.ContactsAndroidAPIVO;
+import egovframework.hyb.add.ctt.service.ContactsAndroidAPIVOList;
+import egovframework.hyb.add.ctt.service.EgovContactsAndroidAPIService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 /**  
  * @Class Name : EgovContactsAndroidAPIController.java
  * @Description : EgovContactsAndroidAPIController
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012. 8. 13.  나신일                   최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.08.13.  나신일              최초생성
+ *   2020.08.14   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 13
@@ -44,7 +44,7 @@ public class EgovContactsAndroidAPIController {
 	 * @return ContactsAndroidAPIVOList
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unchecked")
+        	@SuppressWarnings("unchecked")
 	@RequestMapping("/ctt/xml/contactsInfoList.do")
 	public @ResponseBody
 	ContactsAndroidAPIVOList selectContactsInfoListXml(ContactsAndroidAPIVO contactVO) throws Exception {
@@ -66,7 +66,7 @@ public class EgovContactsAndroidAPIController {
 	 * @return ContactsAndroidAPIVO
 	 * @exception Exception
 	 */
-	@RequestMapping("/ctt/xml/addContactsInfo.do")
+    @RequestMapping("/ctt/xml/addContactsInfo.do")
 	public @ResponseBody
 	ContactsAndroidAPIVO addContactsInfoXml(ContactsAndroidAPIVO contactVO) throws Exception {
 
@@ -113,7 +113,7 @@ public class EgovContactsAndroidAPIController {
 	 * @return ContactsAndroidAPIVO
 	 * @exception Exception
 	 */
-	@RequestMapping("/ctt/xml/updateContacts.do")
+    @RequestMapping("/ctt/xml/updateContacts.do")
 	public @ResponseBody
 	ContactsAndroidAPIVO updateContactsXml(ContactsAndroidAPIVO contactVO) throws Exception {
 
@@ -156,7 +156,7 @@ public class EgovContactsAndroidAPIController {
 	 * @return ContactsAndroidAPIVO
 	 * @exception Exception
 	 */
-	@RequestMapping("/frw/xml/deleteContacts.do")
+    @RequestMapping("/ctt/xml/deleteContacts.do")
 	public @ResponseBody
 	ContactsAndroidAPIVO deleteContactsXml(ContactsAndroidAPIVO contactVO) throws Exception {
 
@@ -183,7 +183,7 @@ public class EgovContactsAndroidAPIController {
 	 * @return ContactsAndroidAPIVOList
 	 * @exception Exception
 	 */
-	@RequestMapping("/ctt/xml/selectBackupCount.do")
+    @RequestMapping("/ctt/xml/selectBackupCount.do")
 	public @ResponseBody
 	ContactsAndroidAPIVO selectContactsCountXml(ContactsAndroidAPIVO fileVO) throws Exception {
 

@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.ios.mda.service.EgovMediaiOSAPIService;
 import egovframework.hyb.ios.mda.service.MediaiOSAPIFileVO;
 
@@ -61,7 +62,9 @@ public class EgovMediaiOSFileMngUtil extends EgovAbstractServiceImpl {
 	
 	
 	public MediaiOSAPIFileVO writeUploadedFile(MultipartFile file) throws Exception{
-		
+
+		DeviceAPIFileUploadValidator.validateMdaUpload(file);
+
 		String originFileName = file.getOriginalFilename();
 		int index = originFileName.lastIndexOf(".");
 		String fileExt = originFileName.substring(index + 1);

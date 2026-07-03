@@ -15,14 +15,17 @@
  */
 package egovframework.hyb.mbl.pus.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : PushDeviceAPIVO.java
  * @Description : PushDeviceAPIVO Class
  * @Modification Information  
  * @
- * @  수정일      수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2016.06.20   신성학                최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2016.06.20   신성학             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 06. 20
@@ -31,39 +34,40 @@ package egovframework.hyb.mbl.pus.service;
  * 
  *  Copyright (C) by MOPAS All right reserved.
  */
-public class PushDeviceAPIVO extends PushDeviceAPIDefaultVO {
+
+public class PushDeviceAPIVO implements Serializable {
 	
     private static final long serialVersionUID = 1L;
 
 	/** 일련번호 */
-    private int sn;
+        private int sn;
     
     /** 기기식별 */
-    private String uuid;
+        private String uuid;
     
 	/** 네트워크 디바이스 정보  */
-    private String ntwrkDeviceInfo;
+        private String ntwrkDeviceInfo;
     
     /** 디바이스 명  */
-    private String deviceNm;
+        private String deviceNm;
 
     /** OS 버전  */
-    private String osVer;
+        private String osVer;
     
     /** 사용여부  */
-    private String useYn;
+        private String useYn;
     
     /** OS 구분  */
-    private String osType;
+        private String osType;
     
     /** 디바이스 토큰 ID  */
-    private String tokenId;
+        private String tokenId;
     
     /** Push 발송 메시지  */
-    private String message;
+        private String message;
 
 	/** Push 발송 일시  */
-    private String sndDt;
+        private String sndDt;
     
 	/**
 	 * @return  sn을 반환한다
@@ -92,7 +96,6 @@ public class PushDeviceAPIVO extends PushDeviceAPIDefaultVO {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-
 
     public String getNtwrkDeviceInfo() {
 		return ntwrkDeviceInfo;
@@ -142,7 +145,6 @@ public class PushDeviceAPIVO extends PushDeviceAPIDefaultVO {
 		this.tokenId = tokenId;
 	}
 
-
     public String getSndDt() {
 		return sndDt;
 	}
@@ -158,6 +160,5 @@ public class PushDeviceAPIVO extends PushDeviceAPIDefaultVO {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
 
 }

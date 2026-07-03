@@ -15,6 +15,8 @@
  */
 package egovframework.hyb.add.cps.service;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -23,9 +25,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @Description : CompassAPIVO Class
  * @Modification Information  
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.23    서형주                  최초생성
+ * @ 수정일                수정자             수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.23   서형주              최초생성
+ *   2020.07.29   신용호              Swagger 적용
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 30
@@ -34,27 +37,27 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement
-public class CompassAndroidAPIVO extends CompassAndroidAPIDefaultVO {
+public class CompassAndroidAPIVO implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
     /** 일련번호 */
-    private int sn;
+        private int sn;
     
     /** 기기식별 */
-    private String uuid;
+        private String uuid;
     
     /** 기기방향 */
-    private String drc;
+        private String drc;
     
     /** 정확도 */
-    private String accrcy;
+        private String accrcy;
     
     /** timestamp */
-    private String timestamp;
+        private String timestamp;
     
     /** 사용여부 */
-    private String useYn;
+        private String useYn;
     
     /**
      * @return  sn을 반환한다

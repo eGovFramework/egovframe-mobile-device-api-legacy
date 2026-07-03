@@ -16,14 +16,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import egovframework.hyb.add.frw.service.EgovFileReaderWriterAndroidAPIService;
-import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVO;
-
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import egovframework.rte.fdl.cmmn.exception.EgovBizException;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
+import egovframework.hyb.add.frw.service.EgovFileReaderWriterAndroidAPIService;
+import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVO;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import egovframework.rte.fdl.cmmn.exception.EgovBizException;
+import egovframework.rte.fdl.idgnr.EgovIdGnrService;
+import egovframework.rte.fdl.property.EgovPropertyService;
 
 /**  
  * @Class Name : EgovFileTransfer.java
@@ -80,6 +80,8 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
      */
     public FileReaderWriterAndroidAPIVO writeUploadedFile(MultipartFile file,
             FileReaderWriterAndroidAPIVO fileVO) throws Exception {
+
+        DeviceAPIFileUploadValidator.validateFrwUpload(file);
 
         String originFileName = file.getOriginalFilename();
         int index = originFileName.lastIndexOf(".");
@@ -154,6 +156,7 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
             HttpServletResponse response, FileReaderWriterAndroidAPIVO fileVO)
             throws Exception {
 
+        DeviceAPIFileUploadValidator.assertSafeStoredFileName(fileVO.getStreFileNm());
         File file = new File(propertiesService.getString("fileStorePath")
                 + fileVO.getStreFileNm());
 

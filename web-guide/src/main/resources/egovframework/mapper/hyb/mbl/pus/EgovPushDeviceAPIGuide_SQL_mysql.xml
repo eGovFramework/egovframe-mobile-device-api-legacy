@@ -68,6 +68,11 @@
 			SELECT
 				SN, UUID, OS_TYPE, TOKEN_ID
 			FROM PUSH_DEVICE
+			<where>
+				<if test="uuid != null and uuid != ''">
+					AND UUID = #{uuid}
+				</if>
+			</where>
 			ORDER BY SN DESC
 	</select>
 	
@@ -75,7 +80,10 @@
 			SELECT
 				SN, UUID, OS_TYPE, TOKEN_ID
 			FROM PUSH_DEVICE
-			where SN = #{sn}
+			WHERE SN = #{sn}
+			<if test="uuid != null and uuid != ''">
+				AND UUID = #{uuid}
+			</if>
 			ORDER BY SN DESC
 	</select>
 	
@@ -83,6 +91,11 @@
 			SELECT
 				SN, UUID, MESSAGE, SND_DT, TOKEN_ID
 			FROM PUSH_MESSAGE
+			<where>
+				<if test="uuid != null and uuid != ''">
+					AND UUID = #{uuid}
+				</if>
+			</where>
 			ORDER BY SN DESC
 	</select>
 

@@ -11,7 +11,7 @@
 		<result property="fileSize" column="FILE_SIZE"/>
 	</resultMap>
 	
-	<select id="selectDocumentListInfo" parameterType="egovframework.hyb.mbl.fop.service.FileOpenerDeviceAPIVO" resultMap="documentList">
+	<select id="selectDocumentListInfo" parameterType="egovframework.hyb.mbl.fop.service.FileOpenerDeviceAPIDefaultVO" resultMap="documentList">
 		SELECT
 			a.SN,			
 			a.UPD_DT,

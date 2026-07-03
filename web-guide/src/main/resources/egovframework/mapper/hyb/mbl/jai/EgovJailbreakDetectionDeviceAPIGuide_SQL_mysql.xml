@@ -32,7 +32,7 @@
 		
 	</insert>
 	
-	<select id="selectJailbreakDetectionDevcieList" parameterType="egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIVO" resultMap="JailbreakDetectionInfo">
+	<select id="selectJailbreakDetectionDevcieList" parameterType="egovframework.hyb.mbl.jai.service.JailbreakDetectionDeviceAPIDefaultVO" resultMap="JailbreakDetectionInfo">
 			SELECT
 				SN, UUID, OS, PG_VER, DETECTION
 			FROM DETECTION

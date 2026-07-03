@@ -17,12 +17,6 @@ package egovframework.hyb.add.nwk.web;
 
 import java.util.List;
 
-import egovframework.hyb.add.nwk.service.EgovNetworkAndroidAPIService;
-import egovframework.hyb.add.nwk.service.NetworkAndroidAPIDefaultVO;
-import egovframework.hyb.add.nwk.service.NetworkAndroidAPIVO;
-import egovframework.hyb.add.nwk.service.NetworkAndroidAPIXmlVO;
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,14 +29,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import egovframework.hyb.add.nwk.service.EgovNetworkAndroidAPIService;
+import egovframework.hyb.add.nwk.service.NetworkAndroidAPIDefaultVO;
+import egovframework.hyb.add.nwk.service.NetworkAndroidAPIVO;
+import egovframework.hyb.add.nwk.service.NetworkAndroidAPIXmlVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovNetworkAndroidAPIController.java
  * @Description : EgovNetworkAndroidAPIController Class
  * @Modification Information  
  * @
- * @  수정일            수정자        수정내용
- * @ ---------        ---------    -------------------------------
- * @ 2012. 8. 20.        이율경        최초생성
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------------   -------------------------------
+ *   2012.08.20   이율경              최초생성
+ *   2020.09.07   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 8. 20.
@@ -68,7 +68,7 @@ public class EgovNetworkAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unchecked")
+    	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/nwk/networkAndroidInfoList.do")
 	public @ResponseBody
 	NetworkAndroidAPIXmlVO selectNetworkInfoList(@ModelAttribute("searchNetworkAndroidVO") NetworkAndroidAPIDefaultVO searchNetworkVO, ModelMap model) throws Exception {
@@ -88,9 +88,10 @@ public class EgovNetworkAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@RequestMapping(value = "/nwk/networkAndroidInfo.do")
+    @RequestMapping(value = "/nwk/networkAndroidInfo.do")
 	public @ResponseBody
-	NetworkAndroidAPIXmlVO selectNetworkInfo(@ModelAttribute("searchNetworkAndroidVO") NetworkAndroidAPIDefaultVO searchNetworkVO, NetworkAndroidAPIVO sampleNetworkVO,
+	NetworkAndroidAPIXmlVO selectNetworkInfo(
+			NetworkAndroidAPIVO sampleNetworkVO,
 			BindingResult bindingResult, Model model, SessionStatus status) throws Exception {
 
 		NetworkAndroidAPIVO networkInfo = egovNetworkAndroidAPIService.selectNetworkInfo(sampleNetworkVO);
@@ -108,9 +109,9 @@ public class EgovNetworkAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@RequestMapping("/nwk/addNetworkAndroidInfo.do")
+    @RequestMapping("/nwk/addNetworkAndroidInfo.do")
 	public @ResponseBody
-	NetworkAndroidAPIXmlVO insertNetworkInfo(@ModelAttribute("searchNetworkAndroidVO") NetworkAndroidAPIDefaultVO searchNetworkVO, NetworkAndroidAPIVO sampleNetworkVO,
+	NetworkAndroidAPIXmlVO insertNetworkInfo(NetworkAndroidAPIVO sampleNetworkVO,
 			BindingResult bindingResult, Model model, SessionStatus status) throws Exception {
 
 		int success = egovNetworkAndroidAPIService.insertNetworkInfo(sampleNetworkVO);
@@ -137,9 +138,9 @@ public class EgovNetworkAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@RequestMapping("/nwk/deleteNetworkAndroidInfo.do")
+    @RequestMapping("/nwk/deleteNetworkAndroidInfo.do")
 	public @ResponseBody
-	NetworkAndroidAPIXmlVO deleteNetworkInfo(NetworkAndroidAPIVO sampleVO, @ModelAttribute("searchNetworkiOSVO") NetworkAndroidAPIDefaultVO searchVO, SessionStatus status)
+	NetworkAndroidAPIXmlVO deleteNetworkInfo(NetworkAndroidAPIVO sampleVO, SessionStatus status)
 			throws Exception {
 
 		int success = egovNetworkAndroidAPIService.deleteNetworkInfo(sampleVO);
@@ -166,7 +167,7 @@ public class EgovNetworkAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@RequestMapping("/nwk/getMp3FileAndorid.do")
+    	@RequestMapping("/nwk/getMp3FileAndorid.do")
 	public void getMp3File(HttpServletResponse response) throws Exception {
 
 		String mp3FilePath = propertiesService.getString("fileStorePath");

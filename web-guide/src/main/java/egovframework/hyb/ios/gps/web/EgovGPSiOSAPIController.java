@@ -17,12 +17,6 @@ package egovframework.hyb.ios.gps.web;
 
 import java.util.List;
 
-import egovframework.hyb.ios.gps.service.EgovGPSiOSAPIService;
-import egovframework.hyb.ios.gps.service.GPSiOSAPIDefaultVO;
-import egovframework.hyb.ios.gps.service.GPSiOSAPIVO;
-
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -34,14 +28,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.hyb.ios.gps.service.EgovGPSiOSAPIService;
+import egovframework.hyb.ios.gps.service.GPSiOSAPIDefaultVO;
+import egovframework.hyb.ios.gps.service.GPSiOSAPIVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovGPSAPIController
  * @Description : EgovGPSAPI Controller Class
  * @Modification Information  
  * @
- * @  수정일                수정자                  수정내용
- * @ 
- * @ 2012.07.31    이한철                  최초 작성
+ * @ 수정일         수정자        수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.31   이한철        최초 작성
+ *   2020.08.24   신용호        Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 06. 18
@@ -52,7 +51,7 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 @Controller
-public class EgovGPSiOSAPIController {
+public class EgovGPSIosAPIController {
 
     /** EgovGPSAPIService */
     @Resource(name = "EgovGPSAPIService")
@@ -73,7 +72,7 @@ public class EgovGPSiOSAPIController {
      */
     @RequestMapping(value = "/gps/gpsInfoList.do")
     public ModelAndView selectGPSInfoList(
-            @ModelAttribute("searchVO") GPSiOSAPIVO searchVO,
+            @ModelAttribute("searchVO") GPSiOSAPIDefaultVO searchVO,
             ModelMap model) throws Exception {
 
         ModelAndView jsonView = new ModelAndView("jsonView");

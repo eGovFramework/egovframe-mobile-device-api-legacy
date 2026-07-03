@@ -1,13 +1,16 @@
 package egovframework.hyb.mbl.stm.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : StreamingMediaAPIFileVO.java
  * @Description : StreamingMediaAPIFileVO Class
  * @Modification Information  
  * @
- * @  수정일            수정자        수정내용
- * @ ---------        ---------    -------------------------------
- * @ 2016. 7. 14.     장성호        최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2016.07.14   장성호             최초생성
+ *   2020.09.16   신용호             Swagger 적용
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2016. 7. 14.
@@ -15,46 +18,48 @@ package egovframework.hyb.mbl.stm.service;
  * @see
  * 
  */
-public class StreamingMediaAPIFileVO {
+public class StreamingMediaAPIFileVO implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
     /** 미디어 일련번호 */
-    private int sn;
+	    private int sn;
     
     /** 파일연번 */
-    private int fileSn;
+	    private int fileSn;
     
     /** 파일저장경로 */
-    private String fileStreCours;
+	    private String fileStreCours;
     
     /** 저장파일명 */
-    private String streFileNm;
+	    private String streFileNm;
     
     /** 원파일명 */
-    private String orignlFileNm;
+	    private String orignlFileNm;
     
     /** 파일확장자 */
-    private String fileExtsn;
+	    private String fileExtsn;
     
     /** 파일내용 */
-    private String fileCn;
+	    private String fileCn;
     
     /** 파일크기 */
-    private String fileSize;
+	    private String fileSize;
     
     /** 미디어 구분 코드 */
-    private String mdCode;
+	    private String mdCode;
     
     /** 미디어 제목 */
-    private String mdSj;
+	    private String mdSj;
     
     /** 디바이스 식별 */
-    private String uuid;
+	    private String uuid;
     
     /** 활성화여부 */
-    private String useyn;
+	    private String useyn;
     
     /** 재생 횟수 */
-    private String revivCo;
+	    private String revivCo;
 
     /**
      * @return sn을 반환한다.

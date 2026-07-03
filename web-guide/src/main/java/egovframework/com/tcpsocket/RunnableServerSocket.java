@@ -8,6 +8,16 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Observable;
 
+/**
+ * @Class Name : RunnableServerSocket.java
+ * @Description : RunnableServerSocket
+ * @Modification : 
+ * @
+ * @ 수정일               수정자              수정내용
+ * @ ----------   --------    ---------------------------
+ * @ 2019.08.16   신용호              최초 작성
+ */
+
 public class RunnableServerSocket extends Observable implements Runnable {
 
 	private final Socket socket; //initialize in const'r
@@ -47,7 +57,6 @@ public class RunnableServerSocket extends Observable implements Runnable {
 	        System.out.println("Runnable > Server : Socket Remote LocalAddress = "+socket.getLocalAddress());
 	        System.out.println("Runnable > Server : Socket Remote LocalSocketAddress = "+socket.getLocalSocketAddress());
 	        System.out.println("Runnable > Server : Socket Remote InetAddress = "+socket.getInetAddress());
-
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

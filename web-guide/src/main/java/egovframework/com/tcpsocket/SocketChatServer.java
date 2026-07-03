@@ -3,11 +3,22 @@ package egovframework.com.tcpsocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * @Class Name : SocketChatServer.java
+ * @Description : SocketChatServer
+ * @Modification : 
+ * @
+ * @ 수정일               수정자              수정내용
+ * @ ----------   --------    ---------------------------
+ * @ 2019.08.16   신용호              최초 작성
+ */
+
 public class SocketChatServer {
 
 	public static void main(String[] args) {
 
 		try {
+			// 앱에서 연결한 소켓 포트번호
 			int tcpSocketPort = 13305;
 
 			// 서버 생성

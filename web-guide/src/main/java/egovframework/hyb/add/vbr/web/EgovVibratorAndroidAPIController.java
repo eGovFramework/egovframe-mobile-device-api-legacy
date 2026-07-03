@@ -17,12 +17,6 @@ package egovframework.hyb.add.vbr.web;
 
 import java.util.List;
 
-import egovframework.hyb.add.vbr.service.EgovVibratorAndroidAPIService;
-import egovframework.hyb.add.vbr.service.VibratorAndroidAPIDefaultVO;
-import egovframework.hyb.add.vbr.service.VibratorAndroidAPIVO;
-import egovframework.hyb.add.vbr.service.VibratorAndroidAPIXmlVO;
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -34,14 +28,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import egovframework.hyb.add.vbr.service.EgovVibratorAndroidAPIService;
+import egovframework.hyb.add.vbr.service.VibratorAndroidAPIDefaultVO;
+import egovframework.hyb.add.vbr.service.VibratorAndroidAPIVO;
+import egovframework.hyb.add.vbr.service.VibratorAndroidAPIXmlVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovVibratorAndroidAPIController.java
  * @Description : EgovVibratorAndroidAPIController Class
  * @Modification Information  
  * @
- * @  수정일            수정자        수정내용
- * @ ---------        ---------    -------------------------------
- * @ 2012. 8. 16.        이율경        최초생성
+ * @ 수정일         수정자              수정내용
+ * @ ----------   --------------    -------------------------------
+ *   2012.08.16   이율경              최초생성
+ *   2020.09.07   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 8. 16.
@@ -67,7 +67,7 @@ public class EgovVibratorAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@SuppressWarnings("unchecked")
+    	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/vbr/VibratorAndroidInfoList.do")
 	public @ResponseBody
 	VibratorAndroidAPIXmlVO selectVibratorInfoList(@ModelAttribute("searchVibratorVO") VibratorAndroidAPIDefaultVO searchVO, ModelMap model) throws Exception {
@@ -87,9 +87,10 @@ public class EgovVibratorAndroidAPIController {
 	 * @return ModelAndView
 	 * @exception Exception
 	 */
-	@RequestMapping("/vbr/addVibratorAndroidInfo.do")
+    @RequestMapping("/vbr/addVibratorAndroidInfo.do")
 	public @ResponseBody
-	VibratorAndroidAPIXmlVO insertVibratorInfo(@ModelAttribute("searchVibratorAndroidVO") VibratorAndroidAPIDefaultVO searchVO, VibratorAndroidAPIXmlVO vibratorVO,
+	VibratorAndroidAPIXmlVO insertVibratorInfo(
+			VibratorAndroidAPIXmlVO vibratorVO,
 			BindingResult bindingResult, Model model, SessionStatus status) throws Exception {
 
 		VibratorAndroidAPIXmlVO xmlVO = new VibratorAndroidAPIXmlVO();

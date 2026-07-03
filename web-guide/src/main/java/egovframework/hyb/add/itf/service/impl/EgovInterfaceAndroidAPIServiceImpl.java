@@ -15,6 +15,7 @@
  */
 package egovframework.hyb.add.itf.service.impl;
 
+import egovframework.com.cmm.security.DeviceAPIPasswordUtil;
 import egovframework.hyb.add.itf.service.EgovInterfaceAndroidAPIService;
 import egovframework.hyb.add.itf.service.InterfaceAndroidAPIVO;
 
@@ -24,78 +25,41 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-/**  
- * @Class Name : EgovInterfaceAndroidAPIServiceImpl.java
- * @Description : EgovInterfaceAndroidAPIServiceImpl Class
- * @Modification Information  
- * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.09    나신일                  최초생성
- * 
- * @author 모바일 디바이스 API 팀
- * @since 2012. 07. 09
- * @version 1.0
- * @see
- * 
- *  Copyright (C) by MOPAS All right reserved.
- */
-
 @Service("EgovInterfaceAndroidAPIService")
 public class EgovInterfaceAndroidAPIServiceImpl extends EgovAbstractServiceImpl
         implements EgovInterfaceAndroidAPIService {
 
-    /** InterfaceAndroidAPIDAO */
     @Resource(name = "InterfaceAndroidAPIDAO")
     private InterfaceAndroidAPIDAO interfaceAPIDAO;
 
-    /**
-     * 해당 ID로 가입된 정보가 있는지 확인 한다.
-     * 
-     * @param vo
-     *            - 로그인할 정보가 담긴 InterfaceAndroidAPIVO
-     * @return 로그인 결과
-     * @exception Exception
-     */
     public int selectInterfaceInfoListTotCnt(InterfaceAndroidAPIVO vo)
             throws Exception {
         return interfaceAPIDAO.selectInterfaceInfoListTotCnt(vo);
     }
 
-    /**
-     * 회원 정보를 등록한다.
-     * 
-     * @param vo
-     *            - 등록할 정보가 담긴 InterfaceAndroidAPIVO
-     * @return 등록 결과
-     * @exception Exception
-     */
     public int insertInterfaceInfo(InterfaceAndroidAPIVO vo) throws Exception {
+        vo.setUserPw(DeviceAPIPasswordUtil.encode(vo.getUserPw()));
         return interfaceAPIDAO.insertInterfaceInfo(vo);
     }
 
-    /**
-     * 로그인을 한다.
-     * 
-     * @param vo
-     *            - 로그인할 정보가 담긴 InterfaceAndroidAPIVO
-     * @return 로그인 결과
-     * @exception Exception
-     */
     public InterfaceAndroidAPIVO selectInterfaceInfo(InterfaceAndroidAPIVO vo)
             throws Exception {
-        return interfaceAPIDAO.selectInterfaceInfo(vo);
+        InterfaceAndroidAPIVO stored = interfaceAPIDAO.selectInterfaceInfoByUserId(vo);
+        if (stored == null) {
+            return null;
+        }
+        if (!DeviceAPIPasswordUtil.matches(vo.getUserPw(), stored.getUserPw())) {
+            return null;
+        }
+        stored.setUserPw(null);
+        return stored;
     }
 
-    /**
-     * 회원탈퇴를 한다.
-     * 
-     * @param vo
-     *            - 탈퇴할 정보가 담긴 InterfaceAndroidAPIVO
-     * @return 회원탈퇴 결과
-     * @exception Exception
-     */
     public int deleteInterfaceInfo(InterfaceAndroidAPIVO vo) throws Exception {
-        return interfaceAPIDAO.deleteInterfaceInfo(vo);
+        InterfaceAndroidAPIVO stored = interfaceAPIDAO.selectInterfaceInfoByUserId(vo);
+        if (stored == null || !DeviceAPIPasswordUtil.matches(vo.getUserPw(), stored.getUserPw())) {
+            return 0;
+        }
+        return interfaceAPIDAO.deleteInterfaceInfoByUserId(vo);
     }
 }

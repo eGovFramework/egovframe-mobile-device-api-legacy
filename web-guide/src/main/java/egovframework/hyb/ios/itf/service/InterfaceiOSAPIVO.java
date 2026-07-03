@@ -15,14 +15,17 @@
  */
 package egovframework.hyb.ios.itf.service;
 
+import java.io.Serializable;
+
 /**  
  * @Class Name : InterfaceiOSAPIVO.java
  * @Description : InterfaceiOSAPIVO Class
  * @Modification Information  
  * @
- * @  수정일                 수정자                 수정내용
- * @ 
- * @ 2012.07.11    이한철                  최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.11   이한철             최초생성
+ *   2020.07.29   신용호             Swagger 적용
  * 
  * @author 모바일 디바이스 API 팀
  * @since 2012. 07. 11
@@ -32,24 +35,24 @@ package egovframework.hyb.ios.itf.service;
  *  Copyright (C) by MOPAS All right reserved.
  */
 
-public class InterfaceiOSAPIVO extends InterfaceiOSAPIDefaultVO {
+public class InterfaceiOSAPIVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /** 일련번호 */
-    private int sn;
+        private int sn;
 
-    /** 기기식별 */
-    private String uuid;
+    /** 기기식별코드 */
+        private String uuid;
 
     /** 아이디 */
-    private String userId;
+        private String userId;
 
     /** 비밀번호 */
-    private String userPw;
+        private String userPw;
 
     /** E-mail */
-    private String emails;
+        private String emails;
 
     /**
      * @return sn을 반환한다

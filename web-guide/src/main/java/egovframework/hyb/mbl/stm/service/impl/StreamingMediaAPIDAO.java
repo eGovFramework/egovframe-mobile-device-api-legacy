@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import egovframework.com.cmm.mapper.EgovComAbstractDAO;
-import egovframework.hyb.add.mda.service.MediaAndroidAPIVO;
+import egovframework.hyb.mbl.stm.service.StreamingMediaAPIDefaultVO;
 import egovframework.hyb.mbl.stm.service.StreamingMediaAPIFileVO;
 import egovframework.hyb.mbl.stm.service.StreamingMediaAPIVO;
 
@@ -33,7 +33,7 @@ public class StreamingMediaAPIDAO extends EgovComAbstractDAO {
      * @return 조회 목록
      * @exception Exception
      */
-    public List<?> selectMediaInfoList(StreamingMediaAPIVO searchVO) throws Exception {
+    public List<?> selectMediaInfoList(StreamingMediaAPIDefaultVO searchVO) throws Exception {
         return selectList("streamingMediaAPIDAO.selectMediaInfoList", searchVO);
     }
     

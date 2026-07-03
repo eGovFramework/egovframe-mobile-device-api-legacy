@@ -39,6 +39,11 @@
 				DATE_FORMAT(crtfc_dt, '%Y-%m-%d %H:%i:%s') crtfc_dt, 
 				ENTRPRS_SE_CODE
 			FROM pki
+			<where>
+				<if test="uuid != null and uuid != ''">
+					AND UUID = #{uuid}
+				</if>
+			</where>
 			ORDER BY SN DESC
 			limit #{firstIndex}, #{recordCountPerPage}
 				
@@ -48,6 +53,11 @@
 
 			SELECT COUNT(*) totcnt
 			FROM pki
+			<where>
+				<if test="uuid != null and uuid != ''">
+					AND UUID = #{uuid}
+				</if>
+			</where>
 	</select>
 		
 </mapper>

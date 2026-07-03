@@ -1,6 +1,7 @@
 package kr.go.egovframework.hyb.plugin;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,10 +18,9 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
-import kr.go.egovframework.hyb.filereaderwriterapp.R;
+import kr.go.egovframework.hyb.deviceapiapp.R;
 
 /**  
  * @Class Name : EgovFileOpener
@@ -69,47 +69,37 @@ public class EgovFileOpener extends CordovaPlugin  {
         
     	try {
 			params = data.getJSONObject(1);
-			url = data.getString(0);
+			url = EgovFileOpenerRequestValidator.normalizeDownloadUri(data.getString(0));
+	        orignlFileNm = EgovFileOpenerRequestValidator.normalizeFileName(
+	                params.getString("orignlFileNm"));
+	        streFileNm = EgovFileOpenerRequestValidator.normalizeStoredFileName(
+	                params.optString("streFileNm", ""));
+	        targetPath = params.optString("targetPath", null);
 
-	        streFileNm = params.getString("streFileNm");
-	        orignlFileNm = params.getString("orignlFileNm");
-	        targetPath = params.getString("targetPath");
-	        
+	        String serverUrl = context.getString(R.string.SERVER_URL);
+	        String downloadAssetFileUrl = EgovFileOpenerRequestValidator.buildDownloadUrl(
+	                context, serverUrl, url);
+	        File targetFile = EgovFileOpenerRequestValidator.resolveSecureTargetFile(
+	                context, targetPath, orignlFileNm);
+
+	        Log.d(this.getClass().getSimpleName(), "url : " + url);
+	        Log.d(this.getClass().getSimpleName(), "streFileNm : " + streFileNm);
+	        Log.d(this.getClass().getSimpleName(), "orignlFileNm : " + orignlFileNm);
+	        Log.d(this.getClass().getSimpleName(), "targetPath : " + targetFile.getParent());
+
+	        new FileOpenerFileAsync(context).execute(
+	                downloadAssetFileUrl, targetFile.getParent(), targetFile.getName());
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-	        // Cordova 콜백 처리
-			requestCallBackContext(callbackContext, 1, "");
+			requestCallBackContext(callbackContext, 1, e.getMessage());
+		} catch (IOException e) {
+			requestCallBackContext(callbackContext, 1, e.getMessage());
 		}
-    	
-        Log.d(this.getClass().getSimpleName(),"url : "+ url);
-        
-        Log.d(this.getClass().getSimpleName(),"streFileNm : "+ streFileNm);
-        Log.d(this.getClass().getSimpleName(),"orignlFileNm : "+ orignlFileNm);
-        
-        
-        
-        if (targetPath==null || targetPath.equals("null")) {
-        	targetPath = context.getFilesDir().toString()+"/www";
-        }
-        
-        Log.d(this.getClass().getSimpleName(),"targetPath : "+ targetPath);
-        
-        String SERVER_URL = context.getString(R.string.SERVER_URL);
-    	
-	    String downloadAssetFileUrl = SERVER_URL+url;
-        
-        new FileOpenerFileAsync(context).execute(downloadAssetFileUrl, targetPath, orignlFileNm);
-	    
-      
 	}
     
     public class FileOpenerFileAsync extends AsyncTask<String, String, String> {
 
     	private ProgressDialog mDlg;
     	private Context mContext;
-    	private String mDownloadLocalPath;
     	
     	public FileOpenerFileAsync(Context context) {
     		mContext = context;
@@ -138,16 +128,20 @@ public class EgovFileOpener extends CordovaPlugin  {
 
     			String paramTargetPath = params[1].toString();
     			String paramOrignlFileNm = params[2].toString();
-    			    			
-    			Log.d(this.getClass().getSimpleName(), ">>> : paramTargetPath : " + paramTargetPath.replace("file://", ""));
-    			    			
+
+    			File targetFile = EgovFileOpenerRequestValidator.resolveSecureTargetFile(
+    			        mContext, paramTargetPath, paramOrignlFileNm);
+
+    			Log.d(this.getClass().getSimpleName(),
+    			        ">>> : targetFile : " + targetFile.getAbsolutePath());
+
     			connection.connect();
 
     			int lenghtOfFile = connection.getContentLength();
     			Log.d("ANDRO_ASYNC", "Lenght of file: " + lenghtOfFile);
 
     			InputStream input = new BufferedInputStream(url.openStream());
-    			OutputStream output = new FileOutputStream(paramTargetPath.replace("file://", "") + paramOrignlFileNm);
+    			OutputStream output = new FileOutputStream(targetFile);
 
     			byte data[] = new byte[1024];
 
@@ -155,7 +149,9 @@ public class EgovFileOpener extends CordovaPlugin  {
 
     			while ((count = input.read(data)) != -1) {
     				total += count;
-    				publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+    				if (lenghtOfFile > 0) {
+    					publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+    				}
     				output.write(data, 0, count);
     			}
 
@@ -165,12 +161,12 @@ public class EgovFileOpener extends CordovaPlugin  {
     			
     		} catch (InterruptedException e) {
     			e.printStackTrace();
-    	        // Cordova 콜백 처리
     			requestCallBackContext(mCallbackContext, 3, e.getMessage());
     		} catch (IOException e) {
     			e.printStackTrace();
-    	        // Cordova 콜백 처리
     			requestCallBackContext(mCallbackContext, 3, e.getMessage());
+    		} catch (JSONException e) {
+    			requestCallBackContext(mCallbackContext, 1, e.getMessage());
     		}
 
     		return null;
@@ -187,7 +183,6 @@ public class EgovFileOpener extends CordovaPlugin  {
     		
     		mDlg.dismiss();
     		
-    		// Cordova 콜백 처리
     		requestCallBackContext(mCallbackContext, 0, "");    		
     	}
     }
@@ -222,7 +217,6 @@ public class EgovFileOpener extends CordovaPlugin  {
 			jsonObject.put("resultMsg", errMessage+addMessage);
 			
 		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, jsonObject));

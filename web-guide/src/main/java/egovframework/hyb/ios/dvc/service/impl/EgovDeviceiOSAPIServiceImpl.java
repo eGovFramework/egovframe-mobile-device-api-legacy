@@ -65,7 +65,6 @@ public class EgovDeviceiOSAPIServiceImpl extends EgovAbstractServiceImpl impleme
     	deviceiOSAPIDAO.insertDeviceInfo(vo);   
     }
 
-
     /**
 	 * 디바이스 정보를 삭제한다.
 	 * @param vo - 삭제할 정보가 담긴 DeviceiOSAPIVO

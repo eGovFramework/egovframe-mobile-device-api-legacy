@@ -22,9 +22,10 @@ import java.util.List;
  * @Description : EgovGPSAPIService Class
  * @Modification Information  
  * @
- * @  수정일              수정자                 수정내용
- * @ 
- * @ 2012.07.31   이한철                 최초생성
+ * @ 수정일         수정자        수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2012.07.31   이한철        최초생성
+ *   2020.08.24   신용호        Swagger 적용
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 05. 14
@@ -64,7 +65,7 @@ public interface EgovGPSiOSAPIService {
      * @return gps 정보 목록
      * @exception Exception
      */
-    List<?> selectGPSInfoList(GPSiOSAPIVO searchVO) throws Exception;
+    List<?> selectGPSInfoList(GPSiOSAPIDefaultVO searchVO) throws Exception;
 
     /**
      * gps 정보 총 갯수를 조회한다.

@@ -40,9 +40,11 @@
 <body>
 	<h1>DeviceAPI Web Service</h1>
 	<h3>본 서비스는 전자정부 표준프레임워크 DeviceAPI App(하이브리드앱)과의 데이타 송수신 기능을 수행합니다.</h3>
+	<h3>This service performs data transmission / reception with eGovFrame DeviceAPI Apps(Hybrid Mobile Apps).</h3>
 	<hr width="100%" color="black">
 	<br/><br/>
-	<a href="/chat-sockjs.jsp">웹소켓(WebSocket) 테스트 화면 이동</a><br/>
-	<a href="#" onClick="callAjax();">DeviceAPI Web서비스 : Ajax 데이타 송수신 테스트</a><br/>
+	<a href="./chat-sockjs.jsp">1. 웹소켓 테스트 화면 이동 (Move websocket test screen)</a><br/>
+	<br/>
+	<a href="./test-ajax.jsp">2. Ajax 데이타 송수신 테스트 (Ajax data transmission and reception test)</a><br/>
 </body>
 </html>

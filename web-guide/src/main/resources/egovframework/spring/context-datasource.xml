@@ -14,7 +14,7 @@
 	<alias name="dataSource-${Globals.DbType}" alias="dataSource" />
 
 	<!-- MySQL -->
-	<bean id="dataSource-mysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<bean id="dataSource-mysql" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${Globals.DriverClassName}"/>
 		<property name="url" value="${Globals.Url}" />
 		<property name="username" value="${Globals.UserName}"/>
@@ -22,7 +22,7 @@
 	</bean>
 
 	<!-- Oracle -->
-	<bean id="dataSource-oracle" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<bean id="dataSource-oracle" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${Globals.DriverClassName}"/>
 		<property name="url" value="${Globals.Url}" />
 		<property name="username" value="${Globals.UserName}"/>
@@ -30,7 +30,7 @@
 	</bean>
 
 	<!-- Altibase -->
-	<bean id="dataSource-altibase" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<bean id="dataSource-altibase" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${Globals.DriverClassName}"/>
 		<property name="url" value="${Globals.Url}" />
 		<property name="username" value="${Globals.UserName}"/>
@@ -38,7 +38,7 @@
 	</bean>
 
 	<!-- Tibero -->
-	<bean id="dataSource-tibero" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<bean id="dataSource-tibero" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${Globals.DriverClassName}"/>
 		<property name="url" value="${Globals.Url}" />
 		<property name="username" value="${Globals.UserName}"/>
@@ -46,7 +46,7 @@
 	</bean>
 
     <!-- cubrid -->
-    <bean id="dataSource-cubrid" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <bean id="dataSource-cubrid" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${Globals.DriverClassName}"/>
         <property name="url" value="${Globals.Url}" />
         <property name="username" value="${Globals.UserName}"/>

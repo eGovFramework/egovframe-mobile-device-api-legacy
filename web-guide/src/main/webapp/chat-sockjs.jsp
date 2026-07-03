@@ -19,7 +19,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>채팅</title>
+<title>Chat Demo</title>
 <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="js/sockjs-1.3.0.min.js"></script>
 <script type="text/javascript">
@@ -38,7 +38,7 @@
 		wsocket.close();
 	}
 	function onOpen(evt) {
-		appendMessage("연결되었습니다.");
+		appendMessage("Connect OK!");
 	}
 	function onMessage(evt) {
 		var data = evt.data;
@@ -47,7 +47,7 @@
 		}
 	}
 	function onClose(evt) {
-		appendMessage("연결을 끊었습니다.");
+		appendMessage("Disconnect OK!");
 	}
 	
 	function send() {
@@ -84,15 +84,15 @@
 </style>
 </head>
 <body>
-	서버:<input type="text" id="serverUrl" value="http://192.168.100.155:9700">* localhost 지정 불가(반드시 IP로지정)<br/>
-	이름:<input type="text" id="nickname">
-	<input type="button" id="enterBtn" value="입장">
-	<input type="button" id="exitBtn" value="나가기">
+	Server URL : <input type="text" id="serverUrl" value="http://192.168.100.155:9700/Template-DeviceAPI-Total_Web" style="width:400px;">* localhost not specified(Must be IP)<br/>
+	Nick Name : <input type="text" id="nickname">
+	<input type="button" id="enterBtn" value="Enter">
+	<input type="button" id="exitBtn" value="Exit">
     
-    <h1>대화 영역</h1>
+    <h1>Chat Area</h1>
     <div id="chatArea"><div id="chatMessageArea"></div></div>
     <br/>
     <input type="text" id="message">
-    <input type="button" id="sendBtn" value="전송">
+    <input type="button" id="sendBtn" value="Send Message">
 </body>
 </html>

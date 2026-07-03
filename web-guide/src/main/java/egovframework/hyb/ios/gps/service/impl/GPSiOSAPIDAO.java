@@ -23,7 +23,6 @@ import egovframework.hyb.ios.gps.service.GPSiOSAPIVO;
 
 import org.springframework.stereotype.Repository;
 
-
 /**  
  * @Class Name : GPSAPIDAO.java
  * @Description : GPSAPI DAO Class

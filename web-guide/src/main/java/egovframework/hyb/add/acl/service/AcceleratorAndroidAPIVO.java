@@ -15,6 +15,8 @@
  */
 package egovframework.hyb.add.acl.service;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -23,9 +25,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @Description : AcceleratorAPIVO Class
  * @Modification Information  
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.23    서형주                  최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.23   서형주              최초생성
+ *   2020.08.11   신용호              Swagger 적용
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 23
@@ -34,30 +37,30 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  */
 @XmlRootElement
-public class AcceleratorAndroidAPIVO extends AcceleratorAndroidAPIDefaultVO {
+public class AcceleratorAndroidAPIVO implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
     /** 일련번호 */
-    private int sn;
+        private int sn;
     
     /** 기기식별 */
-    private String uuid;
+        private String uuid;
     
     /** x */
-    private String xaxis;
+        private String xaxis;
     
     /** y */
-    private String yaxis;
+        private String yaxis;
     
     /** z */
-    private String zaxis;
+        private String zaxis;
     
     /** timestamp */
-    private String timestamp;
+        private String timestamp;
     
     /** 사용여부 */
-    private String useYn;
+        private String useYn;
     
     /**
      * @return  sn을 반환한다

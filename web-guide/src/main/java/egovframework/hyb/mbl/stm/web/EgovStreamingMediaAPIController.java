@@ -20,19 +20,22 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.AbstractView;
 
+import egovframework.hyb.ios.dvc.service.DeviceiOSAPIVO;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.mbl.stm.service.EgovStreamingMediaAPIService;
+import egovframework.hyb.mbl.stm.service.StreamingMediaAPIDefaultVO;
 import egovframework.hyb.mbl.stm.service.StreamingMediaAPIFileVO;
 import egovframework.hyb.mbl.stm.service.StreamingMediaAPIVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
-
 /**  
  * @Class Name : EgovStreamingMediaAPIController.java
  * @Description : EgovStreamingMediaAPIController Class
  * @Modification Information  
  * @
- * @  수정일            수정자        수정내용
- * @ ---------        ---------    -------------------------------
- * @ 2016. 7. 14.     장성호        최초생성
+ * @ 수정일               수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2016.07.14   장성호              최초생성
+ *   2020.09.16   신용호              Swagger 적용
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2016. 7. 14.
@@ -61,9 +64,9 @@ public class EgovStreamingMediaAPIController {
 	 * @return 조회 목록
 	 * @exception Exception
 	 */
-	@RequestMapping("/stm/mediaInfoList.do")
+    	@RequestMapping("/stm/mediaInfoList.do")
 	public @ResponseBody
-	ModelAndView selectMediaInfoList(StreamingMediaAPIVO vo) throws Exception {
+	ModelAndView selectMediaInfoList(StreamingMediaAPIDefaultVO vo) throws Exception {
 		
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		
@@ -75,14 +78,13 @@ public class EgovStreamingMediaAPIController {
 		return jsonView;
 	}
 
-	@RequestMapping("/stm/updateMediaInfoRevivCo.do")
-	public ModelAndView updateMediaInfoRevivCo(@RequestParam("sn") String sn) throws Exception {
+    @RequestMapping("/stm/updateMediaInfoRevivCo.do")
+	public ModelAndView updateMediaInfoRevivCo(@RequestParam("sn") String sn, HttpServletRequest request) throws Exception {
 
-		if (sn != null && "".equals(sn) == false) {
-
+		if (sn != null && !"".equals(sn)) {
 			StreamingMediaAPIVO vo = new StreamingMediaAPIVO();
 			vo.setSn(sn);
-
+			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, request.getParameter("uuid")));
 			egovStreamingMediaAPIService.updateMediaInfoRevivCo(vo);
 		}
 		
@@ -93,23 +95,28 @@ public class EgovStreamingMediaAPIController {
 		return jsonView;
 	}
 
-	
-	@RequestMapping("/stm/getMediaStreaming.do")
-	public ModelAndView getMediaStreaming(@RequestParam("sn") final String sn, HttpServletResponse response) throws Exception {
+    @RequestMapping("/stm/getMediaStreaming.do")
+	public ModelAndView getMediaStreaming(@RequestParam("sn") final String sn,
+			final HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		View streamView = new AbstractView() {
 	        @Override
-	        protected void renderMergedOutputModel(Map model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	        protected void renderMergedOutputModel(Map model, HttpServletRequest req, HttpServletResponse resp) throws Exception {
 	            
 	        	StreamingMediaAPIFileVO resultVO = null;
-	    		if (sn != null && "".equals(sn) == false) {
-
+	    		if (sn != null && !"".equals(sn)) {
 	    			StreamingMediaAPIFileVO vo = new StreamingMediaAPIFileVO();
-	    			vo.setSn(Integer.parseInt(sn));	    			
-	    			resultVO = egovStreamingMediaAPIService.selectMediaFileURL(vo);	    			
+	    			vo.setSn(Integer.parseInt(sn));
+	    			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, req.getParameter("uuid")));
+	    			resultVO = egovStreamingMediaAPIService.selectMediaFileURL(vo);
 	    		}
-	    			    		
-	    		RandomAccessFile rf = new RandomAccessFile(new File(resultVO.getFileStreCours().toString() + resultVO.getStreFileNm().toString()), "r");
+	    		if (resultVO == null) {
+	    			resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Media access denied.");
+	    			return;
+	    		}
+
+	    		RandomAccessFile rf = new RandomAccessFile(new File(
+	    				resultVO.getFileStreCours().toString() + resultVO.getStreFileNm().toString()), "r");
 	    		
 	    		long rangeStart = 0;
 	    		long rangeEnd = 0;
@@ -117,7 +124,7 @@ public class EgovStreamingMediaAPIController {
 	    		
 	    		try{
 	    			long movieSize = rf.length();
-	    			String range = request.getHeader("range");
+	    				String range = req.getHeader("range");
 	    		
 	    			if(range != null){
 	    				if(range.endsWith("-")){
@@ -137,14 +144,16 @@ public class EgovStreamingMediaAPIController {
 	    			
 	    			long partSize = rangeEnd - rangeStart +1;
 	    			
-	    			response.reset();	    			
-	    			response.setStatus(isPart ? 206 : 200);	    			
-	    			response.setContentType("video/"+ resultVO.getFileExtsn());	    			
-	    			response.setHeader("Content-Range", "bytes"+rangeStart+"-"+rangeEnd+"/"+movieSize);
-	    			response.setHeader("Accept-Range", "bytes");
-	    			response.setHeader("Content-Length", ""+partSize);
+	    			resp.reset();	    			
+	    			resp.setStatus(isPart ? 206 : 200);	
+	    			resp.setContentType("video/"+ resultVO.getFileExtsn());
+	    			resp.setHeader("Content-Disposition:", "attachment; filename=" + new String(resultVO.getOrignlFileNm().getBytes(), "UTF-8"));
+	    			resp.setHeader("Content-Transfer-Encoding", "binary");
+	    			resp.setHeader("Content-Range", "bytes"+rangeStart+"-"+rangeEnd+"/"+movieSize);
+	    			resp.setHeader("Accept-Range", "bytes");
+	    			resp.setHeader("Content-Length", ""+partSize);
 	    			
-	    			OutputStream out = response.getOutputStream();
+	    			OutputStream out = resp.getOutputStream();
 	    			rf.seek(rangeStart);
 	    			
 	    			int bufferSize = 8*1024;

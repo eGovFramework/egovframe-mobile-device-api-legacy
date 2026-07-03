@@ -23,7 +23,6 @@ import egovframework.hyb.add.dvc.service.DeviceAndroidAPIVO;
 
 import org.springframework.stereotype.Repository;
 
-
 /**  
  * @Class Name : DeviceAPIDAO.java
  * @Description : DeviceAPI DAO Class

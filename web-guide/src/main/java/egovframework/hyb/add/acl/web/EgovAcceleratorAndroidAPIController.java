@@ -17,12 +17,6 @@ package egovframework.hyb.add.acl.web;
 
 import java.util.List;
 
-import egovframework.hyb.add.acl.service.AcceleratorAndroidAPIDefaultVO;
-import egovframework.hyb.add.acl.service.AcceleratorAndroidAPIVO;
-import egovframework.hyb.add.acl.service.AcceleratorAndroidAPIVOList;
-import egovframework.hyb.add.acl.service.EgovAcceleratorAndroidAPIService;
-import egovframework.rte.fdl.property.EgovPropertyService;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -34,14 +28,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
+import egovframework.hyb.add.acl.service.AcceleratorAndroidAPIDefaultVO;
+import egovframework.hyb.add.acl.service.AcceleratorAndroidAPIVO;
+import egovframework.hyb.add.acl.service.AcceleratorAndroidAPIVOList;
+import egovframework.hyb.add.acl.service.EgovAcceleratorAndroidAPIService;
+import egovframework.rte.fdl.property.EgovPropertyService;
 /**  
  * @Class Name : EgovAcceleratorAPIController
  * @Description : EgovAcceleratorAPIController Class
  * @Modification Information  
  * @
- * @  수정일                 수정자                 수정내용
- * @ ---------   ---------   -------------------------------
- * @ 2012.07.23    서형주                  최초생성
+ * @ 수정일                수정자             수정내용
+ * @ ----------   ---------   -------------------------------
+ *   2012.07.23   서형주              최초생성
+ *   2020.08.11   신용호              Swagger 적용
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 23
@@ -68,7 +68,7 @@ public class EgovAcceleratorAndroidAPIController {
      * @return "/acl/xml/acceleratorInfoList.do"
      * @exception Exception
      */
-    @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked")
 	@RequestMapping(value="/acl/xml/acceleratorInfoList.do")
     public @ResponseBody AcceleratorAndroidAPIVOList selectAcceleratorInfoXMLList(
     		@ModelAttribute("searchVO") AcceleratorAndroidAPIDefaultVO searchVO, ModelMap model)
@@ -93,9 +93,8 @@ public class EgovAcceleratorAndroidAPIController {
      */
     @RequestMapping("/acl/xml/addAcceleratorInfo.do")
     public @ResponseBody AcceleratorAndroidAPIVO addAcceleratorInfoXml(
-            @ModelAttribute("searchVO") AcceleratorAndroidAPIDefaultVO searchVO,
                 AcceleratorAndroidAPIVO acceleratorVO,
-            BindingResult bindingResult, Model model, SessionStatus status) 
+            BindingResult bindingResult, Model model, SessionStatus status)
             throws Exception {
 
         AcceleratorAndroidAPIVO acceleratorAPIVO = new AcceleratorAndroidAPIVO();
@@ -121,13 +120,12 @@ public class EgovAcceleratorAndroidAPIController {
      */
     @RequestMapping("/acl/xml/withdrawal.do")
     public @ResponseBody AcceleratorAndroidAPIVO withdrawalXml(
-            @ModelAttribute("searchVO") AcceleratorAndroidAPIDefaultVO searchVO,
                 AcceleratorAndroidAPIVO acceleratorVO,
             BindingResult bindingResult, Model model, SessionStatus status) 
-    throws Exception {        
-              
+    throws Exception {
+        
         int cnt = egovAcceleratorAndroidAPIService.deleteAcceleratorInfo(acceleratorVO);
-                
+        
         AcceleratorAndroidAPIVO acceleratorAPIVO = new AcceleratorAndroidAPIVO();
         
         if(cnt > 0) {

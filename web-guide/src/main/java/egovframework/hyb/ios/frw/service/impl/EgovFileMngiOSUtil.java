@@ -12,17 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-
-import egovframework.hyb.ios.frw.service.EgovFileReaderWriteriOSAPIService;
-import egovframework.hyb.ios.frw.service.FileReaderWriteriOSAPIVO;
-
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import egovframework.rte.fdl.cmmn.exception.EgovBizException;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-import egovframework.rte.fdl.property.EgovPropertyService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +25,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
+import egovframework.hyb.ios.frw.service.EgovFileReaderWriteriOSAPIService;
+import egovframework.hyb.ios.frw.service.FileReaderWriteriOSAPIVO;
+import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import egovframework.rte.fdl.cmmn.exception.EgovBizException;
+import egovframework.rte.fdl.idgnr.EgovIdGnrService;
+import egovframework.rte.fdl.property.EgovPropertyService;
 
 /**  
  * @Class Name : EgovFileTransfer.java
@@ -79,7 +80,9 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 	 * @exception Exception
 	 */
 	public FileReaderWriteriOSAPIVO writeUploadedFile(MultipartFile file, FileReaderWriteriOSAPIVO fileVO) throws Exception{
-		
+
+		DeviceAPIFileUploadValidator.validateFrwUpload(file);
+
 		String originFileName = file.getOriginalFilename();
 		int index = originFileName.lastIndexOf(".");
 		String fileExt = originFileName.substring(index + 1);
@@ -152,7 +155,41 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 	 * @param fileVO - 파일 정보가 담긴 FileReaderWriteriOSAPIVO 
 	 * @exception Exception
 	 */
+	public String computeFileSha256(String streFileNm) throws Exception {
+		File file = new File(propertiesService.getString("fileStorePath") + streFileNm);
+		if (!file.exists() || !file.isFile()) {
+			throw new FileNotFoundException(streFileNm);
+		}
+
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(file);
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int read;
+			while ((read = fis.read(buffer)) != -1) {
+				digest.update(buffer, 0, read);
+			}
+		} finally {
+			if (fis != null) {
+				try {
+					fis.close();
+				} catch (IOException ignore) {
+					LOGGER.error("Fail to close fileinputstream : {}", ignore.getMessage());
+				}
+			}
+		}
+
+		byte[] hash = digest.digest();
+		StringBuilder sb = new StringBuilder(hash.length * 2);
+		for (byte b : hash) {
+			sb.append(String.format("%02x", b & 0xff));
+		}
+		return sb.toString();
+	}
+
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response, String originalFileName, String streFileNm) throws Exception{
+		DeviceAPIFileUploadValidator.assertSafeStoredFileName(streFileNm);
 		File file = new File(propertiesService.getString("fileStorePath") + streFileNm);
 		
 		if(!file.exists()){
