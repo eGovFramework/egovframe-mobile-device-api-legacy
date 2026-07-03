@@ -214,6 +214,22 @@ function initPermissionScope() {
   PermissionScope.show();
 }
 
+
+/** HTML 출력용 XSS 이스케이프 */
+function fn_egov_escapeHtml(value) {
+    if (value == null) {
+        return "";
+    }
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&#34;")
+        .replace(/'/g, "&#39;")
+        .replace(/\./g, "&#46;")
+        .replace(/\//g, "&#47;");
+}
+
 /*********************************************************
  * HTML 관련 함수
  *********************************************************/
@@ -234,8 +250,8 @@ function fn_displayList(result)
         {
             html += '<li>';
             html += ' 	<a onclick="fn_egov_open_mediaDetail(\'' + resultRows[i]["sn"] + '\')">';
-            html += ' 		<h3>' + resultRows[i]["mdSj"] + '</h3>';
-            html += '		<h3> 재생횟수 : ' + resultRows[i]["revivCo"] + '회</h3>';
+            html += ' 		<h3>' + fn_egov_escapeHtml(resultRows[i]["mdSj"]) + '</h3>';
+            html += '		<h3> 재생횟수 : ' + fn_egov_escapeHtml(resultRows[i]["revivCo"]) + '회</h3>';
             html += '	</a>';
             html += '</li>';
         }
@@ -357,7 +373,7 @@ function fn_egov_get_mediaDownload(sn, fileName)
         var myPath = entry.nativeURL;
         var mediaFileName = "Media."+fileType;
         fileTransfer.download(
-                              loadServer + "/mda/getMediaiOS.do?sn=" + sn,
+                              loadServer + "/mda/getMediaiOS.do?sn=" + sn + "&uuid=" + encodeURIComponent(device.uuid),
                               entry.nativeURL + mediaFileName,
                               function(entry)
                               {

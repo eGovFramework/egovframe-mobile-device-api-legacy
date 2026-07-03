@@ -1,3 +1,20 @@
+
+/** HTML 출력용 XSS 이스케이프 */
+function fn_egov_escapeHtml(value) {
+    if (value == null) {
+        return "";
+    }
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&#34;")
+        .replaceAll("'", "&#39;")
+        .replaceAll("\\.", "&#46;")
+        .replaceAll("%2E", "&#46;")
+        .replaceAll("%2F", "&#47;");
+}
+
 /**
  * @fileoverview 모바일 전자정부 하이브리드 앱 스트리밍 미디어 API 가이드 프로그램 JavaScript
  * JavaScript.
@@ -49,9 +66,9 @@ function fn_egov_medialist() {
                $(resultJson.resultSet).each(function(){
                                             
                          var sn = this.sn;
-                         var mdSj = this.mdSj;
-                         var revivCo = this.revivCo;
-                         var mdcode = this.mdCode;
+                         var mdSj = fn_egov_escapeHtml(this.mdSj);
+                         var revivCo = fn_egov_escapeHtml(this.revivCo);
+                         var mdcode = fn_egov_escapeHtml(this.mdCode);
                                                                 
                          strhtml += '<li>';
                          strhtml += '     <a href="#" onclick="javascript:fn_egov_filelist_go(\'' + sn + '\')">';
@@ -86,7 +103,7 @@ function fn_egov_filelist_go(input) {
   
     jConfirm('동영상을 재생하시겠습니까?', '알림', 'c', function(r) {
         if (r == true) {
-        	var resultURL = server_url + "/stm/getMediaStreaming.do?sn=" + input;                	
+        	var resultURL = server_url + "/stm/getMediaStreaming.do?sn=" + input + "&uuid=" + encodeURIComponent(device.uuid);                	
         	fn_egov_playMedia(resultURL, input);        
         }
     });
@@ -114,7 +131,7 @@ function fn_egov_playMedia(resultURL, input){
 
 function fn_egov_updateMediaInfoRevivCo(inputSn){
     var url = "/stm/updateMediaInfoRevivCo.do";
-    var params = {sn : inputSn};
+    var params = {sn : inputSn, uuid : device.uuid};
     console.log(">>> inputSn:" + inputSn);
     
     window.plugins.EgovInterface.request(url, params, function(jsondata) {

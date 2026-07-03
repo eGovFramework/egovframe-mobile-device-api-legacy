@@ -32,6 +32,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일              수정자                 수정내용
  * @ 
  * @ 2012.07.31   이한철                 최초생성
+ *   2026.06.26   이백행                 [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 05. 14
@@ -50,9 +51,8 @@ public class GPSiOSAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 등록할 정보가 담긴 GPSAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public void insertGPSInfo(GPSiOSAPIVO vo) throws Exception {
+    public void insertGPSInfo(GPSiOSAPIVO vo) {
         insert("gpsiOSAPIDAO.insertGPSInfo", vo);
     }
 
@@ -62,9 +62,8 @@ public class GPSiOSAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 삭제할 정보가 담긴 GPSAPIVO
      * @return void형
-     * @exception Exception
      */
-    public void deleteGPSInfo(GPSiOSAPIVO vo) throws Exception {
+    public void deleteGPSInfo(GPSiOSAPIVO vo) {
         delete("gpsiOSAPIDAO.deleteGPSInfo", vo);
     }
 
@@ -74,9 +73,8 @@ public class GPSiOSAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 조회할 정보가 담긴 GPSAPIDefaultVO
      * @return gps 정보 목록
-     * @exception Exception
      */
-    public List<?> selectGPSInfoList(GPSiOSAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectGPSInfoList(GPSiOSAPIDefaultVO searchVO) {
         return selectList("gpsiOSAPIDAO.selectGPSInfoList", searchVO);
     }
 
@@ -86,7 +84,6 @@ public class GPSiOSAPIDAO extends EgovComAbstractDAO {
      * @param vo
      *            - 조회할 정보가 담긴 GPSAPIDefaultVO
      * @return 네트워크 정보 총 갯수
-     * @exception
      */
     public int selectGPSInfoListTotCnt(GPSiOSAPIDefaultVO searchVO) {
         return (Integer) selectOne(

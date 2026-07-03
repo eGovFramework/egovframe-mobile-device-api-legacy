@@ -31,6 +31,7 @@ import egovframework.hyb.mbl.fop.service.FileOpenerDeviceAPIDefaultVO;
  * @  수정일      수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2016.07.11   장성호               최초생성
+ *   2026.06.26   이백행               [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 07. 11
@@ -47,9 +48,8 @@ public class FileOpenerDeviceAPIDAO extends EgovComAbstractDAO {
 	 * Push Device 정보 목록을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 PushDeviceAPIDefaultVO
 	 * @return Push Device 정보 목록
-	 * @exception Exception
 	 */
-    public List<?> selectFileOpenerDocumentList(FileOpenerDeviceAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectFileOpenerDocumentList(FileOpenerDeviceAPIDefaultVO searchVO) {
         return selectList("fileOpenerDeviceAPIDAO.selectDocumentListInfo", searchVO);
     }
 

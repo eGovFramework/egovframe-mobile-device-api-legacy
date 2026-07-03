@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Single policy file for all builds. Set require-https before build: false=local, true=release -->
+<network-policy require-https="false" />

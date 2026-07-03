@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.ios.frw.service.impl.EgovFileMngiOSUtil;
 import egovframework.hyb.mbl.fop.service.EgovFileOpenerDeviceAPIService;
 import egovframework.hyb.mbl.fop.service.FileOpenerDeviceAPIDefaultVO;
@@ -107,6 +108,7 @@ public class EgovFileOpenerDeviceAPIController {
     })
 	@RequestMapping("/fop/FileOpenerfileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response, FileOpenerDeviceAPIVO fileVO) throws Exception{
+		DeviceAPIFileUploadValidator.assertSafeStoredFileName(fileVO.getStreFileNm());
 		log.debug("fileVO.getOrignlFileNm() = "+fileVO.getOrignlFileNm());
 		log.debug(">>> fileVO.getStreFileNm() = "+fileVO.getStreFileNm());
 		egovFileMngUtil.fileDownload(request, response, fileVO.getOrignlFileNm(), fileVO.getStreFileNm());

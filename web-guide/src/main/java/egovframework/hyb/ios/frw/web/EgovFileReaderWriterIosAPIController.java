@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.ios.frw.service.EgovFileReaderWriteriOSAPIService;
 import egovframework.hyb.ios.frw.service.FileReaderWriteriOSAPIVO;
 import egovframework.hyb.ios.frw.service.impl.EgovFileMngiOSUtil;
@@ -29,6 +30,7 @@ import io.swagger.annotations.ApiOperation;
  * @ ----------   ---------   -------------------------------
  *   2012.07.10   서준식        최초생성
  *   2020.08.24   신용호        Swagger 적용
+  *   2026.06.25   이백행              [2026년 컨트리뷰션] iOS API Controller 파일명과 클래스명 일치화
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 7. 10.
@@ -38,7 +40,7 @@ import io.swagger.annotations.ApiOperation;
  *  Copyright (C) by MOPAS All right reserved.
  */
 @Controller
-public class EgovFileReaderWriterIosAPIController {
+public class EgovFileReaderWriteriOSAPIController {
 	
 	/** EgovFileReaderWriteriOSAPIService */
 	@Resource(name="egovFileReaderWriteriOSAPIService")
@@ -82,13 +84,18 @@ public class EgovFileReaderWriterIosAPIController {
     	@ApiImplicitParam(name = "fileSn", value = "파일연번", required = true, dataType = "int", paramType = "query"),
     })
 	@RequestMapping("/frw/deleteFile.do")
-	public ModelAndView deleteFile(FileReaderWriteriOSAPIVO fileVO) throws Exception{
-		
-		//fileSN 과 uuid 를 이용하여 삭제할 파일 검색 
-		FileReaderWriteriOSAPIVO fileReaderWriteriOSAPIVO = egovFileReaderWriteriOSAPIService.selectFileInfo(fileVO);
-		
-		egovFileReaderWriteriOSAPIService.deleteFileInfo(fileReaderWriteriOSAPIVO);
+	public ModelAndView deleteFile(FileReaderWriteriOSAPIVO fileVO, HttpServletRequest request) throws Exception{
 
+		fileVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, fileVO.getUuid()));
+		FileReaderWriteriOSAPIVO fileReaderWriteriOSAPIVO = egovFileReaderWriteriOSAPIService.selectFileInfo(fileVO);
+		if (fileReaderWriteriOSAPIVO == null) {
+			ModelAndView deniedView = new ModelAndView("jsonView");
+			deniedView.addObject("resultStatus", "FAIL");
+			deniedView.addObject("resultMessage", "삭제 권한이 없거나 파일을 찾을 수 없습니다.");
+			return deniedView;
+		}
+
+		egovFileReaderWriteriOSAPIService.deleteFileInfo(fileReaderWriteriOSAPIVO);
 		egovFileMngUtil.deleteFile(fileReaderWriteriOSAPIVO);
 		
 		
@@ -149,10 +156,14 @@ public class EgovFileReaderWriterIosAPIController {
     })
 	@RequestMapping("/frw/fileDownload.do")
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response, FileReaderWriteriOSAPIVO fileVO) throws Exception{
-		
-		FileReaderWriteriOSAPIVO fileReaderWriteriOSAPIVO = egovFileReaderWriteriOSAPIService.selectFileInfo(fileVO);		
+
+		fileVO.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, fileVO.getUuid()));
+		FileReaderWriteriOSAPIVO fileReaderWriteriOSAPIVO = egovFileReaderWriteriOSAPIService.selectFileInfo(fileVO);
+		if (fileReaderWriteriOSAPIVO == null) {
+			response.sendError(HttpServletResponse.SC_FORBIDDEN, "File access denied.");
+			return;
+		}
 		egovFileMngUtil.fileDownload(request, response, fileReaderWriteriOSAPIVO);
-		
 	}
 	
 }

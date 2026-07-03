@@ -47,6 +47,7 @@ import io.swagger.annotations.ApiOperation;
  *   2012.07.23   서형주              최초생성
  *   2012.08.16   서준식              json 버전으로 변경
  *   2020.08.11   신용호              Swagger 적용
+ *   2026.06.25   이백행              [2026년 컨트리뷰션] iOS API Controller 파일명과 클래스명 일치화
  * 
  * @author Device API 실행환경팀
  * @since 2012. 07. 23
@@ -56,7 +57,7 @@ import io.swagger.annotations.ApiOperation;
  */
 
 @Controller
-public class EgovAcceleratorIosAPIController {
+public class EgovAcceleratoriOSAPIController {
 
 	/** EgovAcceleratorAPIService */
 	@Resource(name = "EgovAcceleratoriOSAPIService")

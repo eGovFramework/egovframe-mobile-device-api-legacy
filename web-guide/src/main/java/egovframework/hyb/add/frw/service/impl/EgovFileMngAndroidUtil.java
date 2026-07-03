@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.add.frw.service.EgovFileReaderWriterAndroidAPIService;
 import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -80,6 +81,8 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
     public FileReaderWriterAndroidAPIVO writeUploadedFile(MultipartFile file,
             FileReaderWriterAndroidAPIVO fileVO) throws Exception {
 
+        DeviceAPIFileUploadValidator.validateFrwUpload(file);
+
         String originFileName = file.getOriginalFilename();
         int index = originFileName.lastIndexOf(".");
         String fileExt = originFileName.substring(index + 1);
@@ -103,10 +106,8 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
                 byte[] bytes = file.getBytes();
                 input = new ByteArrayInputStream(bytes);
 
-//                File videoFile = new File(
-//                        propertiesService.getString("fileStorePath") + newName);
-                // 260320 KISA 보안취약점 패치
-                File videoFile = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath")+newName));
+                File videoFile = new File(
+                        propertiesService.getString("fileStorePath") + newName);
                 out = new FileOutputStream(videoFile);
                 int len = -1;
                 byte[] fileBuffer = new byte[1024 * 8];
@@ -155,11 +156,9 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
             HttpServletResponse response, FileReaderWriterAndroidAPIVO fileVO)
             throws Exception {
 
-//        File file = new File(propertiesService.getString("fileStorePath")
-//                + fileVO.getStreFileNm());
-        // 260320 KISA 보안취약점 패치
-        File file = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath")
-                + fileVO.getStreFileNm()));
+        DeviceAPIFileUploadValidator.assertSafeStoredFileName(fileVO.getStreFileNm());
+        File file = new File(propertiesService.getString("fileStorePath")
+                + fileVO.getStreFileNm());
 
         if (!file.exists()) {
             throw new FileNotFoundException(fileVO.getStreFileNm());
@@ -223,11 +222,8 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
     public boolean deleteFile(FileReaderWriterAndroidAPIVO fileVO)
             throws Exception {
 
-//        File videoFile = new File(propertiesService.getString("fileStorePath")
-//                + fileVO.getStreFileNm());
-    	// 260320 KISA 보안취약점 패치
-    	File videoFile = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath")
-                + fileVO.getStreFileNm()));
+        File videoFile = new File(propertiesService.getString("fileStorePath")
+                + fileVO.getStreFileNm());
 
         if (videoFile.exists()) {
 

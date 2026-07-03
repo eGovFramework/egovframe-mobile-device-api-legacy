@@ -33,6 +33,7 @@ import org.springframework.stereotype.Repository;
  * @ ---------		---------	-------------------------------
  * @ 2012. 7. 23.		이율경		최초생성
  * @ 2012. 8. 03.  		이해성       커스터마이징
+ * @ 2026. 6. 26.       이백행        [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 개발환경 팀
  * @since 2012. 7. 23.
@@ -47,9 +48,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 CameraAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertCameraPhotoAlbum(CameraiOSAPIFileVO vo) throws Exception {
+    public int insertCameraPhotoAlbum(CameraiOSAPIFileVO vo) {
     	return (Integer)insert("cameraiOSAPIDAO.insertCameraPhotoAlbum", vo);
     }
     
@@ -57,9 +57,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지 파일을 등록한다.
 	 * @param vo - 등록할 파일 정보가 담긴 CameraIOSAPIFileVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertCameraPhotoAlbumFile(CameraiOSAPIFileVO vo) throws Exception {
+    public int insertCameraPhotoAlbumFile(CameraiOSAPIFileVO vo) {
     	return (Integer)insert("cameraiOSAPIDAO.insertCameraPhotoAlbumFile", vo);
     }
     
@@ -67,9 +66,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지 파일을 수정한다.
 	 * @param vo - 등록할 정보가 담긴 CameraIOSAPIFileVO
 	 * @return 수정 결과
-	 * @exception Exception
 	 */
-    public int updateCameraPhotoAlbumInfoFile(CameraiOSAPIFileVO vo) throws Exception {
+    public int updateCameraPhotoAlbumInfoFile(CameraiOSAPIFileVO vo) {
     	return (Integer)update("cameraiOSAPIDAO.updateCameraPhotoAlbumFile", vo);
     }
 
@@ -77,9 +75,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지를 삭제한다.
 	 * @param vo - 삭제할 파일 정보가 담긴 CameraAPIVO
 	 * @return 삭제 결과
-	 * @exception Exception
 	 */
-    public int deleteCameraPhotoAlbumInfo(CameraiOSAPIVO vo) throws Exception {
+    public int deleteCameraPhotoAlbumInfo(CameraiOSAPIVO vo) {
     	return (Integer)delete("cameraiOSAPIDAO.deleteCameraPhotoAlbumInfo", vo);
     }
     
@@ -87,9 +84,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지 파일을  삭제한다.
 	 * @param vo - 삭제할 파일 정보가 담긴 CameraIOSAPIFileVO
 	 * @return 삭제 결과 
-	 * @exception Exception
 	 */
-    public int deleteCameraPhotoAlbumInfoFile(CameraiOSAPIVO vo) throws Exception {
+    public int deleteCameraPhotoAlbumInfoFile(CameraiOSAPIVO vo) {
     	return (Integer)delete("cameraiOSAPIDAO.deleteCameraPhotoAlbumInfoFile", vo);
     }
 
@@ -97,9 +93,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지 정보를 조회한다.
 	 * @param vo - 조회할 정보가 담긴 CameraAPIVO
 	 * @return 조회한 네트워크 정보
-	 * @exception Exception
 	 */
-    public CameraiOSAPIVO selectCameraPhotoAlbumInfo(CameraiOSAPIVO vo) throws Exception {
+    public CameraiOSAPIVO selectCameraPhotoAlbumInfo(CameraiOSAPIVO vo) {
         return (CameraiOSAPIVO) selectOne("cameraiOSAPIDAO.selectCameraPhotoAlbumInfo", vo);
     }
 
@@ -107,9 +102,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지 정보 목록을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 CameraAPIDefaultVO
 	 * @return 이미지 정보 목록
-	 * @exception Exception
 	 */
-    public List<?> selectCameraPhotoAlbumInfoList(CameraiOSAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectCameraPhotoAlbumInfoList(CameraiOSAPIDefaultVO searchVO) {
         return selectList("cameraiOSAPIDAO.selectCameraPhotoAlbumInfoList", searchVO);
     }
     
@@ -117,9 +111,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지 파일 정보를 조회한다.
 	 * @param vo - 조회할 정보가 담긴 CameraIOSAPIFileVO
 	 * @return 이미지 파일 정보
-	 * @exception Exception
 	 */
-    public CameraiOSAPIFileVO selectImageFileInfo(CameraiOSAPIFileVO vo) throws Exception {
+    public CameraiOSAPIFileVO selectImageFileInfo(CameraiOSAPIFileVO vo) {
         return (CameraiOSAPIFileVO) selectOne("cameraiOSAPIDAO.selectImageFileInfo", vo);
     }
     
@@ -127,9 +120,8 @@ public class CameraiOSAPIDAO extends EgovComAbstractDAO {
 	 * 이미지 제목 중복을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 CameraIOSAPIFileVO
 	 * @return 파일연번 정보
-	 * @exception Exception
 	 */
-    public CameraiOSAPIFileVO selectPhotoAlbumPhotoSj(CameraiOSAPIFileVO vo) throws Exception {
+    public CameraiOSAPIFileVO selectPhotoAlbumPhotoSj(CameraiOSAPIFileVO vo) {
         return (CameraiOSAPIFileVO) selectOne("cameraiOSAPIDAO.selectCameraPhotoAlbumPhotoSj", vo);
     }
 }

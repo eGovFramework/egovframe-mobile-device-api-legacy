@@ -44,6 +44,18 @@
 			WHERE USER_ID = #{userId}
 		
 	</delete>
+
+	<delete id="deleteInterfaceInfoByUserId">
+			DELETE FROM INTERFACE_EGOV
+			WHERE USER_ID = #{userId}
+	</delete>
+	
+	<select id="selectInterfaceInfoByUserId" resultMap="interfaceiOSInfo">
+			SELECT
+				SN, UUID, EMAILS, USER_ID, USER_PW
+			FROM INTERFACE_EGOV 
+			WHERE USER_ID = #{userId}
+	</select>
 	
 	<select id="selectInterfaceInfo" resultMap="interfaceiOSInfo">
 		

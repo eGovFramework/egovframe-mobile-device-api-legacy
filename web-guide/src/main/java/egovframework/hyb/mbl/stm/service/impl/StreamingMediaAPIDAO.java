@@ -17,6 +17,7 @@ import egovframework.hyb.mbl.stm.service.StreamingMediaAPIVO;
  * @  수정일            수정자        수정내용
  * @ ---------        ---------    -------------------------------
  * @ 2016. 7. 14.     장성호        최초생성
+ * @ 2026. 6. 26.     이백행        [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2016. 7. 14.
@@ -31,9 +32,8 @@ public class StreamingMediaAPIDAO extends EgovComAbstractDAO {
      * 미디어 목록을 조회한다.
      * @param VO - 조회할 정보가 담긴 StreamingMediaAPIVO
      * @return 조회 목록
-     * @exception Exception
      */
-    public List<?> selectMediaInfoList(StreamingMediaAPIDefaultVO searchVO) throws Exception {
+    public List<?> selectMediaInfoList(StreamingMediaAPIDefaultVO searchVO) {
         return selectList("streamingMediaAPIDAO.selectMediaInfoList", searchVO);
     }
     
@@ -41,14 +41,13 @@ public class StreamingMediaAPIDAO extends EgovComAbstractDAO {
      * 미디어 파일 정보를 조회한다.
      * @param vo - 조회할 정보가 담긴 StreamingMediaAPIVO
      * @return 이미지 파일 정보
-     * @exception Exception
      */
-    public StreamingMediaAPIFileVO selectMediaFileInfo(StreamingMediaAPIFileVO vo) throws Exception {
+    public StreamingMediaAPIFileVO selectMediaFileInfo(StreamingMediaAPIFileVO vo) {
         return (StreamingMediaAPIFileVO) selectOne("streamingMediaAPIDAO.selectMediaFileInfo", vo);
     }
     
     
-    public int updateMediaInfoRevivCo(StreamingMediaAPIVO vo) throws Exception {
+    public int updateMediaInfoRevivCo(StreamingMediaAPIVO vo) {
         return (Integer)update("streamingMediaAPIDAO.updateMediaInfoRevivCo", vo);
     }
 }

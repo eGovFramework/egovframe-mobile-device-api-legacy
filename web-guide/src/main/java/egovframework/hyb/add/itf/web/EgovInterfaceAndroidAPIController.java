@@ -16,6 +16,7 @@
 package egovframework.hyb.add.itf.web;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
+import egovframework.com.cmm.security.DeviceAPILoginVO;
 import egovframework.hyb.add.itf.service.EgovInterfaceAndroidAPIService;
 import egovframework.hyb.add.itf.service.InterfaceAndroidAPIVO;
 import egovframework.hyb.ios.itf.service.InterfaceiOSAPIVO;
@@ -164,12 +167,11 @@ public class EgovInterfaceAndroidAPIController {
     @RequestMapping("/itf/logIn.do")
     public ModelAndView logIn(
             InterfaceAndroidAPIVO interfaceVO, BindingResult bindingResult,
-            Model model, SessionStatus status) throws Exception {
+            Model model, SessionStatus status, HttpServletRequest request) throws Exception {
 
         ModelAndView jsonView = new ModelAndView("jsonView");
 
-        InterfaceAndroidAPIVO interfaceAndroidAPIVO = null;
-        interfaceAndroidAPIVO = egovInterfaceAPIService
+        InterfaceAndroidAPIVO interfaceAndroidAPIVO = egovInterfaceAPIService
                 .selectInterfaceInfo(interfaceVO);
 
         if (interfaceAndroidAPIVO == null) {            
@@ -183,6 +185,11 @@ public class EgovInterfaceAndroidAPIController {
             }
             
         } else {
+            DeviceAPILoginVO loginVO = new DeviceAPILoginVO();
+            loginVO.setSn(interfaceAndroidAPIVO.getSn());
+            loginVO.setUserId(interfaceAndroidAPIVO.getUserId());
+            loginVO.setUuid(interfaceVO.getUuid());
+            DeviceAPIAuthSupport.bindLogin(request, loginVO);
             jsonView.addObject("resultState", "OK");
             jsonView.addObject("resultMessage", "로그인에 성공하였습니다.");
         }
@@ -208,10 +215,9 @@ public class EgovInterfaceAndroidAPIController {
     public @ResponseBody
     InterfaceAndroidAPIVO logInXml(
             InterfaceAndroidAPIVO interfaceVO, BindingResult bindingResult,
-            Model model, SessionStatus status) throws Exception {
+            Model model, SessionStatus status, HttpServletRequest request) throws Exception {
 
-        InterfaceAndroidAPIVO interfaceAndroidAPIVO = null;
-        interfaceAndroidAPIVO = egovInterfaceAPIService
+        InterfaceAndroidAPIVO interfaceAndroidAPIVO = egovInterfaceAPIService
                 .selectInterfaceInfo(interfaceVO);
 
         if (interfaceAndroidAPIVO == null) {
@@ -227,6 +233,11 @@ public class EgovInterfaceAndroidAPIController {
             
 
         } else {
+            DeviceAPILoginVO loginVO = new DeviceAPILoginVO();
+            loginVO.setSn(interfaceAndroidAPIVO.getSn());
+            loginVO.setUserId(interfaceAndroidAPIVO.getUserId());
+            loginVO.setUuid(interfaceVO.getUuid());
+            DeviceAPIAuthSupport.bindLogin(request, loginVO);
             interfaceAndroidAPIVO.setResultState("OK");
             interfaceAndroidAPIVO.setResultMessage("로그인에 성공하였습니다.");
         }

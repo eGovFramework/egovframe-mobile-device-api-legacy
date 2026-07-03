@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.ios.mda.service.EgovMediaiOSAPIService;
 import egovframework.hyb.ios.mda.service.MediaiOSAPIFileVO;
 import egovframework.hyb.ios.mda.service.MediaiOSAPIVO;
@@ -48,6 +49,7 @@ import io.swagger.annotations.ApiOperation;
  *   2012.07.30	  이율경              최초생성
  *   2012.08.14	  이해성              커스터마이징
  *   2020.09.07   신용호              Swagger 적용
+ *   2026.06.25   이백행              [2026년 컨트리뷰션] iOS API Controller 파일명과 클래스명 일치화
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 7. 30.
@@ -56,7 +58,7 @@ import io.swagger.annotations.ApiOperation;
  * 
  */
 @Controller
-public class EgovMediaIosAPIController {
+public class EgovMediaiOSAPIController {
 
 	/** EgovMediaiOSAPIService */
     @Resource(name = "EgovMediaiOSAPIService")
@@ -170,11 +172,13 @@ public class EgovMediaIosAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping("/mda/getMediaiOS.do")
-    public void getSoundFile(@RequestParam("sn") String sn, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	if(sn != null && "".equals(sn) == false) {
+    public void getSoundFile(@RequestParam("sn") String sn,
+            @RequestParam(value = "uuid", required = false) String uuid,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	if(sn != null && !"".equals(sn)) {
     		MediaiOSAPIFileVO vo = new MediaiOSAPIFileVO();
 			vo.setSn(Integer.parseInt(sn));
-		
+			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, uuid));
 			egovMediaiOSAPIService.selectMediaFileInf(response, vo);
     	}
     }

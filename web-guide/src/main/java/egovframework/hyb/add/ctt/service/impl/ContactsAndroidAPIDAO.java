@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일                 수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2012. 8. 13.  나신일                   최초생성
+ * @ 2026. 6. 26.  이백행                   [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 13
@@ -32,9 +33,8 @@ public class ContactsAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param vo
      *            - 연락처 정보가 담긴 ContactsAndroidAPIVO
-     * @exception Exception
      */
-    public void insertContactsInfo(ContactsAndroidAPIVO vo) throws Exception {
+    public void insertContactsInfo(ContactsAndroidAPIVO vo) {
         insert("contactsAndroidAPIDAO.insertContactInfo", vo);
     }
 
@@ -43,9 +43,8 @@ public class ContactsAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param vo
      *            - 연락처 정보가 담긴 ContactsAndroidAPIVO
-     * @exception Exception
      */
-    public void updateContactsInfo(ContactsAndroidAPIVO vo) throws Exception {
+    public void updateContactsInfo(ContactsAndroidAPIVO vo) {
         insert("contactsAndroidAPIDAO.updateContactInfo", vo);
     }
 
@@ -54,9 +53,8 @@ public class ContactsAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param vo
      *            - 연락처 정보가 담긴 ContactsAndroidAPIVO
-     * @exception Exception
      */
-    public List<?> selectFileInfoList(ContactsAndroidAPIVO vo) throws Exception {
+    public List<?> selectFileInfoList(ContactsAndroidAPIVO vo) {
         return selectList("contactsAndroidAPIDAO.selectContactInfoList", vo);
     }
 
@@ -65,10 +63,8 @@ public class ContactsAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param vo
      *            - 연락처 정보가 담긴 ContactsAndroidAPIVO
-     * @exception Exception
      */
-    public ContactsAndroidAPIVO selectContactsInfo(ContactsAndroidAPIVO vo)
-            throws Exception {
+    public ContactsAndroidAPIVO selectContactsInfo(ContactsAndroidAPIVO vo) {
         return (ContactsAndroidAPIVO) selectOne(
                 "contactsAndroidAPIDAO.selectContactInfo", vo);
     }
@@ -78,9 +74,8 @@ public class ContactsAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param vo
      *            - 연락처 정보가 담긴 ContactsAndroidAPIVO
-     * @exception Exception
      */
-    public int deleteContactsInfo(ContactsAndroidAPIVO vo) throws Exception {
+    public int deleteContactsInfo(ContactsAndroidAPIVO vo) {
         return delete("contactsAndroidAPIDAO.deleteContactInfo", vo);
     }
 
@@ -89,9 +84,8 @@ public class ContactsAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param vo
      *            - 연락처 정보가 담긴 ContactsAndroidAPIVO
-     * @exception Exception
      */
-    public int selectContactsTotCnt(ContactsAndroidAPIVO vo) throws Exception {
+    public int selectContactsTotCnt(ContactsAndroidAPIVO vo) {
         return (Integer) selectOne(
                 "contactsAndroidAPIDAO.selectContactInfoListTotCnt", vo);
     }

@@ -10,6 +10,9 @@
 //예제) #define kSERVER_URL     @"http://<ipaddress>:<port>/Template-DeviceAPI-Total_Web"
 #define kSERVER_URL     @"http://192.168.100.155:9700/Template-DeviceAPI-Total_Web"
 
+// Local: NO / Production: set YES and use https:// in kSERVER_URL
+#define kREQUIRE_HTTPS NO
+
 #define kSERVER_OK      200
 
 #import <UIKit/UIKit.h>

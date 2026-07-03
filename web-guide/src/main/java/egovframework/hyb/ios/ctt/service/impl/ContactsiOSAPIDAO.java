@@ -18,6 +18,7 @@ import egovframework.hyb.ios.ctt.service.ContactsiOSAPIVO;
  * @ ---------   ---------   -------------------------------
  * @ 2012. 8. 13.  나신일                   최초생성
  * @ 2012. 8. 23.  이해성                   커스터마이징
+ *   2026.06.26    이백행                  [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 13
@@ -32,9 +33,8 @@ public class ContactsiOSAPIDAO extends EgovComAbstractDAO{
 	/**
 	 * 연락처  정보를 입력한다.
 	 * @param vo - 연락처 정보가 담긴 ContactsiOSAPIVO 
-	 * @exception Exception
 	 */
-    public void insertContactsInfo(ContactsiOSAPIVO vo) throws Exception {
+    public void insertContactsInfo(ContactsiOSAPIVO vo) {
         insert("contactsiOSAPIDAO.insertContactInfo", vo);
     }
     
@@ -42,45 +42,40 @@ public class ContactsiOSAPIDAO extends EgovComAbstractDAO{
     /**
 	 * 연락처 정보를 업데이트 한다.
 	 * @param vo - 연락처 정보가 담긴 ContactsiOSAPIVO 
-	 * @exception Exception
 	 */
-    public void updateContactsInfo(ContactsiOSAPIVO vo) throws Exception {
+    public void updateContactsInfo(ContactsiOSAPIVO vo) {
         insert("contactsiOSAPIDAO.updateContactInfo", vo);
     }
     
     /**
 	 * 연락처 정보리스트를 조회한다.
 	 * @param vo - 연락처 정보가 담긴 ContactsiOSAPIVO 
-	 * @exception Exception
 	 */
-    public List<?> selectFileInfoList(ContactsiOSAPIVO vo) throws Exception{
+    public List<?> selectFileInfoList(ContactsiOSAPIVO vo) {
     	return selectList("contactsiOSAPIDAO.selectContactInfoList", vo);
     }
     
     /**
 	 * 연락처 정보를 조회한다.
 	 * @param vo - 연락처 정보가 담긴 ContactsiOSAPIVO 
-	 * @exception Exception
 	 */
-    public ContactsiOSAPIVO selectContactsInfo(ContactsiOSAPIVO vo) throws Exception{
+    public ContactsiOSAPIVO selectContactsInfo(ContactsiOSAPIVO vo) {
     	return (ContactsiOSAPIVO) selectOne("contactsiOSAPIDAO.selectContactInfo", vo);
     }
     
     /**
 	 * 연락처 정보를 삭제한다.
 	 * @param vo - 연락처 정보가 담긴 ContactsiOSAPIVO 
-	 * @exception Exception
 	 */
-    public int deleteContactsInfo(ContactsiOSAPIVO vo) throws Exception {
+    public int deleteContactsInfo(ContactsiOSAPIVO vo) {
     	return delete("contactsiOSAPIDAO.deleteContactInfo", vo);
     }
     
     /**
 	 * 연락처 정보를 삭제한다.
 	 * @param vo - 연락처 정보가 담긴 ContactsiOSAPIVO 
-	 * @exception Exception
 	 */
-    public int selectContactsTotCnt(ContactsiOSAPIVO vo) throws Exception {
+    public int selectContactsTotCnt(ContactsiOSAPIVO vo) {
     	return (Integer) selectOne("contactsiOSAPIDAO.selectContactInfoListTotCnt", vo);    	
     }
 }

@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -128,6 +129,7 @@ public class InterfaceAndroidAPIVO implements Serializable {
      * @param userPw를
      *            반환한다
      */
+    @XmlTransient
     public String getUserPw() {
         return userPw;
     }

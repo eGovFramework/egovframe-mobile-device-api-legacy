@@ -15,6 +15,7 @@
  */
 package egovframework.hyb.add.itf.service.impl;
 
+import egovframework.com.cmm.security.DeviceAPIPasswordUtil;
 import egovframework.hyb.add.itf.service.EgovInterfaceAndroidAPIService;
 import egovframework.hyb.add.itf.service.InterfaceAndroidAPIVO;
 
@@ -71,6 +72,7 @@ public class EgovInterfaceAndroidAPIServiceImpl extends EgovAbstractServiceImpl
      * @exception Exception
      */
     public int insertInterfaceInfo(InterfaceAndroidAPIVO vo) throws Exception {
+        vo.setUserPw(DeviceAPIPasswordUtil.encode(vo.getUserPw()));
         return interfaceAPIDAO.insertInterfaceInfo(vo);
     }
 
@@ -84,8 +86,17 @@ public class EgovInterfaceAndroidAPIServiceImpl extends EgovAbstractServiceImpl
      */
     public InterfaceAndroidAPIVO selectInterfaceInfo(InterfaceAndroidAPIVO vo)
             throws Exception {
-        return interfaceAPIDAO.selectInterfaceInfo(vo);
+        InterfaceAndroidAPIVO stored = interfaceAPIDAO.selectInterfaceInfoByUserId(vo);
+        if (stored == null) {
+            return null;
+        }
+        if (!DeviceAPIPasswordUtil.matches(vo.getUserPw(), stored.getUserPw())) {
+            return null;
+        }
+        stored.setUserPw(null);
+        return stored;
     }
+
 
     /**
      * 회원탈퇴를 한다.
@@ -96,6 +107,10 @@ public class EgovInterfaceAndroidAPIServiceImpl extends EgovAbstractServiceImpl
      * @exception Exception
      */
     public int deleteInterfaceInfo(InterfaceAndroidAPIVO vo) throws Exception {
-        return interfaceAPIDAO.deleteInterfaceInfo(vo);
+        InterfaceAndroidAPIVO stored = interfaceAPIDAO.selectInterfaceInfoByUserId(vo);
+        if (stored == null || !DeviceAPIPasswordUtil.matches(vo.getUserPw(), stored.getUserPw())) {
+            return 0;
+        }
+        return interfaceAPIDAO.deleteInterfaceInfoByUserId(vo);
     }
 }

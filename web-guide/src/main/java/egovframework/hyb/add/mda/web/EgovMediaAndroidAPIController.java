@@ -32,6 +32,7 @@ import egovframework.hyb.add.mda.service.EgovMediaAndroidAPIService;
 import egovframework.hyb.add.mda.service.MediaAndroidAPIFileVO;
 import egovframework.hyb.add.mda.service.MediaAndroidAPIVO;
 import egovframework.hyb.add.mda.service.MediaAndroidAPIXmlVO;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.add.mda.service.impl.EgovMediaAndroidFileMngUtil;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -156,13 +157,14 @@ public class EgovMediaAndroidAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
 	@RequestMapping("/mda/getMedia.do")
-	public void getImageInf(@RequestParam("sn") String sn, ModelMap model, HttpServletResponse response) throws Exception {
+	public void getImageInf(@RequestParam("sn") String sn,
+			@RequestParam(value = "uuid", required = false) String uuid,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		if (sn != null && "".equals(sn) == false) {
-
+		if (sn != null && !"".equals(sn)) {
 			MediaAndroidAPIFileVO vo = new MediaAndroidAPIFileVO();
 			vo.setSn(Integer.parseInt(sn));
-
+			vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, uuid));
 			egovMediaAndroidAPIService.selectMediaFileInf(response, vo);
 		}
 	}

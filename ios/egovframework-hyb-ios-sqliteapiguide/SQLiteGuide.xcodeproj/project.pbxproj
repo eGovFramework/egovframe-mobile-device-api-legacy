@@ -42,6 +42,10 @@
 		217E867722B758700023DB3D /* EgovFileOpener.h in Headers */ = {isa = PBXBuildFile; fileRef = 217E866D22B758700023DB3D /* EgovFileOpener.h */; };
 		217E867822B758700023DB3D /* CDVCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 217E866E22B758700023DB3D /* CDVCustom.m */; };
 		217E867922B758700023DB3D /* EgovInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 217E866F22B758700023DB3D /* EgovInterface.m */; };
+		D2F2772A9AA2407EBF5A60F1 /* EgovInterfaceRequestValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = B67DEEDCCA664E24ABE2E6DC /* EgovInterfaceRequestValidator.m */; };
+B31CAC56D875492AAEB6C2EB /* EgovFileOpenerRequestValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 		35CF9747B5B64120BD82789E /* EgovFileOpenerRequestValidator.m */; };
+		8B04F61972CB4E8AA72523CD /* EgovFileOpenerRequestValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 		028357DEE10F44A587DF13D6 /* EgovFileOpenerRequestValidator.h */; };
+				84D135BB46674D61A314940B /* EgovInterfaceRequestValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = D0CAD0CACBE94E089123570D /* EgovInterfaceRequestValidator.h */; };
 		217E867A22B758700023DB3D /* EgovInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 217E867022B758700023DB3D /* EgovInterface.h */; };
 		217E867B22B758700023DB3D /* EgovResourceUpdate.m in Sources */ = {isa = PBXBuildFile; fileRef = 217E867122B758700023DB3D /* EgovResourceUpdate.m */; };
 		217E867C22B758700023DB3D /* EgovFileOpener.m in Sources */ = {isa = PBXBuildFile; fileRef = 217E867222B758700023DB3D /* EgovFileOpener.m */; };
@@ -246,6 +250,10 @@
 		217E866E22B758700023DB3D /* CDVCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVCustom.m; path = EgovPlugins/CDVCustom.m; sourceTree = "<group>"; };
 		217E866F22B758700023DB3D /* EgovInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EgovInterface.m; path = EgovPlugins/EgovInterface.m; sourceTree = "<group>"; };
 		217E867022B758700023DB3D /* EgovInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EgovInterface.h; path = EgovPlugins/EgovInterface.h; sourceTree = "<group>"; };
+		D0CAD0CACBE94E089123570D /* EgovInterfaceRequestValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EgovInterfaceRequestValidator.h; path = EgovPlugins/EgovInterfaceRequestValidator.h; sourceTree = "<group>"; };
+		B67DEEDCCA664E24ABE2E6DC /* EgovInterfaceRequestValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EgovInterfaceRequestValidator.m; path = EgovPlugins/EgovInterfaceRequestValidator.m; sourceTree = "<group>"; };
+		028357DEE10F44A587DF13D6 /* EgovFileOpenerRequestValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EgovFileOpenerRequestValidator.h; path = EgovPlugins/EgovFileOpenerRequestValidator.h; sourceTree = "<group>"; };
+		35CF9747B5B64120BD82789E /* EgovFileOpenerRequestValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EgovFileOpenerRequestValidator.m; path = EgovPlugins/EgovFileOpenerRequestValidator.m; sourceTree = "<group>"; };
 		217E867122B758700023DB3D /* EgovResourceUpdate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EgovResourceUpdate.m; path = EgovPlugins/EgovResourceUpdate.m; sourceTree = "<group>"; };
 		217E867222B758700023DB3D /* EgovFileOpener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EgovFileOpener.m; path = EgovPlugins/EgovFileOpener.m; sourceTree = "<group>"; };
 		217E867D22B758840023DB3D /* EgovZip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EgovZip.h; path = EgovPlugins/EgovZip.h; sourceTree = "<group>"; };
@@ -467,6 +475,10 @@
 				217E867222B758700023DB3D /* EgovFileOpener.m */,
 				217E867022B758700023DB3D /* EgovInterface.h */,
 				217E866F22B758700023DB3D /* EgovInterface.m */,
+				D0CAD0CACBE94E089123570D /* EgovInterfaceRequestValidator.h */,
+				B67DEEDCCA664E24ABE2E6DC /* EgovInterfaceRequestValidator.m */,
+						028357DEE10F44A587DF13D6 /* EgovFileOpenerRequestValidator.h */,
+						35CF9747B5B64120BD82789E /* EgovFileOpenerRequestValidator.m */,
 				217E866922B758700023DB3D /* EgovResourceUpdate.h */,
 				217E867122B758700023DB3D /* EgovResourceUpdate.m */,
 				217E866A22B758700023DB3D /* EgovStorageInfo.h */,
@@ -668,6 +680,8 @@
 				217E867322B758700023DB3D /* EgovResourceUpdate.h in Headers */,
 				21434D7A23063F4B00562D9B /* GCDAsyncUdpSocket.h in Headers */,
 				217E867A22B758700023DB3D /* EgovInterface.h in Headers */,
+		8B04F61972CB4E8AA72523CD /* EgovFileOpenerRequestValidator.h in Headers */,
+						84D135BB46674D61A314940B /* EgovInterfaceRequestValidator.h in Headers */,
 				217E868022B758840023DB3D /* EgovZip.h in Headers */,
 				217E867422B758700023DB3D /* EgovStorageInfo.h in Headers */,
 				217E867622B758700023DB3D /* CDVCustom.h in Headers */,
@@ -857,6 +871,8 @@
 				217E867822B758700023DB3D /* CDVCustom.m in Sources */,
 				CEA434C6503C404998DAB27F /* CDVCompass.m in Sources */,
 				217E867922B758700023DB3D /* EgovInterface.m in Sources */,
+		B31CAC56D875492AAEB6C2EB /* EgovFileOpenerRequestValidator.m in Sources */,
+						D2F2772A9AA2407EBF5A60F1 /* EgovInterfaceRequestValidator.m in Sources */,
 				FCA6759BAA074A1099C0D18E /* CDVLocation.m in Sources */,
 				CD38F46F99B145C38D4466AB /* UIImage+CropScaleOrientation.m in Sources */,
 				98ADAD432ED54ED698CBBBE1 /* CDVCamera.m in Sources */,

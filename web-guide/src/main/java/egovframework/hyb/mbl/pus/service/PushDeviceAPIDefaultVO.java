@@ -17,6 +17,8 @@ package egovframework.hyb.mbl.pus.service;
 
 import egovframework.com.cmm.vo.DefaultSearchVO;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**  
  * @Class Name : PushDeviceAPIDefaultVO.java
  * @Description : PushDeviceAPIDefaultVO Class
@@ -35,7 +37,17 @@ import egovframework.com.cmm.vo.DefaultSearchVO;
  *  Copyright (C) by MOPAS All right reserved.
  */
 public class PushDeviceAPIDefaultVO extends DefaultSearchVO {
-	
+
 	private static final long serialVersionUID = 1607939443103082103L;
 
+    @ApiModelProperty(value = "기기식별코드", required = true)
+    private String uuid;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 }

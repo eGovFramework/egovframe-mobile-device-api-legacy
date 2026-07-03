@@ -17,6 +17,7 @@ import egovframework.hyb.add.frw.service.FileReaderWriterAndroidAPIVO;
  * @  수정일                 수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2012. 8. 6.  나신일                   최초생성
+ * @ 2026. 6. 26. 이백행                   [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 6
@@ -33,10 +34,8 @@ public class FileReaderWriterAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param fileVO
      *            - 파일 정보가 담긴 FileReaderWriterAndroidAPIVO
-     * @exception Exception
      */
-    public void insertFileInfo(FileReaderWriterAndroidAPIVO vo)
-            throws Exception {
+    public void insertFileInfo(FileReaderWriterAndroidAPIVO vo) {
         insert("fileReaderWriterAndroidAPIDAO.insertFileInfo", vo);
     }
 
@@ -45,10 +44,8 @@ public class FileReaderWriterAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param fileVO
      *            - 파일 정보가 담긴 FileReaderWriterAndroidAPIVO
-     * @exception Exception
      */
-    public void insertFileDetailInfo(FileReaderWriterAndroidAPIVO vo)
-            throws Exception {
+    public void insertFileDetailInfo(FileReaderWriterAndroidAPIVO vo) {
         insert("fileReaderWriterAndroidAPIDAO.insertFileDetailInfo", vo);
     }
 
@@ -57,10 +54,8 @@ public class FileReaderWriterAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param fileVO
      *            - 파일 정보가 담긴 FileReaderWriterAndroidAPIVO
-     * @exception Exception
      */
-    public List<?> selectFileInfoList(FileReaderWriterAndroidAPIVO vo)
-            throws Exception {
+    public List<?> selectFileInfoList(FileReaderWriterAndroidAPIVO vo) {
         return selectList("fileReaderWriterAndroidAPIDAO.selectFileInfoList", vo);
     }
 
@@ -69,10 +64,9 @@ public class FileReaderWriterAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param fileVO
      *            - 파일 정보가 담긴 FileReaderWriterAndroidAPIVO
-     * @exception Exception
      */
     public FileReaderWriterAndroidAPIVO selectFileInfo(
-            FileReaderWriterAndroidAPIVO vo) throws Exception {
+            FileReaderWriterAndroidAPIVO vo) {
         return (FileReaderWriterAndroidAPIVO) selectOne(
                 "fileReaderWriterAndroidAPIDAO.selectFileInfo", vo);
     }
@@ -82,9 +76,8 @@ public class FileReaderWriterAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param fileVO
      *            - 파일 정보가 담긴 FileReaderWriterAndroidAPIVO
-     * @exception Exception
      */
-    public int deleteFileInfo(FileReaderWriterAndroidAPIVO vo) throws Exception {
+    public int deleteFileInfo(FileReaderWriterAndroidAPIVO vo) {
         return delete("fileReaderWriterAndroidAPIDAO.deleteFileInfo", vo);
     }
 
@@ -93,10 +86,8 @@ public class FileReaderWriterAndroidAPIDAO extends EgovComAbstractDAO {
      * 
      * @param fileVO
      *            - 파일 정보가 담긴 FileReaderWriterAndroidAPIVO
-     * @exception Exception
      */
-    public int deleteFileDetailInfo(FileReaderWriterAndroidAPIVO vo)
-            throws Exception {
+    public int deleteFileDetailInfo(FileReaderWriterAndroidAPIVO vo) {
         return delete("fileReaderWriterAndroidAPIDAO.deleteFileDetailInfo", vo);
     }
 }

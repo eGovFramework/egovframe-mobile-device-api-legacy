@@ -75,6 +75,10 @@ public class ResourceUpdateDeviceAPIVO implements Serializable {
     /** OS 구분  */
     @ApiModelProperty(value="OS 구분")
     private String osType;
+
+    /** ZIP 파일 SHA-256 해시 */
+    @ApiModelProperty(value="ZIP 파일 SHA-256 해시")
+    private String fileSha256;
     
     public String getResVersion() {
 		return resVersion;
@@ -158,6 +162,14 @@ public class ResourceUpdateDeviceAPIVO implements Serializable {
 
 	public void setOsType(String osType) {
 		this.osType = osType;
+	}
+
+	public String getFileSha256() {
+		return fileSha256;
+	}
+
+	public void setFileSha256(String fileSha256) {
+		this.fileSha256 = fileSha256;
 	}
 
 }

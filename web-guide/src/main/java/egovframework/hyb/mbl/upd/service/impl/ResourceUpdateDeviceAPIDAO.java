@@ -29,6 +29,7 @@ import egovframework.hyb.mbl.upd.service.ResourceUpdateDeviceAPIVO;
  * @  수정일      수정자                 수정내용
  * @ ---------   ---------   -------------------------------
  * @ 2016.06.20   신용호               최초생성
+ *   2026.06.26   이백행               [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2016. 06. 20
@@ -45,9 +46,8 @@ public class ResourceUpdateDeviceAPIDAO extends EgovComAbstractDAO {
 	 * Push Device 정보 목록을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 PushDeviceAPIDefaultVO
 	 * @return Push Device 정보 목록
-	 * @exception Exception
 	 */
-    public ResourceUpdateDeviceAPIVO selectResourceUpdateVersionInfo(ResourceUpdateDeviceAPIVO searchVO) throws Exception {
+    public ResourceUpdateDeviceAPIVO selectResourceUpdateVersionInfo(ResourceUpdateDeviceAPIVO searchVO) {
         return (ResourceUpdateDeviceAPIVO) selectOne("resourceUpdateDeviceAPIDAO.selectResourceUpdateVersionInfo", searchVO);
     }
 

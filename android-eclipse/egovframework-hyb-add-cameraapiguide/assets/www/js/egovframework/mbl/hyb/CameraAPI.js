@@ -86,6 +86,23 @@ function fn_egov_displayDetail(imageSrc, xmldata) {
  * @returns 
  * @type 
  */
+
+/** HTML 출력용 XSS 이스케이프 */
+function fn_egov_escapeHtml(value) {
+    if (value == null) {
+        return "";
+    }
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&#34;")
+        .replaceAll("'", "&#39;")
+        .replaceAll("\\.", "&#46;")
+        .replaceAll("%2E", "&#46;")
+        .replaceAll("%2F", "&#47;");
+}
+
 function fn_egov_displayList(xmldata) {
     
     var html = "";
@@ -106,7 +123,7 @@ function fn_egov_displayList(xmldata) {
                         .replaceAll("%2F", "&#47;");
                     html += '<li>';
                     html += '     <a href="#" onclick="javascript:fn_egov_detailPhotoAlbum(\'' + sn + '\', \'' + fileSn + '\');">';
-                    html += '         <img src="' + context + '/cmr/getImage.do?fileSn=' + fileSn + '" style="max-width: 100;" />';
+                    html += '         <img src="' + context + '/cmr/getImage.do?fileSn=' + fileSn + '&uuid=' + encodeURIComponent(device.uuid) + '" style="max-width: 100;" />';
                     html += '        <h3>' + photoSj + '</h3>';
                     html += '    </a>';
                     html += '</li>';        
@@ -336,7 +353,7 @@ function fn_egov_savePhotoAlbum() {
  */
 function fn_egov_detailPhotoAlbum(sn, fileSn) {
     
-    var imageSrc = context + '/cmr/getImage.do?fileSn=' + fileSn;
+    var imageSrc = context + '/cmr/getImage.do?fileSn=' + fileSn + '&uuid=' + encodeURIComponent(device.uuid);
     currentImageSn = sn;
     
     if(fn_egov_network_check(true)) {

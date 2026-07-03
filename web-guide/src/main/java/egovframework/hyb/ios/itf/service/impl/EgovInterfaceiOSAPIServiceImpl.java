@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import egovframework.com.cmm.security.DeviceAPIPasswordUtil;
 import egovframework.hyb.ios.itf.service.EgovInterfaceiOSAPIService;
 import egovframework.hyb.ios.itf.service.InterfaceiOSAPIVO;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -70,6 +71,7 @@ public class EgovInterfaceiOSAPIServiceImpl extends EgovAbstractServiceImpl
      * @exception Exception
      */
     public int insertInterfaceInfo(InterfaceiOSAPIVO vo) throws Exception {
+        vo.setUserPw(DeviceAPIPasswordUtil.encode(vo.getUserPw()));
         return interfaceAPIDAO.insertInterfaceInfo(vo);
     }
 
@@ -83,10 +85,18 @@ public class EgovInterfaceiOSAPIServiceImpl extends EgovAbstractServiceImpl
      */
     public InterfaceiOSAPIVO selectInterfaceInfo(InterfaceiOSAPIVO vo)
             throws Exception {
-        return interfaceAPIDAO.selectInterfaceInfo(vo);
+        InterfaceiOSAPIVO stored = interfaceAPIDAO.selectInterfaceInfoByUserId(vo);
+        if (stored == null) {
+            return null;
+        }
+        if (!DeviceAPIPasswordUtil.matches(vo.getUserPw(), stored.getUserPw())) {
+            return null;
+        }
+        stored.setUserPw(null);
+        return stored;
     }
 
-    /**
+	/**
      * 회원탈퇴를 한다.
      * 
      * @param vo
@@ -95,7 +105,10 @@ public class EgovInterfaceiOSAPIServiceImpl extends EgovAbstractServiceImpl
      * @exception Exception
      */
     public int deleteInterfaceInfo(InterfaceiOSAPIVO vo) throws Exception {
-        return interfaceAPIDAO.deleteInterfaceInfo(vo);
+        InterfaceiOSAPIVO stored = interfaceAPIDAO.selectInterfaceInfoByUserId(vo);
+        if (stored == null || !DeviceAPIPasswordUtil.matches(vo.getUserPw(), stored.getUserPw())) {
+            return 0;
+        }
+        return interfaceAPIDAO.deleteInterfaceInfoByUserId(vo);
     }
-
 }

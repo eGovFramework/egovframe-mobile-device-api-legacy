@@ -59,6 +59,7 @@ import io.swagger.annotations.ApiOperation;
  *   2017.02.27   최두영              시큐어코딩(ES)-36. 부적절한 예외 처리[CWE253, CWE-440, CWE-754]
  *   2019.10.14   신용호              iOS에서 확장자를 mp3로 인식하도록 contentDisposition값을 설정(getMp3File)
  *   2020.09.07   신용호              Swagger 적용
+ *   2026.06.25   이백행              [2026년 컨트리뷰션] iOS API Controller 파일명과 클래스명 일치화
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 06. 18
@@ -69,7 +70,7 @@ import io.swagger.annotations.ApiOperation;
  */
 
 @Controller
-public class EgovNetworkIosAPIController {
+public class EgovNetworkiOSAPIController {
 	
 	/** EgovNetworkiOSAPIService */
     @Resource(name = "EgovNetworkiOSAPIService")
@@ -79,7 +80,7 @@ public class EgovNetworkIosAPIController {
     @Resource(name = "propertiesService")
     protected EgovPropertyService propertiesService;
  
-    private static final Logger LOGGER = LoggerFactory.getLogger(EgovNetworkIosAPIController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EgovNetworkiOSAPIController.class);
     
     /**
 	 * 어플리케이션 실행 시, 서버 설정

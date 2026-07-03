@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
  *   2012.08.13   나신일              최초생성
  *   2012.08.23   이해성              커스터마이징
  *   2020.08.14   신용호              Swagger 적용
+ *   2026.06.25   이백행              [2026년 컨트리뷰션] iOS API Controller 파일명과 클래스명 일치화
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 8. 13
@@ -36,7 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  */
 @Controller
-public class EgovContactsIosAPIController {
+public class EgovContactsiOSAPIController {
 	
 	/** EgovContactsiOSAPIService */
 	@Resource(name="egovContactsiOSAPIService")

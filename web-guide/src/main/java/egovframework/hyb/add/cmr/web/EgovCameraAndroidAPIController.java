@@ -36,6 +36,7 @@ import egovframework.hyb.add.cmr.service.CameraAndroidAPIFileVO;
 import egovframework.hyb.add.cmr.service.CameraAndroidAPIVO;
 import egovframework.hyb.add.cmr.service.CameraAndroidAPIXmlVO;
 import egovframework.hyb.add.cmr.service.EgovCameraAndroidAPIService;
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.add.cmr.service.impl.EgovCameraAndroidFileMngUtil;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -172,10 +173,11 @@ public class EgovCameraAndroidAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping(value="/cmr/cameraPhotoAlbumDetail.do")
-    public @ResponseBody CameraAndroidAPIXmlVO selectPhotoAlbum( CameraAndroidAPIVO vo,
-            SessionStatus status)
+    public @ResponseBody CameraAndroidAPIXmlVO selectPhotoAlbum(CameraAndroidAPIVO vo,
+            HttpServletRequest request, SessionStatus status)
             throws Exception {
-        
+
+        vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, vo.getUuid()));
         CameraAndroidAPIVO cameraVO = egovCameraAndroidAPIService.selectCameraPhotoAlbum(vo);
         
         CameraAndroidAPIXmlVO cameraAndroidAPIXmlVO = new CameraAndroidAPIXmlVO();
@@ -197,14 +199,14 @@ public class EgovCameraAndroidAPIController {
     	@ApiImplicitParam(name = "fileSn", value = "파일연번", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping("/cmr/getImage.do")
-    public void getImageInf(@RequestParam("fileSn") String fileSn, ModelMap model,
-            HttpServletResponse response) throws Exception {
+    public void getImageInf(@RequestParam("fileSn") String fileSn,
+            @RequestParam(value = "uuid", required = false) String uuid,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        if(fileSn != null && "".equals(fileSn) == false) {
-            
+        if (fileSn != null && !"".equals(fileSn)) {
             CameraAndroidAPIFileVO vo = new CameraAndroidAPIFileVO();
             vo.setFileSn(Integer.parseInt(fileSn));
-        
+            vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, uuid));
             egovCameraAndroidAPIService.selectImageFileInf(response, vo);
         }
     }
@@ -220,29 +222,25 @@ public class EgovCameraAndroidAPIController {
     	@ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping(value="/cmr/deleteCameraPhotoAlbum.do")
-    public @ResponseBody CameraAndroidAPIXmlVO deleteCameraPhotoAlbum( CameraAndroidAPIVO vo,
-            SessionStatus status)
+    public @ResponseBody CameraAndroidAPIXmlVO deleteCameraPhotoAlbum(CameraAndroidAPIVO vo,
+            HttpServletRequest request, SessionStatus status)
             throws Exception {
- 
+
         CameraAndroidAPIXmlVO cameraAndroidAPIXmlVO = new CameraAndroidAPIXmlVO();
-            
+        vo.setUuid(DeviceAPIAuthSupport.resolveDeviceUuid(request, vo.getUuid()));
+
         CameraAndroidAPIVO cameraVO = egovCameraAndroidAPIService.selectCameraPhotoAlbum(vo);
-        if(cameraVO == null) {
-            
+        if (cameraVO == null) {
             cameraAndroidAPIXmlVO.setDeleteCheck("false");
+            return cameraAndroidAPIXmlVO;
         }
-        
+
         Boolean deleteCheck = egovCameraAndroidAPIService.deleteCameraPhotoAlbum(cameraVO);
-        if(!deleteCheck) {
-            
-            cameraAndroidAPIXmlVO.setDeleteCheck("false");
-        } 
-        
-        cameraAndroidAPIXmlVO.setDeleteCheck("true");
-        
+        cameraAndroidAPIXmlVO.setDeleteCheck(deleteCheck ? "true" : "false");
+
         return cameraAndroidAPIXmlVO;
     }
-    
+ 
     /**
      * 이미지 제목 중복을 조회한다.
      * @param cameraVO - 조회할 정보가 담긴 CameraAPIVO

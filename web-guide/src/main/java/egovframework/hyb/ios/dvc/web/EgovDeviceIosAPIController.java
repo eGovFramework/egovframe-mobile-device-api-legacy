@@ -18,11 +18,13 @@ package egovframework.hyb.ios.dvc.web;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import egovframework.com.cmm.security.DeviceAPIAuthSupport;
 import egovframework.hyb.ios.dvc.service.DeviceiOSAPIVO;
 import egovframework.hyb.ios.dvc.service.EgovDeviceiOSAPIService;
 import egovframework.rte.fdl.property.EgovPropertyService;
@@ -40,6 +42,7 @@ import io.swagger.annotations.ApiOperation;
  * @ ----------   ---------   -------------------------------
  *   2012.07.30   서준식              최초 작성
  *   2020.08.10   신용호              Swagger 적용
+ *   2026.06.25   이백행              [2026년 컨트리뷰션] iOS API Controller 파일명과 클래스명 일치화
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 07. 30
@@ -51,7 +54,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(value = "EgovDeviceIosAPIController V2")
 @RestController
-public class EgovDeviceIosAPIController {
+public class EgovDeviceiOSAPIController {
 	
 	/** EgovNetworkAPIService */
     @Resource(name = "egovDeviceiOSAPIService")
@@ -97,11 +100,14 @@ public class EgovDeviceIosAPIController {
         @ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping(value="/dvc/deviceInfo.do")
-    public ModelAndView selectDeviceInfo(DeviceiOSAPIVO vo)
+    public ModelAndView selectDeviceInfo(DeviceiOSAPIVO vo, HttpServletRequest request)
             throws Exception {
- 
+
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		DeviceiOSAPIVO deviceiOSAPIVO = egovDeviceiOSAPIService.selectDeviceInfo(vo);
+		if (deviceiOSAPIVO != null) {
+			DeviceAPIAuthSupport.assertOwnedUuid(request, deviceiOSAPIVO.getUuid());
+		}
 		
 		jsonView.addObject("deviceInfo", deviceiOSAPIVO);
 		jsonView.addObject("resultState","OK");
@@ -144,11 +150,17 @@ public class EgovDeviceIosAPIController {
     	@ApiImplicitParam(name = "sn", value = "일련번호", required = true, dataType = "int", paramType = "query"),
     })
     @RequestMapping("/dvc/deleteDeviceInfo.do")
-    public ModelAndView deleteDeviceInfo(
-    		DeviceiOSAPIVO vo)
+    public ModelAndView deleteDeviceInfo(DeviceiOSAPIVO vo, HttpServletRequest request)
             throws Exception {
-    	
-    	egovDeviceiOSAPIService.deleteDeviceInfo(vo);
+
+    	DeviceiOSAPIVO deviceInfo = egovDeviceiOSAPIService.selectDeviceInfo(vo);
+    	if (deviceInfo == null) {
+    		ModelAndView deniedView = new ModelAndView("jsonView");
+    		deniedView.addObject("resultState", "FAIL");
+    		return deniedView;
+    	}
+    	DeviceAPIAuthSupport.assertOwnedUuid(request, deviceInfo.getUuid());
+    	egovDeviceiOSAPIService.deleteDeviceInfo(deviceInfo);
         
         ModelAndView jsonView = new ModelAndView("jsonView");
         jsonView.addObject("resultState","OK");

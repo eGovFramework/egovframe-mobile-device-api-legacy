@@ -2,172 +2,279 @@
  * @fileoverview 모바일 전자정부 하이브리드 앱 Interface API 가이드 프로그램 JavaScript
  * JavaScript. 
  *
- * @author 이한철
+ * @author 나신일
  * @version 1.0 
+ * @  수정일			수정자		수정내용
+ * @ ---------		---------	-------------------------------
+ * @ 2015. 4. 20.   신용호 		iscroll5 적용 
  */
 
+/** iscroll를 적용하기 위한 공통 */
+var myScroll = null;
+
+/*********************************************************
+ * HTML 및 이벤트 관련 함수
+ *********************************************************/
+
+/**
+ * 화면을 위한 관련 이벤트
+ */
+
+$(function(){
+    $.validator.setDefaults({
+        onkeyup:false,
+        onclick:false,
+        onfocusout:false,
+        submitHandler: function() { 
+            //3G 사용시 과금이 발생 할 수 있다는 경고 메시지 표시
+            if(!fn_egov_network_check(false)) {
+                return;
+            }
+
+            if($.mobile.activePage.is('#login')) {
+                // 로그인
+                fn_egov_login_member();         				 
+            } else if($.mobile.activePage.is('#signUp')) {
+                // 회원가입
+                fn_egov_subscribe_member();
+            } else  if($.mobile.activePage.is('#secessionMember')) {
+                // 회원탈퇴
+                $("#secessionMemberBtn").focus();
+                fn_egov_confirm_secession(); 
+            }
+        }
+    });
+
+    // validation check
+    $("#subscribeForm").validate();
+    $("#loginForm").validate();
+    $("#secessionForm").validate();
+
+    $('#loginMoveBtn').click(function () {
+        // 로그인 화면 이동
+        fn_egov_go_login();
+    });
+    
+    $(document).on("pageshow", "#importanceList", function(event, ui){
+        
+        if(myScroll != null) {
+            
+            myScroll.destroy();
+        }
+        loaded('#wrapperInfo');
+    });
+});
+
+/**
+ * PhoneGap 초기화 이벤트에서 호출하는 function
+ * @returns iscroll 과 Back 버튼 event 추가
+ * @type
+*/
+function DeviceAPIInit() {
+    loaded('#wrapperInfo');
+  	
+}
+
+/**
+ * iScroll 적용
+ * @returns 
+ * @type 
+ */
+function loaded(scrollTarget) {
+    
+    // Use this for high compatibility (iDevice + Android)
+	var options = {
+            scrollX: true,
+            scrollbars: true
+        }
+
+	console.log("device.version >>> "+device.version);
+	if (parseFloat(device.version)>=4.0) {
+		options["click"] = true;
+	}
+	
+    setTimeout(function () {
+
+    	myScroll = new IScroll(scrollTarget, options);
+    	myScroll.refresh();
+
+    	document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+    },500);
+
+}
 
 /**
  * 회원가입 화면 이동 function.
- * @returns 회원가입 화면으로 이동.
+ * @returns 화원가입 화면으로 이동.
  * @type
- */
-function fn_goSignUp() {
-	
-	console.log("Signup display change");
-	$.mobile.changePage('#signUp', 'slide', false, false);
-    
+*/
+function fn_egov_go_signUp() {
+    $('#subscribeForm').each(function(){
+        this.reset();
+    });
+
+    $.mobile.changePage("#signUp", "slide", false, false);
 }
 
 /**
  * 로그인 화면 이동 function.
  * @returns 로그인 화면으로 이동.
  * @type
- */
-function fn_goLogin() {
-	
-	console.log("Login display change");
-	$.mobile.changePage('#login', 'slide', false, false);
-    
+*/
+function fn_egov_go_login() {
+    $('#loginForm').each(function(){
+        this.reset();
+    });
+
+    $.mobile.changePage("#login", "slide", false, false);
 }
 
 /**
  * 회원탈퇴 화면 이동 function.
- * @returns 회원탈퇴 화면으로 이동.
+ * @returns 화원탈퇴 화면으로 이동.
  * @type
- */
-function fn_goWithdrawal() {
-	
-	console.log("withdrawal display change");
-	$.mobile.changePage('#signDown', 'slide', false, false);
+*/
+function fn_egov_go_secession() {
+    $('#secessionForm').each(function(){
+        this.reset();
+    });
+
+    $.mobile.changePage("#secessionMember", "slide", false, false);
+}
+
+/**
+ * login 정보 서버 전송 function.
+ * @returns 로그인 성공 여부
+ * @type  
+*/
+function fn_egov_login_member() {
+    var url = "/itf/xml/logIn.do";
+    var acceptType = "xml";
+    var userid = $("#loginId").val();
+    var userpw = $("#loginPasswd").val();
+
+    $.mobile.loading("show");
+
+    var params = {uuid :  device.uuid,
+            userId: userid,
+            userPw: userpw};
+
+        alert('전송방식:RESTful\n전송타입:POST('+ acceptType + ')\nparam:' + JSON.stringify(params).replace(userpw,'****'));
+
+    // get the data from server
+    window.plugins.EgovInterface.post(url, acceptType, params, function(xmldata) {		
+    /*
+    var data = JSON.parse(jsondata);		
+    if(data.resultState == "OK"){
+        $.mobile.changePage("#secessionMember", "slide", false, false);
+    }else{
+        jAlert(data.resultMessage, '오류', 'c');
+    }*/
+        console.log('DeviceAPIGuide fn_egov_login_member request Complete');
+        alert('응답방식:RESTful\n응답타입:POST('+ acceptType + ')\nparam:' + xmldata.replace(userpw,'****'));		
+        $.mobile.loading("hide");
+        if($(xmldata).find("resultState").text() == "OK"){
+                window.history.back();
+            }else{
+                jAlert($(xmldata).find("resultMessage").text(), '오류', 'c');
+            }
+
+        });	
+
+
+}
+
+/**
+ * 회원가입 정보 서버 전송 function.
+ * @returns 회원가입 성공 여부
+ * @type  
+*/
+
+function fn_egov_subscribe_member() {	
+    var url = "/itf/xml/addInterfaceInfo.do";
+    var acceptType = "xml";
+    var userid = $("#signUpId").val();
+    var userpw = $("#signUpPasswd").val();
+    var emails = $("#signUpEmail").val();	
     
-}
-
-/**
- * 로그인 function.
- * @returns 로그인을 한다.
- * @type  
-*/
-function fn_login() {
-    var params = {  uuid :  device.uuid }
-	$.mobile.loading("show");
-    alert('전송방식:RESTful\n전송Type:json, get\nURL:\n' + "/itf/logIniOS.do?userId=" + $("#loginId").val() + "&userPw=" + $("#loginPasswd").val());
-    EgovInterface.submitAsynchronous(
-                                    [params, "/itf/logIniOS.do?userId=" + $("#loginId").val() + "&userPw=" + $("#loginPasswd").val()],
-                                    function(result) {
-                                         console.log("InterfaceAPIGuide fn_login Completed");
-                                        var str = '{resultState:'+result.resultState+',resultMessage:'+result.resultMessage+'}';
-//                                        for (myKey in result){
-//                                            str += myKey + ':' + result[myKey] + '\n';
-//                                        }
-//                                        str += '}';
-                                        alert('응답방식:RESTful\n응답Type:json, post\nParam:\n' + str);
-//                                        fn_goWithdrawal();
-                                         $.mobile.loading("hide");
-                                         window.history.back();
-                                    },
-                                    function(error) {
-                                         console.log("InterfaceAPIGuide fn_login Failed");
-                                         var str = "";
-                                         for (myKey in error){
-                                             str += myKey + ' : ' + error[myKey] + '\n';
-                                         }
-                                         alert('계정 확인 필요.\n'+'응답방식:RESTful\n전송Type:json, post\nParam:\n' + str);
-                                         $.mobile.loading("hide");
-                                    }
-                                    );
-}
-
-
-
-/**
- * 회원가입 서버 전송 function.
- * @returns 회원가입 정보를 서버에 저장 요청한다.
- * @type  
-*/
-function fn_signUp() {
-
-    var params = {  uuid :  device.uuid,
-                    userId : $("#signUpId").val(), 
-                    userPw : $("#signUpPasswd").val(),
-                    emails : $("#signUpEmail").val()};	
-	
-//    $('#spaceused1').progressBar(100);
+    var params = {uuid :  device.uuid,			 
+            userId: userid,
+            userPw: userpw,
+            emails: emails};
     $.mobile.loading("show");
-    EgovInterface.submitAsynchronous(
-                                     [params, "/itf/addInterfaceiOSInfo.do"],
-                                     function(result) {
-                                         console.log("InterfaceAPIGuide fn_signUp Completed");
-                                        var s = JSON.stringify(result);
-                                         var str = '{resultState:'+result.resultState+',resultMessage:'+result.resultMessage+'}';
-//                                         for (myKey in result){
-//                                             str += result[myKey];
-//                                         }
-                                         alert('응답방식:RESTful\n응답Type:json, post\nParam:\n' + str);
-//                                        fn_goLogin();
-//                                        setTimeout("fn_alert()", 1500);
-                                         $.mobile.loading("hide");
-                                         window.history.back();
-                                     },
-                                     function(error) {
-                                         console.log("InterfaceAPIGuide fn_signUp Failed");
-                                         var str = "";
-                                         for (myKey in error){
-                                             str += myKey + ' : ' + error[myKey] + '\n';
-                                         }
-                                         alert('응답방식:RESTful\n응답Type:json, post\nParam:\n' + str);
-                                         $.mobile.loading("hide");
-                                     }
-                                     );
+    alert('전송방식:RESTful\n전송타입:POST('+ acceptType + ')\nparam:' + JSON.stringify(params).replace(userpw,'****'));
+    
+    // get the data from server
+    window.plugins.EgovInterface.post(url, acceptType, params, function(xmldata) {
+        /*
+        var data = JSON.parse(jsondata);		
+        if(data.resultState == "OK"){
+            $.mobile.changePage("#login", "slide", false, false);
+        }else{
+            jAlert(data.resultMessage, '오류', 'c');
+        }*/
+        console.log('DeviceAPIGuide fn_egov_subscribe_member request Complete');
+        alert('응답방식:RESTful\n응답타입:POST('+ acceptType + ')\nparam:' + xmldata);		
+        $.mobile.loading("hide");
+        if($(xmldata).find("resultState").text() == "OK"){
+            
+            window.history.back();
+        }else{
+            jAlert($(xmldata).find("resultMessage").text(), '오류', 'c');
+        }
+    });
+
+
 }
 
+
 /**
- * 회원탈퇴 요청 function.
- * @returns 회원탈퇴 요청한다.
+ * 회원탈퇴 정보 서버 전송 function.
+ * @returns 회원 탈퇴 성공 여부
  * @type  
 */
-function fn_withdrawal() {
+function fn_egov_secession_member() {
+    var url = "/itf/xml/withdrawal.do";
+    var acceptType = "xml";
+    var userid = $("#secessionMemberId").val();
+    var userpw = $("#secessionMemberPasswd").val();
+    
 
-    var params = {  userId : $("#signDownId").val(),
-                    userPw : $("#signDownPasswd").val() };
+    var params = {uuid :  device.uuid,
+            userId: userid,
+            userPw: userpw};
     $.mobile.loading("show");
-    EgovInterface.submitAsynchronous(
-                                     [params, "/itf/withdrawaliOS.do"],
-                                     function(result) {
-                                         console.log("InterfaceAPIGuide fn_withdrawal Completed");
-                                         var str = '{resultState:'+result.resultState+',resultMessage:'+result.resultMessage+'}';
-//                                         for (myKey in result){
-//                                             str += myKey + ':' + result[myKey] + '\n';
-//                                         }
-                                         alert('응답방식:RESTful\n응답Type:json, post\nParam:\n' + str);
-//                                        fn_goSignUp();
-                                         $.mobile.loading("hide");
-                                         window.history.back();
-                                     },
-                                     function(error) {
-                                         console.log("InterfaceAPIGuide fn_withdrawal Failed");
-                                         var str = "계정 확인 필요.\n";
-                                         for (myKey in error){
-                                             str += myKey + ' : ' + error[myKey] + '\n';
-                                         }
-                                        alert('응답방식:RESTful\n응답Type:json, post\nParam:\n' + str);
-                                         $.mobile.loading("hide");
-                                     }
-                                     );
-}
-
-/**
- * Network Info 전송 확인 function.
- * @returns 네트워크 정보를 서버에 전송전 사용자 확인을 수행한다.
- * @type  
-*/
-function confirm_signUp(){
-    jConfirm('전송방식:RESTful\n전송Type:json, post\nParam:\n' + '{ uuid:'+device.uuid+', userId:'+$("#signUpId").val()+', userPw:'+$("#signUpPasswd").val()+', emails:'+$("#signUpEmail").val()+')', '알림', 'c', function(r){
-        if(r == true){
-            fn_signUp();
+    alert('전송방식:RESTful\n전송타입:POST('+ acceptType + ')\nparam:' + JSON.stringify(params).replace(userpw,'****'));
+    
+    // get the data from server
+    window.plugins.EgovInterface.post(url, acceptType, params, function(xmldata) {
+        /*
+        var data = JSON.parse(jsondata);
+        if(data.resultState == "OK"){
+            jAlert(data.resultMessage, '성공', 'c', function(r){
+                if(r == true){
+                    $.mobile.changePage("#signUp", { transition: "slide", reverse: true });
         }else{
         }
-    });	
+        });
+        }else{
+        jAlert(data.resultMessage, '오류', 'c');
+        }		
+         */
+        console.log('DeviceAPIGuide fn_egov_secession_member request Complete');
+        alert('응답방식:RESTful\n응답타입:POST('+ acceptType + ')\nparam:' + xmldata);
+        $.mobile.loading("hide");
+        if($(xmldata).find("resultState").text() == "OK"){
+            jAlert($(xmldata).find("resultMessage").text(), '성공', 'c', function(r){
+                if(r == true){
+                    window.history.back();
+                }
+            });
+        }else{
+            jAlert($(xmldata).find("resultMessage").text(), '오류', 'c');
+        }
+    });
 }
 
 /**
@@ -175,118 +282,11 @@ function confirm_signUp(){
  * @returns 회원 탈퇴 전 사용자 확인을 수행한다.
  * @type  
 */
-function confirm_withdrawal(){
-    jConfirm('전송방식:RESTful\n전송Type:json, post\nParam:\n' + '{ userId:'+$("#signDownId").val()+', userPw:'+$("#signDownPasswd").val()+'}', '알림', 'c', function(r){
+function fn_egov_confirm_secession(){
+    jConfirm('회원탈퇴 하시겠습니까??', '알림', 'c', function(r){
         if(r == true){
-            fn_withdrawal();
-        }else{
-
+            fn_egov_secession_member();
         }
     });	
 }
-
-
-
-// Wait for PhoneGap to load
-// 
-document.addEventListener("deviceready", onDeviceReady, false);
-
-// PhoneGap is loaded and it is now safe to make calls PhoneGap methods
-//
-function onDeviceReady() {
-    console.log("InterfaceAPIGuide deviceready Success");
-    fn_egov_network_notification();
-    
-    $('#goSignup').click(function () {
-                             //회원가입 화면 이동
-                             fn_goSignUp() ;
-                             });
-    $('#goLogin').click(function () {
-                        //로그인 화면 이동
-                        fn_goLogin();
-                        });
-    $('#goSigndown').click(function () {
-                        //회원탈퇴 화면 이동
-                        fn_goWithdrawal();
-                        });
-    
-    $.validator.setDefaults({
-                            
-                            submitHandler: function() { 
-                                if($.mobile.activePage.is('#login')) {
-                                    if (fn_egov_network_check(false))
-                                        // 로그인
-                                        fn_login();
-                                } else if($.mobile.activePage.is('#signUp')) {
-                                    if (fn_egov_network_check(false))
-                                        // 회원가입
-                                        confirm_signUp();
-                                } else  if($.mobile.activePage.is('#signDown')) {
-                                    if (fn_egov_network_check(false))
-                                        // 회원탈퇴
-                                        confirm_withdrawal();
-                                }
-                            }
-                    });
-    
-    // validation check
-    $("#subscribeForm").validate();
-    $("#loginForm").validate();
-    $("#secessionForm").validate();
-    
-    infoiScroll();
-    
-    loadiScroll();
-
-}
-
-var myScroll;
-
-function loadiScroll() {                
-
-    myScroll = new IScroll('#wrapper', {
-        scrollX: true,
-        scrollbars: true,
-        mouseWheel: true,
-        interactiveScrollbars: true,
-        shrinkScrollbars: 'scale',
-        fadeScrollbars: true,
-        click: true
-    });
-    
-    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-    
-}
-
-/**
- * iscroll setting function
- * @returns iscroll event 처리
- * @type
- */
-function infoiScroll() {                
-
-    myScroll = new IScroll('#wrapperInfo', {
-        scrollX: true,
-        scrollbars: true,
-        mouseWheel: true,
-        interactiveScrollbars: true,
-        shrinkScrollbars: 'scale',
-        fadeScrollbars: true,
-        click: true
-    });
-    
-    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-    
-}
-
-
-
-
-
-
-
-
-
-
-
 

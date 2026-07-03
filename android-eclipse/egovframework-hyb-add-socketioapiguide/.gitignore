@@ -1,14 +1,26 @@
-# Non-project-specific build files:
-build.xml
+# Android Eclipse + Ant/Cordova (eGov Device API 3.10.x)
+
+# Eclipse / Ant
+bin/
+gen/
+out/
 local.properties
-/gradlew
-/gradlew.bat
-/gradle
-# Ant builds
-ant-build
-ant-gen
-# Eclipse builds
-gen
-out
-# Gradle builds
-/build
+
+# Android build outputs
+*.apk
+*.ap_
+*.dex
+*.class
+
+# IntelliJ (if opened in Android Studio)
+.idea/
+*.iml
+
+# Cordova / Node (if cordova folder exists)
+node_modules/
+platforms/
+plugins/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.ios.mda.service.EgovMediaiOSAPIService;
 import egovframework.hyb.ios.mda.service.MediaiOSAPIFileVO;
 
@@ -61,7 +62,9 @@ public class EgovMediaiOSFileMngUtil extends EgovAbstractServiceImpl {
 	
 	
 	public MediaiOSAPIFileVO writeUploadedFile(MultipartFile file) throws Exception{
-		
+
+		DeviceAPIFileUploadValidator.validateMdaUpload(file);
+
 		String originFileName = file.getOriginalFilename();
 		int index = originFileName.lastIndexOf(".");
 		String fileExt = originFileName.substring(index + 1);
@@ -86,8 +89,7 @@ public class EgovMediaiOSFileMngUtil extends EgovAbstractServiceImpl {
 				byte[] bytes = file.getBytes();
 				input = new ByteArrayInputStream(bytes);
 				
-				// 260320 KISA 보안취약점 패치
-				File videoFile = new File(EgovWebUtil.filePathBlackList(filePath + newName));
+				File videoFile = new File(filePath + newName);
 				out = new FileOutputStream(videoFile);
 				int nextChar;
 				while((nextChar = input.read()) != -1){

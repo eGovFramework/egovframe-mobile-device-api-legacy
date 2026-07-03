@@ -31,6 +31,7 @@ import egovframework.hyb.add.nwk.service.NetworkAndroidAPIVO;
  * @  수정일            수정자        수정내용
  * @ ---------        ---------    -------------------------------
  * @ 2012. 8. 20.        이율경        최초생성
+ * @ 2026. 6. 26.        이백행        [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 8. 20.
@@ -45,9 +46,8 @@ public class NetworkAndroidAPIDAO extends EgovComAbstractDAO {
      * 네트워크 정보를 등록한다.
      * @param vo - 등록할 정보가 담긴 NetworkAPIVO
      * @return 등록 결과
-     * @exception Exception
      */
-    public int insertNetworkInfo(NetworkAndroidAPIVO vo) throws Exception {
+    public int insertNetworkInfo(NetworkAndroidAPIVO vo) {
         return (Integer)insert("networkAndroidAPIDAO.insertNetworkInfo", vo);
     }
 
@@ -55,9 +55,8 @@ public class NetworkAndroidAPIDAO extends EgovComAbstractDAO {
      * 네트워크 정보를 수정한다.
      * @param vo - 수정할 정보가 담긴 NetworkAPIVO
      * @return void형
-     * @exception Exception
      */
-    public int updateNetworkInfo(NetworkAndroidAPIVO vo) throws Exception {
+    public int updateNetworkInfo(NetworkAndroidAPIVO vo) {
         return (Integer)update("networkAndroidAPIDAO.updateNetworkInfo", vo);
     }
 
@@ -65,9 +64,8 @@ public class NetworkAndroidAPIDAO extends EgovComAbstractDAO {
      * 네트워크 정보를 삭제한다.
      * @param vo - 삭제할 정보가 담긴 NetworkAPIVO
      * @return void형 
-     * @exception Exception
      */
-    public int deleteNetworkInfo(NetworkAndroidAPIVO vo) throws Exception {
+    public int deleteNetworkInfo(NetworkAndroidAPIVO vo) {
         return (Integer)delete("networkAndroidAPIDAO.deleteNetworkInfo", vo);
     }
 
@@ -75,9 +73,8 @@ public class NetworkAndroidAPIDAO extends EgovComAbstractDAO {
      * 네트워크 정보를 조회한다.
      * @param vo - 조회할 정보가 담긴 NetworkAPIVO
      * @return 조회한 네트워크 정보
-     * @exception Exception
      */
-    public NetworkAndroidAPIVO selectNetworkInfo(NetworkAndroidAPIVO vo) throws Exception {
+    public NetworkAndroidAPIVO selectNetworkInfo(NetworkAndroidAPIVO vo) {
         return (NetworkAndroidAPIVO) selectOne("networkAndroidAPIDAO.selectNetworkInfo", vo);
     }
 
@@ -85,9 +82,8 @@ public class NetworkAndroidAPIDAO extends EgovComAbstractDAO {
      * 네트워크 정보 목록을 조회한다.
      * @param vo - 조회할 정보가 담긴 NetworkAPIDefaultVO
      * @return 네트워크 정보 목록
-     * @exception Exception
      */
-    public List<?> selectNetworkInfoList(NetworkAndroidAPIDefaultVO searchNetworkVO) throws Exception {
+    public List<?> selectNetworkInfoList(NetworkAndroidAPIDefaultVO searchNetworkVO) {
         return selectList("networkAndroidAPIDAO.selectNetworkInfoList", searchNetworkVO);
         //return null;
     }
@@ -96,7 +92,6 @@ public class NetworkAndroidAPIDAO extends EgovComAbstractDAO {
      * 네트워크 정보 총 갯수를 조회한다.
      * @param  vo - 조회할 정보가 담긴 NetworkAPIDefaultVO
      * @return 네트워크 정보 총 갯수
-     * @exception
      */
     public int selectNetworkInfoListTotCnt(NetworkAndroidAPIDefaultVO searchVO) {
         return (Integer) selectOne("networkAPIDAO.selectNetworkInfoListTotCnt_S", searchVO);

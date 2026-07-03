@@ -35,6 +35,7 @@
 				A.MD_CODE, B.FILE_SN, B.FILE_STRE_COURS, B.STRE_FILE_NM, B.FILE_EXTSN, B.ORIGNL_FILE_NM
 			FROM MEDIA A JOIN FILE_DETAIL_INFO B USING(FILE_SN)
 			WHERE A.SN = #{sn}
+			AND A.UUID = #{uuid}
 			
 	</select>
 	
@@ -43,6 +44,7 @@
 			UPDATE	MEDIA
 			 SET REVIV_CO = REVIV_CO + 1
  			WHERE  SN = #{sn}
+			AND UUID = #{uuid}
 		
 	</update>
 	

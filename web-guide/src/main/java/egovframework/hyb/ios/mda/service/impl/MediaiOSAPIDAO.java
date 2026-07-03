@@ -32,6 +32,7 @@ import org.springframework.stereotype.Repository;
  * @ ---------		---------	-------------------------------
  * @ 2012. 7. 30.		이율경		최초생성
  * @ 2012. 8. 14.		이해성       커스터마이징
+ * @ 2026. 6. 26.       이백행        [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
  * 
  * @author 디바이스 API 실행환경 팀
  * @since 2012. 7. 30.
@@ -46,9 +47,8 @@ public class MediaiOSAPIDAO extends EgovComAbstractDAO {
 	 * 녹음 Media를 등록한다.
 	 * @param vo - 등록할 정보가 담긴 CameraAPIVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertMediaInfo(MediaiOSAPIFileVO vo) throws Exception {
+    public int insertMediaInfo(MediaiOSAPIFileVO vo) {
     	return (Integer)insert("mediaiOSAPIDAO.insertMediaInfo", vo);
     }
     
@@ -56,9 +56,8 @@ public class MediaiOSAPIDAO extends EgovComAbstractDAO {
 	 * 녹음 파일을 등록한다.
 	 * @param vo - 등록할 파일 정보가 담긴 CameraiOSAPIFileVO
 	 * @return 등록 결과
-	 * @exception Exception
 	 */
-    public int insertMediaRecordFile(MediaiOSAPIFileVO vo) throws Exception {
+    public int insertMediaRecordFile(MediaiOSAPIFileVO vo) {
     	return (Integer)insert("mediaiOSAPIDAO.insertMediaRecordFile", vo);
     }
     
@@ -66,9 +65,8 @@ public class MediaiOSAPIDAO extends EgovComAbstractDAO {
 	 * 녹음 재생횟수를 수정한다.
 	 * @param vo - 등록할 정보가 담긴 MediaiOSAPIFileVO
 	 * @return 수정 결과
-	 * @exception Exception
 	 */
-    public int updateMediaInfoRevivCo(MediaiOSAPIVO vo) throws Exception {
+    public int updateMediaInfoRevivCo(MediaiOSAPIVO vo) {
     	return (Integer)update("mediaiOSAPIDAO.updateMediaInfoRevivCo", vo);
     }
     
@@ -76,9 +74,8 @@ public class MediaiOSAPIDAO extends EgovComAbstractDAO {
 	 * 미디어 정보를 조회한다.
 	 * @param VO - 조회할 정보가 담긴 MediaiOSAPIVO
 	 * @return 조회 목록
-	 * @exception Exception
 	 */
-	public MediaiOSAPIFileVO selectMediaInfoDetail(MediaiOSAPIVO vo) throws Exception {
+	public MediaiOSAPIFileVO selectMediaInfoDetail(MediaiOSAPIVO vo) {
 		return (MediaiOSAPIFileVO) selectOne("mediaiOSAPIDAO.selectMediaInfoDetail", vo);
 	}
 	
@@ -86,9 +83,8 @@ public class MediaiOSAPIDAO extends EgovComAbstractDAO {
 	 * 미디어 목록을 조회한다.
 	 * @param VO - 조회할 정보가 담긴 MediaiOSAPIDefaultVO
 	 * @return 조회 목록
-	 * @exception Exception
 	 */
-	public List<?> selectMediaInfoList(MediaiOSAPIVO searchVO) throws Exception {
+	public List<?> selectMediaInfoList(MediaiOSAPIVO searchVO) {
 		return selectList("mediaiOSAPIDAO.selectMediaInfoList", searchVO);
 	}
 	
@@ -96,9 +92,8 @@ public class MediaiOSAPIDAO extends EgovComAbstractDAO {
 	 * 미디어 파일 정보를 조회한다.
 	 * @param vo - 조회할 정보가 담긴 MediaiOSAPIFileVO
 	 * @return 이미지 파일 정보
-	 * @exception Exception
 	 */
-    public MediaiOSAPIFileVO selectMediaFileInfo(MediaiOSAPIFileVO vo) throws Exception {
+    public MediaiOSAPIFileVO selectMediaFileInfo(MediaiOSAPIFileVO vo) {
         return (MediaiOSAPIFileVO) selectOne("mediaiOSAPIDAO.selectMediaFileInfo", vo);
     }
 }

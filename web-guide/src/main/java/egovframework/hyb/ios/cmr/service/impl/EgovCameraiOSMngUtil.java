@@ -2,7 +2,6 @@ package egovframework.hyb.ios.cmr.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import egovframework.com.cmm.security.DeviceAPIFileUploadValidator;
 import egovframework.hyb.ios.cmr.service.CameraiOSAPIFileVO;
 import egovframework.hyb.ios.cmr.service.EgovCameraiOSAPIService;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -60,12 +60,13 @@ public class EgovCameraiOSMngUtil extends EgovAbstractServiceImpl {
 	
 	public CameraiOSAPIFileVO writeUploadedFile(MultipartFile file) throws Exception{
 		
+		DeviceAPIFileUploadValidator.validateCmrUpload(file);
+
 		String originFileName = file.getOriginalFilename();
 		int index = originFileName.lastIndexOf(".");
 		String fileExt = originFileName.substring(index + 1);
 		String newName = "IMAGE_" + getTimeStamp() + ".jpg";
 		
-		// 파일 경로 바꾸어야함.
 		String filePath = propertiesService.getString("fileStorePath");
 		
 		CameraiOSAPIFileVO fileVO = new CameraiOSAPIFileVO();
@@ -76,7 +77,9 @@ public class EgovCameraiOSMngUtil extends EgovAbstractServiceImpl {
 		fileVO.setOrignlFileNm(originFileName);
 		fileVO.setFileExtsn(fileExt);
 		fileVO.setFileSize(Long.toString(file.getSize()));
+		
 		IOException excep = null;
+		
 		if(!file.isEmpty()){
 			InputStream input = null;
 			FileOutputStream out = null;
@@ -84,8 +87,7 @@ public class EgovCameraiOSMngUtil extends EgovAbstractServiceImpl {
 				byte[] bytes = file.getBytes();
 				input = new ByteArrayInputStream(bytes);
 				
-				// 260320 KISA 보안취약점 패치
-				File videoFile = new File(EgovWebUtil.filePathBlackList(filePath + newName));
+				File videoFile = new File(filePath + newName);
 				out = new FileOutputStream(videoFile);
 				int nextChar;
 				while((nextChar = input.read()) != -1){
@@ -93,10 +95,11 @@ public class EgovCameraiOSMngUtil extends EgovAbstractServiceImpl {
 					out.flush();					
 				}
 			//2017-02-27 최두영 시큐어코딩(ES)-36. 부적절한 예외 처리[CWE253, CWE-440, CWE-754] 95-95
-            }catch(FileNotFoundException e){
-            	LOGGER.error("["+e.getClass()+"] Try/Catch...FileOutputStream : " , e.getMessage());
-            } catch(Exception e) {
-            	LOGGER.error("["+e.getClass()+"] Try/Catch... : " + e.getMessage());
+            }catch(IOException e){
+            	LOGGER.error("["+e.getClass()+"] Try/Catch...bytes : " + e.getMessage());
+            	throw new EgovBizException("Fail to open FileOutPutStream : " + e.getMessage());
+            }catch (Exception e) {
+            	LOGGER.error("["+e.getClass()+"] Fail to upload file : ", e.getMessage());
 				throw new EgovBizException("Fail to upload file : " + e.getMessage());
 			}finally{
 				try {
@@ -104,16 +107,18 @@ public class EgovCameraiOSMngUtil extends EgovAbstractServiceImpl {
 						out.close();
 					}
 					
-				} catch (IOException e) {
+				} catch(IOException e) {
 					LOGGER.debug("Fail to close fileoutputstrem : {}", e.getMessage());
 					excep = e;
 				}
 			}
 		}
-		egovCameraiOSAPIService.insertCameraPhotoAlbumFile(fileVO);
+		
 		if(excep != null) {
         	throw new EgovBizException("Fail to close fileoutputstrem : " + excep.getMessage());
         }
+		egovCameraiOSAPIService.insertCameraPhotoAlbumFile(fileVO);
+		
 		return fileVO;
 	}
 	
@@ -126,15 +131,12 @@ public class EgovCameraiOSMngUtil extends EgovAbstractServiceImpl {
 		try {
 		    SimpleDateFormat sdfCurrent = new SimpleDateFormat(pattern, Locale.KOREA);
 		    Timestamp ts = new Timestamp(System.currentTimeMillis());
-
 		    rtnStr = sdfCurrent.format(ts.getTime());
-        //2017-02-27 최두영 시큐어코딩(ES)-36. 부적절한 예외 처리[CWE253, CWE-440, CWE-754] 128-128
-        }catch(NullPointerException e){
-        	LOGGER.error("["+e.getClass()+"] Try/Catch...sdfCurrent : " , e.getMessage());
-        } catch(Exception e) {
-		    //e.printStackTrace();			
-		    //throw new RuntimeException(e);	// 보안점검 후속조치
-        	LOGGER.error("["+e.getClass()+"] Try/Catch... : " + e.getMessage());
+        //2017-02-27 최두영 시큐어코딩(ES)-36. 부적절한 예외 처리[CWE253, CWE-440, CWE-754] 130-130
+        } catch(NullPointerException e){
+        	LOGGER.error("["+e.getClass()+"] Try/Catch... sdfCurrent : " , e.getMessage());
+        } catch (Exception e) {            
+        	LOGGER.error("["+e.getClass()+"] Try/Catch... : ", e.getMessage());
 		}
 
 		return rtnStr;

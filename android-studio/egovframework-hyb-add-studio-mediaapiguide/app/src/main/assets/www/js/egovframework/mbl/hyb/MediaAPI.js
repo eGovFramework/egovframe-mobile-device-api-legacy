@@ -99,6 +99,23 @@ function convertTime(number) {
     return hour + ":" + minute + ":" + second;
 }
 
+
+/** HTML 출력용 XSS 이스케이프 */
+function fn_egov_escapeHtml(value) {
+    if (value == null) {
+        return "";
+    }
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll("\"", "&#34;")
+        .replaceAll("'", "&#39;")
+        .replaceAll("\\.", "&#46;")
+        .replaceAll("%2E", "&#46;")
+        .replaceAll("%2F", "&#47;");
+}
+
 /*********************************************************
  * HTML 관련 함수
  *********************************************************/
@@ -115,8 +132,8 @@ function fn_egov_displayList(xmldata) {
     $(xmldata).find("mediaAndroidAPIVOList").each(function(){
         
                     var sn = $(this).find("sn").text();
-                    var mdSj = $(this).find("mdSj").text();
-                    var revivCo = $(this).find("revivCo").text();
+                    var mdSj = fn_egov_escapeHtml($(this).find("mdSj").text());
+                    var revivCo = fn_egov_escapeHtml($(this).find("revivCo").text());
                     
                     html += '<li>';
                     html += '     <a href="#" onclick="javascript:fn_egov_mediaInfoDetail(\'' + sn + '\')">';
@@ -679,7 +696,7 @@ function fn_egov_insertRecordFile() {
  */
 function fn_egov_mediaAPIConfig(sn) {
     
-    var src = context + "/mda/getMedia.do?sn=" + sn;
+    var src = context + "/mda/getMedia.do?sn=" + sn + "&uuid=" + encodeURIComponent(device.uuid);
     
     if(mediaObj) {
         
