@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
  * @  수정일              수정자                 수정내용
  * @ 
  * @ 2012.07.31   이한철                 최초생성
- *   2026.06.26   이백행                 [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
+ *   2026.06.26   이백행                 [2026년 컨트리뷰션] 불필요한 예외 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 05. 14
