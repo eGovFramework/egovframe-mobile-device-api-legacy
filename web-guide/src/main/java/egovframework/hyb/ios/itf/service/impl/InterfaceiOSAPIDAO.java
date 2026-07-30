@@ -25,11 +25,12 @@ import egovframework.hyb.ios.itf.service.InterfaceiOSAPIVO;
  * @Class Name : InterfaceiOSAPIDAO.java
  * @Description : InterfaceiOSAPIDAO DAO Class
  * @Modification Information  
- * @
- * @  수정일                 수정자                 수정내용
- * @ 
- * @ 2012.07.11    이한철                  최초생성
- *   2026.06.26    이백행                  [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
+ * 
+ *   수정일                 수정자                 수정내용
+ *  
+ *   2012.07.11  이한철          최초생성
+ *   2026.06.26  이백행          [2026년 컨트리뷰션] 불필요한 예외 제거
+ *   2026.07.18  이백행          [2026년 컨트리뷰션] 누락된 DAO 메서드와 예외 선언 추가
  * 
  * @author 모바일 디바이스 API 팀
  * @since 2012. 07. 11
@@ -77,6 +78,12 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
                 "interfaceiOSAPIDAO.selectInterfaceInfo", vo);
     }
 
+    public InterfaceiOSAPIVO selectInterfaceInfoByUserId(
+            InterfaceiOSAPIVO vo) {
+        return (InterfaceiOSAPIVO) selectOne(
+                "interfaceiOSAPIDAO.selectInterfaceInfoByUserId", vo);
+    }
+
     /**
      * 회원탈퇴를 한다.
      * 
@@ -86,6 +93,10 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
      */
     public int deleteInterfaceInfo(InterfaceiOSAPIVO vo) {
         return delete("interfaceiOSAPIDAO.deleteInterfaceInfo", vo);
+    }
+
+    public int deleteInterfaceInfoByUserId(InterfaceiOSAPIVO vo) {
+        return delete("interfaceiOSAPIDAO.deleteInterfaceInfoByUserId", vo);
     }
 
 }

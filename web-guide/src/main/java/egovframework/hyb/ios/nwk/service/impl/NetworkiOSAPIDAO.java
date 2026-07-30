@@ -33,7 +33,7 @@ import org.springframework.stereotype.Repository;
  * @ ---------   ---------   -------------------------------
  * @ 2012.05.14   서준식                 최초생성
  * @ 2012.08.01    이해성        DeviceAPIGuide Network Info
- *   2026.06.26   이백행                 [2026년 컨트리뷰션] 불필요한 예외(throws Exception) 제거
+ *   2026.06.26   이백행                 [2026년 컨트리뷰션] 불필요한 예외 제거
  * 
  * @author 디바이스 API 실행환경 개발팀
  * @since 2012. 05. 14

@@ -20,7 +20,8 @@ public class DeviceAPIUploadExceptionHandler {
 
     @ExceptionHandler(EgovBizException.class)
     @ResponseBody
-    public Object handleUploadValidationFailure(EgovBizException exception, HttpServletRequest request) {
+    public Object handleUploadValidationFailure(EgovBizException exception, HttpServletRequest request)
+            throws EgovBizException {
         String servletPath = request.getServletPath();
         if (!isUploadPath(servletPath)) {
             throw exception;
