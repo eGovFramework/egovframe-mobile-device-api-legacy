@@ -7,8 +7,9 @@ import egovframework.hyb.ios.ctt.service.ContactsiOSAPIVO;
 import egovframework.hyb.ios.ctt.service.EgovContactsiOSAPIService;
 import javax.annotation.Resource;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,10 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class EgovContactsIosAPIController {
-	
+	// json-lib의 JSONObject.toBean은 알 수 없는 속성을 무시하므로 동일하게 관대하게 둔다.
+	private static final ObjectMapper MAPPER = new ObjectMapper()
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
 	/** EgovContactsiOSAPIService */
 	@Resource(name="egovContactsiOSAPIService")
 	private EgovContactsiOSAPIService egovContactsiOSAPIService;
@@ -68,13 +72,15 @@ public class EgovContactsIosAPIController {
 	public @ResponseBody ContactsiOSAPIVO addContactsInfoXml(ContactsiOSAPIVO contactVO) throws Exception{
 		String makeJSONString = contactVO.getContactsList().replaceAll("&quot;", "\"");
 		String decodeName = java.net.URLDecoder.decode(makeJSONString,"utf-8");
-		JSONObject jsonObject = JSONObject.fromObject(decodeName);
-		JSONArray jsonArray = jsonObject.getJSONArray("contactsList");
+		JsonNode jsonArray = MAPPER.readTree(decodeName).get("contactsList");
+		if (jsonArray == null || !jsonArray.isArray()) {
+			throw new IllegalArgumentException("contactsList가 없습니다.");
+		}
 		
 		int nGetCount = jsonArray.size();
 		ContactsiOSAPIVO inputVO = null, selectVO = null;
 		for(int i = 0 ; i < nGetCount ; i++) {
-			inputVO = (ContactsiOSAPIVO) JSONObject.toBean((JSONObject)jsonArray.get(i), ContactsiOSAPIVO.class);
+			inputVO = MAPPER.treeToValue(jsonArray.get(i), ContactsiOSAPIVO.class);
 			selectVO = egovContactsiOSAPIService.selectContactsInfo(inputVO);
 			if(selectVO != null) {
 				inputVO.setNewId(selectVO.getContactId());
@@ -112,14 +118,16 @@ public class EgovContactsIosAPIController {
 	public @ResponseBody ContactsiOSAPIVO updateContactsiOS(ContactsiOSAPIVO contactVO) throws Exception{
 		String makeJSONString = contactVO.getContactsList().replaceAll("&quot;", "\"");
 		
-		JSONObject jsonObject = JSONObject.fromObject(makeJSONString);
-		JSONArray jsonArray = jsonObject.getJSONArray("contactsList");
+		JsonNode jsonArray = MAPPER.readTree(makeJSONString).get("contactsList");
+		if (jsonArray == null || !jsonArray.isArray()) {
+			throw new IllegalArgumentException("contactsList가 없습니다.");
+		}
 		
 		int nGetCount = jsonArray.size();
 		
 		ContactsiOSAPIVO inputVO = null, selectVO = null;;		
 		for(int i = 0 ; i < nGetCount ; i++) {
-			inputVO = (ContactsiOSAPIVO) JSONObject.toBean((JSONObject)jsonArray.get(i), ContactsiOSAPIVO.class);
+			inputVO = MAPPER.treeToValue(jsonArray.get(i), ContactsiOSAPIVO.class);
 			selectVO = egovContactsiOSAPIService.selectContactsInfo(inputVO);
 			selectVO.setNewId(inputVO.getNewId());
 			egovContactsiOSAPIService.updateContactsInfo(selectVO);

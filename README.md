@@ -37,6 +37,7 @@ eGovFramework **5.0.0 이상**을 사용하신다면 [egovframe-mobile-device-ap
 
 - Java 8, Maven, DB(MySQL 등) 필요
 - WAR 빌드 후 Tomcat 등에 배포
+- WAR 파일명: `Template-DeviceAPI-Total_Web-<버전>.war`(예: 이 브랜치는 `-3.9.0.war`). `globals.properties`의 컨텍스트 경로와 맞지 않으면 조정하세요.
 - 데모 페이지: `index.jsp`, `chat-sockjs.jsp`, `test-ajax.jsp` (로컬 확인용)
 
 ### 모바일 앱
@@ -93,8 +94,8 @@ eGovFramework **5.0.0 이상**을 사용하신다면 [egovframe-mobile-device-ap
 | eGovFramework RTE | **3.9.0** |
 | Spring Framework | **4.3.22.RELEASE** |
 | spring-security-crypto | 4.2.20.RELEASE |
-| commons-fileupload | 1.3.3 |
-| jackson-databind | 2.9.10.5 |
+| commons-fileupload | 1.6.0 |
+| jackson-databind | 2.18.11 |
 | Java | 8 |
 
 ---
