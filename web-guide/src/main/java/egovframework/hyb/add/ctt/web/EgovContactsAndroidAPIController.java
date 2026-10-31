@@ -1,5 +1,6 @@
 package egovframework.hyb.add.ctt.web;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import egovframework.hyb.add.ctt.service.ContactsAndroidAPIVO;
 import egovframework.hyb.add.ctt.service.ContactsAndroidAPIVOList;
 import egovframework.hyb.add.ctt.service.EgovContactsAndroidAPIService;
+import egovframework.rte.fdl.cmmn.exception.BaseRuntimeException;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**  
  * @Class Name : EgovContactsAndroidAPIController.java
@@ -34,6 +37,10 @@ import net.sf.json.JSONObject;
  */
 @Controller
 public class EgovContactsAndroidAPIController {
+
+	// json-lib의 JSONObject.toBean은 알 수 없는 속성을 무시하므로 동일하게 관대하게 둔다.
+	private static final ObjectMapper MAPPER = new ObjectMapper()
+			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
 	/** EgovContactsAndroidAPIService */
 	@Resource(name = "egovContactsAndroidAPIService")
@@ -82,14 +89,25 @@ public class EgovContactsAndroidAPIController {
 	public @ResponseBody
 	ContactsAndroidAPIVO addContactsInfoXml(ContactsAndroidAPIVO contactVO) throws Exception {
 
-		JSONObject jsonObject = JSONObject.fromObject(contactVO.getContactsList().replaceAll("&quot;", "\""));
-		JSONArray jsonArray = jsonObject.getJSONArray("contactsList");
+		JsonNode jsonArray;
+		try {
+			jsonArray = MAPPER.readTree(contactVO.getContactsList().replaceAll("&quot;", "\"")).get("contactsList");
+		} catch (IOException e) {
+			throw new BaseRuntimeException(e);
+		}
+		if (jsonArray == null || !jsonArray.isArray()) {
+			throw new BaseRuntimeException("contactsList가 없습니다.");
+		}
 
 		int nGetCount = jsonArray.size();
 
 		ContactsAndroidAPIVO inputVO = null, selectVO = null;
 		for (int i = 0; i < nGetCount; i++) {
-			inputVO = (ContactsAndroidAPIVO) JSONObject.toBean((JSONObject) jsonArray.get(i), ContactsAndroidAPIVO.class);
+			try {
+				inputVO = MAPPER.treeToValue(jsonArray.get(i), ContactsAndroidAPIVO.class);
+			} catch (IOException e) {
+				throw new BaseRuntimeException(e);
+			}
 			selectVO = egovContactsAndroidAPIService.selectContactsInfo(inputVO);
 			if (selectVO != null) {
 				inputVO.setNewId(selectVO.getContactId());
@@ -134,14 +152,25 @@ public class EgovContactsAndroidAPIController {
 	public @ResponseBody
 	ContactsAndroidAPIVO updateContactsXml(ContactsAndroidAPIVO contactVO) throws Exception {
 
-		JSONObject jsonObject = JSONObject.fromObject(contactVO.getContactsList().replaceAll("&quot;", "\""));
-		JSONArray jsonArray = jsonObject.getJSONArray("contactsList");
+		JsonNode jsonArray;
+		try {
+			jsonArray = MAPPER.readTree(contactVO.getContactsList().replaceAll("&quot;", "\"")).get("contactsList");
+		} catch (IOException e) {
+			throw new BaseRuntimeException(e);
+		}
+		if (jsonArray == null || !jsonArray.isArray()) {
+			throw new BaseRuntimeException("contactsList가 없습니다.");
+		}
 
 		int nGetCount = jsonArray.size();
 
 		ContactsAndroidAPIVO inputVO = null, selectVO = null;;
 		for (int i = 0; i < nGetCount; i++) {
-			inputVO = (ContactsAndroidAPIVO) JSONObject.toBean((JSONObject) jsonArray.get(i), ContactsAndroidAPIVO.class);
+			try {
+				inputVO = MAPPER.treeToValue(jsonArray.get(i), ContactsAndroidAPIVO.class);
+			} catch (IOException e) {
+				throw new BaseRuntimeException(e);
+			}
 			selectVO = egovContactsAndroidAPIService.selectContactsInfo(inputVO);
 			selectVO.setNewId(inputVO.getNewId());
 			egovContactsAndroidAPIService.updateContactsInfo(selectVO);

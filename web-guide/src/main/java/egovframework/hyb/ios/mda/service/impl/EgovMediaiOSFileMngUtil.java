@@ -89,7 +89,7 @@ public class EgovMediaiOSFileMngUtil extends EgovAbstractServiceImpl {
 				byte[] bytes = file.getBytes();
 				input = new ByteArrayInputStream(bytes);
 				
-				File videoFile = new File(filePath + newName);
+				File videoFile = new File(EgovWebUtil.filePathBlackList(filePath + newName));
 				out = new FileOutputStream(videoFile);
 				int nextChar;
 				while((nextChar = input.read()) != -1){

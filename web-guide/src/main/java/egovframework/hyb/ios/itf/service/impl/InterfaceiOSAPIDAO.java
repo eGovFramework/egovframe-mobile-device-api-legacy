@@ -76,6 +76,11 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
         return (InterfaceiOSAPIVO) selectOne(
                 "interfaceiOSAPIDAO.selectInterfaceInfo", vo);
     }
+    public InterfaceiOSAPIVO selectInterfaceInfoByUserId(
+            InterfaceiOSAPIVO vo) {
+        return (InterfaceiOSAPIVO) selectOne(
+                "interfaceiOSAPIDAO.selectInterfaceInfoByUserId", vo);
+    }
 
     /**
      * 회원탈퇴를 한다.
@@ -86,6 +91,9 @@ public class InterfaceiOSAPIDAO extends EgovComAbstractDAO {
      */
     public int deleteInterfaceInfo(InterfaceiOSAPIVO vo) {
         return delete("interfaceiOSAPIDAO.deleteInterfaceInfo", vo);
+    }
+    public int deleteInterfaceInfoByUserId(InterfaceiOSAPIVO vo) {
+        return delete("interfaceiOSAPIDAO.deleteInterfaceInfoByUserId", vo);
     }
 
 }

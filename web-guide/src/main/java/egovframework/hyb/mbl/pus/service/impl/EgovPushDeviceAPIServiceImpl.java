@@ -52,8 +52,9 @@ import javapns.notification.AppleNotificationServerBasicImpl;
 import javapns.notification.PushNotificationManager;
 import javapns.notification.PushNotificationPayload;
 import javapns.notification.PushedNotification;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 /**  
  * @Class Name : EgovPushDeviceAPIServiceImpl.java
  * @Description : EgovPushDeviceAPIServiceImpl Class
@@ -76,6 +77,7 @@ import net.sf.json.JSONObject;
 public class EgovPushDeviceAPIServiceImpl extends EgovAbstractServiceImpl implements EgovPushDeviceAPIService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovPushDeviceAPIServiceImpl.class);
+	private static final ObjectMapper MAPPER = new ObjectMapper();
 
 	private static String   APNS_CERTIFICATE_PATH	= "C:/eclipse-jee-mars-2-win32-x86_64/egov_push_test_cert.p12";
 	private static String   APNS_CERTIFICATE_PWD	= "egov1234";      // 푸시 인증서 비밀번호
@@ -180,9 +182,8 @@ public class EgovPushDeviceAPIServiceImpl extends EgovAbstractServiceImpl implem
 		   try{
 		    // 3. 푸시 데이터 생성
 		    PushNotificationPayload payLoad = new PushNotificationPayload();
-		    JSONObject jo_body = new JSONObject();
-		    JSONObject jo_aps = new JSONObject();
-		    JSONArray ja = new JSONArray();
+		    ObjectNode jo_body = JsonNodeFactory.instance.objectNode();
+		    ObjectNode jo_aps = JsonNodeFactory.instance.objectNode();
 		    jo_aps.put("alert",msg);
 		    jo_aps.put("badge",APNS_BADGE);
 		    jo_aps.put("sound",APNS_SOUND);
@@ -290,18 +291,18 @@ public class EgovPushDeviceAPIServiceImpl extends EgovAbstractServiceImpl implem
 	    	headers.add("Authorization", "Bearer " + googleCredential.getAccessToken());
 	    	headers.add("content-type", MediaType.APPLICATION_JSON_VALUE);
 
-	    	JSONObject notification = new JSONObject();
+	    	ObjectNode notification = JsonNodeFactory.instance.objectNode();
 	    	notification.put("title", "FCM Test Title"); // Push 제목
 	    	notification.put("body", pushMessage); // Push 내용
 
-	    	JSONObject message = new JSONObject();
+	    	ObjectNode message = JsonNodeFactory.instance.objectNode();
 	    	message.put("token", pushRegId); // 디바이스 토큰
 	    	message.put("notification", notification);
 
-	    	JSONObject jsonParams = new JSONObject();
+	    	ObjectNode jsonParams = JsonNodeFactory.instance.objectNode();
 	    	jsonParams.put("message", message);
 
-	    	HttpEntity<JSONObject> httpEntity = new HttpEntity<JSONObject>(jsonParams, headers);
+	    	HttpEntity<String> httpEntity = new HttpEntity<String>(MAPPER.writeValueAsString(jsonParams), headers);
 	    	RestTemplate rt = new RestTemplate();
 
 	    	// 요청할 주소(.../projects/{등록한 프로젝트 ID 기입}/messages...)
