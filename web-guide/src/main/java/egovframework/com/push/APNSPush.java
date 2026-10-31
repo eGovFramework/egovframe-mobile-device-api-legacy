@@ -7,8 +7,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import javapns.communication.ConnectionToAppleServer;
 import javapns.communication.exceptions.CommunicationException;
 import javapns.communication.exceptions.KeystoreException;
@@ -76,9 +76,8 @@ public class APNSPush {
 		   try{
 		    // 3. 푸시 데이터 생성
 		    PushNotificationPayload payLoad = new PushNotificationPayload();
-		    JSONObject jo_body = new JSONObject();
-		    JSONObject jo_aps = new JSONObject();
-		    JSONArray ja = new JSONArray();
+		    ObjectNode jo_body = JsonNodeFactory.instance.objectNode();
+		    ObjectNode jo_aps = JsonNodeFactory.instance.objectNode();
 		    jo_aps.put("alert",msg);
 		    jo_aps.put("badge",BADGE);
 		    jo_aps.put("sound",SOUND);

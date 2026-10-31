@@ -110,8 +110,7 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
                 byte[] bytes = file.getBytes();
                 input = new ByteArrayInputStream(bytes);
 
-                File videoFile = new File(
-                        propertiesService.getString("fileStorePath") + newName);
+                File videoFile = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath") + newName));
                 out = new FileOutputStream(videoFile);
                 int len = -1;
                 byte[] fileBuffer = new byte[1024 * 8];
@@ -151,8 +150,8 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
             HttpServletResponse response, FileReaderWriterAndroidAPIVO fileVO) {
 
         DeviceAPIFileUploadValidator.assertSafeStoredFileName(fileVO.getStreFileNm());
-        File file = new File(propertiesService.getString("fileStorePath")
-                + fileVO.getStreFileNm());
+        File file = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath")
+                + fileVO.getStreFileNm()));
 
         if (!file.exists()) {
             throw new BaseRuntimeException(fileVO.getStreFileNm());
@@ -216,8 +215,8 @@ public class EgovFileMngAndroidUtil extends EgovAbstractServiceImpl {
      */
     public boolean deleteFile(FileReaderWriterAndroidAPIVO fileVO) {
 
-        File videoFile = new File(propertiesService.getString("fileStorePath")
-                + fileVO.getStreFileNm());
+        File videoFile = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath")
+                + fileVO.getStreFileNm()));
 
         if (videoFile.exists()) {
 

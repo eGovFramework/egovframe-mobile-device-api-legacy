@@ -16,8 +16,8 @@ import javapns.notification.AppleNotificationServerBasicImpl;
 import javapns.notification.PushNotificationManager;
 import javapns.notification.PushNotificationPayload;
 import javapns.notification.PushedNotification;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * @Class Name : ANPSPushTest.java
@@ -80,9 +80,8 @@ public class APNSPushTest {
 		   try{
 		    // 3. 푸시 데이터 생성
 		    PushNotificationPayload payLoad = new PushNotificationPayload();
-		    JSONObject jo_body = new JSONObject();
-		    JSONObject jo_aps = new JSONObject();
-		    JSONArray ja = new JSONArray();
+		    ObjectNode jo_body = JsonNodeFactory.instance.objectNode();
+		    ObjectNode jo_aps = JsonNodeFactory.instance.objectNode();
 		    jo_aps.put("alert",msg);
 		    jo_aps.put("badge",BADGE);
 		    jo_aps.put("sound",SOUND);

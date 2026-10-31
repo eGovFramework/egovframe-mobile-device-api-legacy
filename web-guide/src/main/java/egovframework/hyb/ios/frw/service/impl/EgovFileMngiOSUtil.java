@@ -111,7 +111,7 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 				byte[] bytes = file.getBytes();
 				input = new ByteArrayInputStream(bytes);
 				
-				File videoFile = new File(propertiesService.getString("fileStorePath") + newName);
+				File videoFile = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath") + newName));
 				out = new FileOutputStream(videoFile);
 				int nextChar;
 				while((nextChar = input.read()) != -1){
@@ -155,7 +155,7 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 	 * @param fileVO - 파일 정보가 담긴 FileReaderWriteriOSAPIVO 
 	 */
 	public String computeFileSha256(String streFileNm) {
-		File file = new File(propertiesService.getString("fileStorePath") + streFileNm);
+		File file = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath") + streFileNm));
 		if (!file.exists() || !file.isFile()) {
 			throw new BaseRuntimeException(streFileNm);
 		}
@@ -196,7 +196,7 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 
 	public void fileDownload(HttpServletRequest request, HttpServletResponse response, String originalFileName, String streFileNm) {
 		DeviceAPIFileUploadValidator.assertSafeStoredFileName(streFileNm);
-		File file = new File(propertiesService.getString("fileStorePath") + streFileNm);
+		File file = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath") + streFileNm));
 		
 		if(!file.exists()){
 			throw new BaseRuntimeException(streFileNm);
@@ -261,7 +261,7 @@ public class EgovFileMngiOSUtil extends EgovAbstractServiceImpl {
 	 */
 	public void deleteFile(FileReaderWriteriOSAPIVO fileVO) {
 		
-		File videoFile = new File(propertiesService.getString("fileStorePath") + fileVO.getStreFileNm());
+		File videoFile = new File(EgovWebUtil.filePathBlackList(propertiesService.getString("fileStorePath") + fileVO.getStreFileNm()));
 		
 		if(!videoFile.exists()){
 			LOGGER.info("There is no file to remove.");			
